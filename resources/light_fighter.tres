@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/enemy_res.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+health = 15
+armor = 0
+speed = 220
+minSpeed = 160
+lootValue = 3
+sightRange = 600
+look_ahead = 300

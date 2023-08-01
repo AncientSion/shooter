@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/Parti_Smoke_Ground.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.803468 )
+colors = PoolColorArray( 0.345098, 0.294118, 0.137255, 0.941176, 0.52549, 0.447059, 0.207843, 0.584314 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+emission_shape = 2
+emission_box_extents = Vector3( 10, 10, 1 )
+flag_disable_z = true
+direction = Vector3( 0, -1, 0 )
+spread = 30.0
+gravity = Vector3( 0, 150, 0 )
+initial_velocity = 120.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 57.0
+scale = 15.0
+scale_random = 0.48
+color_ramp = SubResource( 2 )
+
+[node name="Smoke_Ground" type="Particles2D"]
+emitting = false
+amount = 15
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.8
+local_coords = false
+process_material = SubResource( 3 )
+script = ExtResource( 1 )

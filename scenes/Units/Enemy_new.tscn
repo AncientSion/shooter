@@ -1,0 +1,104 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://textures/fighter.png" type="Texture" id=3]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Base_Unit
+class_name Enemy_new
+
+var mounts = [Vector2(0, 359)]#, Vector2(-8, 0)]
+var maxHealth = 15
+var armor = 0
+var speed = 160
+var display = \"FighterA\"
+var steer = 1
+var ticks = 0
+var checkTicks = 30
+var thrust = 5
+
+func _process(_delta):
+	pass
+
+func _physics_process(_delta):
+	#print(\"_process \", display)
+	if destroyed: return
+	if moveTarget == null or not is_instance_valid(moveTarget):
+		#print(\"no target\")
+		return
+	
+	ticks += 1
+	#print(ticks)
+	if ticks > checkTicks:
+		var dist = global_position.distance_to(moveTarget.global_position)
+		print(\"velo: \", velocity)
+		print(\"dist to target: \", dist)
+		if dist < 200:
+			print(\"creating new target\")
+			moveTarget.queue_free()
+			moveTarget = getDummyTarget(-1, 1, -1, 1)
+			moveTarget.get_node(\"Timer\").stop()
+			checkTicks = 240
+		else: checkTicks = 30
+		ticks = 0
+	
+	#print(ticks)
+	accel += getBehaviorVector()
+	velocity += accel * _delta
+	velocity = velocity.limit_length(speed)
+	rotation = velocity.angle()
+	#position += velocity * delta
+	
+	#print(accel)
+	#print(velocity)
+	#velocity = getBehaviorVector()
+	
+	
+#
+#func _physics_process(delta):
+#	accel += seek()
+#	velocity += accel * delta
+#	velocity = velocity.limit_length(speed)
+#	rotation = velocity.angle()
+#	position += velocity * delta	
+	
+func doInit():
+	.doInit()
+	checkBehavior()
+	
+func checkBehavior():
+	print(\"_checkBehavior \", display)
+	
+	if moveTarget == null:
+		moveTarget = getDummyTarget(-1, 1, -1, 1)
+		moveTarget.global_position = global_position
+		moveTarget.global_position.x += 700
+		moveTarget.global_position.y -= 300
+		moveTarget.get_node(\"Timer\").stop()
+		activeBehavior = 0
+#		var dist = global_position.distance_to(moveTarget.global_position)
+			
+func getBehaviorVector():
+	match activeBehavior:
+		0: return seekVector()
+
+func seekVector(): # moves towards target
+	var vector_to_target = (moveTarget.global_position - global_position).normalized() * speed
+	#return vector_to_target
+	var turn = (vector_to_target - velocity).normalized() * thrust
+		#print(turn)
+	return turn
+"
+
+[sub_resource type="CircleShape2D" id=1]
+
+[node name="Enemy" instance=ExtResource( 1 )]
+script = SubResource( 2 )
+
+[node name="Sprite" parent="." index="1"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="Engage" type="CollisionShape2D" parent="." index="8"]
+shape = SubResource( 1 )
+disabled = true

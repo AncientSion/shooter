@@ -1,0 +1,132 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://textures/Unit_Boss.png" type="Texture" id=1]
+[ext_resource path="res://scenes/Units/Unit_Air.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ThrusterPlume2.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scripts/Units/Unit_Boss.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 261, 32.5 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 165.75, 12.5 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 45.75, 4 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 21.2891, 11.7344 )
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 15.75, 9.25 )
+
+[node name="Enemy" instance=ExtResource( 2 )]
+position = Vector2( 1, 0 )
+script = ExtResource( 5 )
+__meta__ = {
+"_editor_description_": "	"
+}
+maxHealth = 800
+armor = 3
+lootValue = 100
+
+[node name="BehaveTimer" type="Timer" parent="." index="3"]
+
+[node name="Aft" parent="ThrusterNodes" index="0" instance=ExtResource( 3 )]
+position = Vector2( -262, 6 )
+rotation = 3.14159
+scale = Vector2( 3, 2 )
+
+[node name="A" parent="ThrusterNodes" index="1" instance=ExtResource( 3 )]
+position = Vector2( 192, 31 )
+rotation = 1.5708
+
+[node name="B" parent="ThrusterNodes" index="2" instance=ExtResource( 3 )]
+position = Vector2( 213, 32 )
+rotation = 1.5708
+
+[node name="C" parent="ThrusterNodes" index="3" instance=ExtResource( 3 )]
+position = Vector2( -237, 25 )
+rotation = 1.5708
+
+[node name="D" parent="ThrusterNodes" index="4" instance=ExtResource( 3 )]
+position = Vector2( -209, 30.0001 )
+rotation = 1.5708
+
+[node name="E" parent="ThrusterNodes" index="5" instance=ExtResource( 3 )]
+position = Vector2( -181, 30 )
+rotation = 1.5708
+
+[node name="Sprite" parent="." index="5"]
+texture = ExtResource( 1 )
+
+[node name="PatrolNodes" type="Position2D" parent="." index="7"]
+
+[node name="A" type="Position2D" parent="PatrolNodes" index="0"]
+position = Vector2( 471, 0 )
+
+[node name="B" type="Position2D" parent="PatrolNodes" index="1"]
+position = Vector2( -1, 173 )
+
+[node name="C" type="Position2D" parent="PatrolNodes" index="2"]
+position = Vector2( -458, 2 )
+
+[node name="D" type="Position2D" parent="PatrolNodes" index="3"]
+position = Vector2( -2, -157 )
+
+[node name="A" parent="Mounts" index="0" instance=ExtResource( 4 )]
+position = Vector2( 184, -39 )
+maxHealth = 1
+maximum_rotation = 89.0
+startAngle = -90
+
+[node name="B" parent="Mounts" index="1" instance=ExtResource( 4 )]
+position = Vector2( 97, -42 )
+maxHealth = 1
+maximum_rotation = 89.0
+startAngle = -90
+
+[node name="C" parent="Mounts" index="2" instance=ExtResource( 4 )]
+position = Vector2( 44, 79 )
+rotation = 3.14159
+maxHealth = 15
+maximum_rotation = 89.0
+startAngle = -90
+
+[node name="D" parent="Mounts" index="3" instance=ExtResource( 4 )]
+position = Vector2( 244, 29 )
+rotation = 3.14159
+maxHealth = 1
+maximum_rotation = 89.0
+startAngle = -90
+
+[node name="E" parent="Mounts" index="4" instance=ExtResource( 4 )]
+position = Vector2( -54, -17 )
+startAngle = -90
+turnrate = 0.0
+
+[node name="ColNodes" parent="." index="14"]
+visible = false
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( -4, -4.5 )
+shape = SubResource( 2 )
+
+[node name="B" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="1"]
+position = Vector2( -2.25, 44.5 )
+shape = SubResource( 4 )
+
+[node name="C" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="2"]
+position = Vector2( -54.75, -42 )
+shape = SubResource( 3 )
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgWeak" index="0"]
+position = Vector2( -55.2891, -59.2656 )
+shape = SubResource( 8 )
+
+[node name="B" type="CollisionShape2D" parent="ColNodes/DmgWeak" index="1"]
+position = Vector2( -29.25, 67.25 )
+shape = SubResource( 9 )
+
+[connection signal="timeout" from="BehaveTimer" to="." method="_on_Timer_timeout"]

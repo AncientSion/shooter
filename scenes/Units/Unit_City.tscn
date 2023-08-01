@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://textures/background/buildingBlock4.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Units/Unit_City.gd" type="Script" id=3]
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 181, 18 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 156, 26.5 )
+
+[node name="Enemy" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+maxHealth = 500
+armor = 2
+
+[node name="Sprite" parent="." index="1"]
+texture = ExtResource( 2 )
+
+[node name="A" parent="Mounts" index="0" instance=ExtResource( 4 )]
+position = Vector2( -90, 48 )
+startAngle = -120
+turnrate = 0.0
+
+[node name="B" parent="Mounts" index="1" instance=ExtResource( 4 )]
+position = Vector2( 0, 48 )
+startAngle = -90
+turnrate = 0.0
+
+[node name="C" parent="Mounts" index="2" instance=ExtResource( 4 )]
+position = Vector2( 90, 48 )
+startAngle = -60
+turnrate = 0.0
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( 0, 45 )
+shape = SubResource( 3 )
+
+[node name="B" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="1"]
+position = Vector2( 1, -1.5 )
+shape = SubResource( 1 )

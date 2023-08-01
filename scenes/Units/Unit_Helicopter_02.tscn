@@ -1,0 +1,68 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scripts/Units/Unit_Helicopter_02.gd" type="Script" id=1]
+[ext_resource path="res://textures/helicopter_02.png" type="Texture" id=2]
+[ext_resource path="res://textures/helicopter_02._backblade_02.png" type="Texture" id=3]
+[ext_resource path="res://textures/helicopter_02._topblade_01.png" type="Texture" id=4]
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=6]
+[ext_resource path="res://textures/helicopter_02._topblade_02.png" type="Texture" id=7]
+[ext_resource path="res://textures/helicopter_02._backblade_01.png" type="Texture" id=8]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 8 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ ExtResource( 7 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 27.125, 7.5 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 15.9012, 3.75 )
+
+[node name="Helicoper_Heavy" instance=ExtResource( 5 )]
+script = ExtResource( 1 )
+
+[node name="Sprite" parent="." index="4"]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="A" parent="Mounts" index="0" instance=ExtResource( 6 )]
+position = Vector2( 32, 11 )
+maximum_rotation = 89.0
+
+[node name="A" type="AnimatedSprite" parent="EffectNodes" index="0"]
+position = Vector2( -42, -9 )
+scale = Vector2( 0.25, 0.25 )
+frames = SubResource( 6 )
+frame = 1
+playing = true
+
+[node name="B" type="AnimatedSprite" parent="EffectNodes" index="1"]
+position = Vector2( 12, -9 )
+scale = Vector2( 0.25, 0.25 )
+frames = SubResource( 7 )
+frame = 1
+playing = true
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( 17.875, 1.5 )
+shape = SubResource( 4 )
+
+[node name="B" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="1"]
+position = Vector2( -25.0988, -1.25 )
+shape = SubResource( 5 )

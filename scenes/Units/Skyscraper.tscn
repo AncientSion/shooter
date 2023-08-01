@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=1]
+[ext_resource path="res://textures/skyscraper.png" type="Texture" id=2]
+[ext_resource path="res://scripts/Units/Skyscraper.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[node name="Skyscraper" instance=ExtResource( 1 )]
+position = Vector2( 1, 0 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -148.0, -112.0 ]
+}
+
+[node name="Sprite" parent="." index="1"]
+texture = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="." index="2"]
+margin_left = -9.0
+margin_top = 60.0
+margin_right = 31.0
+margin_bottom = 100.0
+rect_scale = Vector2( 0.416577, 0.945824 )
+color = Color( 0.290196, 0.290196, 0.290196, 1 )
+
+[node name="VisibilityNotifier2D" parent="." index="3"]
+position = Vector2( 7.15256e-07, 1 )
+scale = Vector2( 1.7, 6.7 )
+
+[node name="Engage" type="CollisionShape2D" parent="." index="8"]
+shape = SubResource( 1 )

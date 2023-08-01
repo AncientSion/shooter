@@ -1,0 +1,2 @@
+extends Helicopter_Light
+class_name Helicopter_Heavy

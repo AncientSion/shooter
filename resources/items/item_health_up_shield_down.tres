@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/items/item_res.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+id = 0
+type = 0
+display = "Health UP Shield DOWN"
+weight = 3
+cost = 1
+constructor = "ITEM_PASSIVE"
+texture = "HealthUp_ShieldDown"
+desc = "Adds Health"
+charges = 0
+cooldown = 0.0
+script_src = ""
