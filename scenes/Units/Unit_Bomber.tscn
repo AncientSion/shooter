@@ -1,0 +1,86 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=1]
+[ext_resource path="res://textures/fighter.png" type="Texture" id=2]
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sm/Bomber_SM.gd" type="Script" id=5]
+[ext_resource path="res://scripts/Units/Unit_Bomber.gd" type="Script" id=6]
+[ext_resource path="res://scenes/Thrust_Part.tscn" type="PackedScene" id=7]
+[ext_resource path="res://resources/light_bomber.tres" type="Resource" id=8]
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0, 0.493506, 1 )
+colors = PoolColorArray( 0.989258, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 1, 0 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 30.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 5.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 21, 5.5 )
+
+[node name="Bomber" instance=ExtResource( 3 )]
+script = ExtResource( 6 )
+stats = ExtResource( 8 )
+
+[node name="SM" parent="." index="0" instance=ExtResource( 4 )]
+script = ExtResource( 5 )
+
+[node name="Debug" parent="." index="1"]
+visible = true
+
+[node name="ThrusterNodes" parent="." index="2"]
+position = Vector2( 0, -1 )
+
+[node name="Aft" type="Node2D" parent="ThrusterNodes" index="0"]
+position = Vector2( -20, 4 )
+
+[node name="Particle2D" parent="ThrusterNodes/Aft" index="0" instance=ExtResource( 7 )]
+position = Vector2( -1, 0 )
+process_material = SubResource( 9 )
+
+[node name="Main" parent="Sprites" index="0"]
+texture = ExtResource( 2 )
+
+[node name="A" parent="." index="5" instance=ExtResource( 1 )]
+position = Vector2( 0, 12 )
+rotation = -3.14159
+startAngle = -90
+invis = true
+
+[node name="Mounts" parent="." index="6"]
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="VisibilityNotifier2D" parent="." index="8"]
+position = Vector2( -0.999999, -1.19209e-07 )
+scale = Vector2( 1.5, 0.3 )
+
+[node name="EffectNodes" parent="." index="11"]
+position = Vector2( 0, -1 )
+
+[node name="ControlNodes" parent="." index="12"]
+position = Vector2( 0, -1 )
+
+[node name="ColNodes" parent="." index="13"]
+position = Vector2( 0, -1 )
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( 0, 2 )
+shape = SubResource( 6 )

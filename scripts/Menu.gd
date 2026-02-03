@@ -2,20 +2,37 @@ extends Node
 
 var stage0 = preload("res://scenes/Stage_0.tscn")
 var intermission = preload("res://scenes/Intermission.tscn")
+var map = preload("res://scenes/Map.tscn")
 
-# Handle "Quit" button press
-func _on_Button_Quit_pressed():
+func _ready():
+	Globals.MAIN_MENU = self
+	pass
+	
+func _on_Start_pressed():
+	var scene = stage0.instance()
+	Globals.curScene = scene
+	get_tree().get_root().add_child(scene)
+	get_tree().set_current_scene(scene)
+	queue_free()
+
+func _on_Intermission_pressed():
+	var scene = intermission.instance()
+	Globals.curScene = scene
+	get_tree().get_root().add_child(scene)
+	get_tree().set_current_scene(scene)
+	queue_free()
+
+func _on_Map_pressed():
+	var scene = map.instance()
+	Globals.MAP_SCENE = scene
+#	Globals.curScene = scene
+	get_tree().get_root().add_child(scene)
+	get_tree().set_current_scene(scene)
+	queue_free()
+
+func _on_Quit_pressed():
 	get_tree().quit()
 
-# Handle "Start" button press
-func _on_Button_Start_pressed():
-	Globals.curScene = stage0.instance()
-	get_tree().get_root().add_child(Globals.curScene)
-	get_tree().set_current_scene(Globals.curScene)
-	queue_free()
-
-func _on_Button_Start2_pressed():
-	Globals.curScene = intermission.instance()
-	get_tree().get_root().add_child(Globals.curScene)
-	get_tree().set_current_scene(Globals.curScene)
-	queue_free()
+func _on_Real_pressed():
+	Globals.GAMESCREEN.start_new_game()
+#	Globals.GAMESCREEN.add_child(map.instance())

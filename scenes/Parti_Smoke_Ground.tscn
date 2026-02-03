@@ -20,8 +20,8 @@ initial_velocity = 120.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 damping = 57.0
-scale = 15.0
-scale_random = 0.48
+scale = 20.0
+scale_random = 0.5
 color_ramp = SubResource( 2 )
 
 [node name="Smoke_Ground" type="Particles2D"]

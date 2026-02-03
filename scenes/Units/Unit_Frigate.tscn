@@ -1,10 +1,110 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scripts/Units/Unit_Frigate.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=2]
 [ext_resource path="res://textures/Unit_Frigate.png" type="Texture" id=3]
-[ext_resource path="res://scenes/ThrusterPlume2.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Thrust_Part_Short.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=6]
+[ext_resource path="res://sm/Frigate_SM.gd" type="Script" id=7]
+[ext_resource path="res://resources/frigate.tres" type="Resource" id=8]
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0, 0.493506, 1 )
+colors = PoolColorArray( 0.989258, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=10]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=12]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=13]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=14]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 120, 23 )
@@ -12,42 +112,85 @@ extents = Vector2( 120, 23 )
 [sub_resource type="Animation" id=2]
 length = 0.001
 
-[node name="Enemy" instance=ExtResource( 2 )]
+[node name="Frigate" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+stats = ExtResource( 8 )
 
-[node name="A" parent="ThrusterNodes" index="0" instance=ExtResource( 5 )]
+[node name="SM" parent="." index="0" instance=ExtResource( 4 )]
+script = ExtResource( 7 )
+
+[node name="Aft" parent="ThrusterNodes" index="0" instance=ExtResource( 5 )]
 position = Vector2( -115, 2 )
+
+[node name="Particle2D" parent="ThrusterNodes/Aft" index="0"]
+process_material = SubResource( 9 )
+
+[node name="Front" parent="ThrusterNodes" index="1" instance=ExtResource( 5 )]
+position = Vector2( 123, -3 )
 rotation = 3.14159
 
-[node name="Sprite" parent="." index="2"]
-texture = ExtResource( 3 )
-__meta__ = {
-"_editor_description_": ""
-}
+[node name="Particle2D" parent="ThrusterNodes/Front" index="0"]
+process_material = SubResource( 10 )
 
-[node name="VisibilityNotifier2D" parent="." index="3"]
-scale = Vector2( 5.49501, -0.922956 )
+[node name="DownA" parent="ThrusterNodes" index="2" instance=ExtResource( 5 )]
+position = Vector2( -87, 22 )
+rotation = -1.5708
+
+[node name="Particle2D" parent="ThrusterNodes/DownA" index="0"]
+process_material = SubResource( 11 )
+
+[node name="DownB" parent="ThrusterNodes" index="3" instance=ExtResource( 5 )]
+position = Vector2( 74, 25 )
+rotation = -1.5708
+
+[node name="Particle2D" parent="ThrusterNodes/DownB" index="0"]
+process_material = SubResource( 12 )
+
+[node name="UpA" parent="ThrusterNodes" index="4" instance=ExtResource( 5 )]
+position = Vector2( -112, -19 )
+rotation = 1.5708
+
+[node name="Particle2D" parent="ThrusterNodes/UpA" index="0"]
+process_material = SubResource( 13 )
+
+[node name="UpB" parent="ThrusterNodes" index="5" instance=ExtResource( 5 )]
+position = Vector2( -96, -21 )
+rotation = 1.5708
+
+[node name="Particle2D" parent="ThrusterNodes/UpB" index="0"]
+process_material = SubResource( 14 )
+
+[node name="Main" parent="Sprites" index="0"]
+texture = ExtResource( 3 )
 
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 6 )]
 position = Vector2( 20, -36 )
-maxHealth = 20
-armor = 1
+health = 20
 maximum_rotation = 89.0
 startAngle = -90
 turnrate = 2.0
 
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 6 )]
-position = Vector2( 101, 33 )
+position = Vector2( 102, 30 )
 rotation = -3.14159
-maxHealth = 5
-armor = 1
+health = 20
 maximum_rotation = 89.0
 startAngle = -90
 turnrate = 2.0
+
+[node name="VisibilityNotifier2D" parent="." index="7"]
+scale = Vector2( 5.49501, -0.922956 )
 
 [node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
 position = Vector2( 3, 1 )
 shape = SubResource( 1 )
 
-[node name="AnimationPlayer" parent="." index="13"]
+[node name="AnimationPlayer" parent="." index="15"]
 anims/RESET = SubResource( 2 )
+
+[editable path="ThrusterNodes/Aft"]
+[editable path="ThrusterNodes/Front"]
+[editable path="ThrusterNodes/DownA"]
+[editable path="ThrusterNodes/DownB"]
+[editable path="ThrusterNodes/UpA"]
+[editable path="ThrusterNodes/UpB"]

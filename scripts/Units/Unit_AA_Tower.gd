@@ -2,40 +2,39 @@ extends Ground_Entity
 class_name AA_Tower
 
 var display = "AA Tower"
-var behaviors = ["Guard"]
 
 func _ready():
-	sightRange = 1000
-#	$Mounts/A/Sprite.hide()
+	pass
 	
 func _physics_process(_delta):
 	pass
 	
-func setStats():
-	maxHealth = 80
-	armor = 2
-	lootValue = 12
-
+func doInit():
+#	maxSmoke = 10
+	.doInit()
+	
 func getPossibleWeapons(index):
-	
-#	var proc = Globals.BULLET_RED.instance()
-	var proc = Globals.RAIL.instance()
-	
-	Globals.curScene.get_node("Refs").add_child(proc)
-#func construct(init_dmgType, init_speed, init_minDmg, init_maxDmg, init_faction, init_projSize, init_projNumber = 1, init_shooter = false):
-	proc.construct(0, 250, 2, 3, faction, 1)
-	proc.set_physics_process(false)
-	proc.disableCollisionNodes()
-	
-#	func construct(init_type:int, init_display:String, init_texture, init_projSize:float, init_projNumber:int, init_burst:int, init_rof:float, init_dmg, init_deviation:int, init_speed:int, init_proc:Proj_Bullet, init_procAmount:int):
+	match index:
+		0:
+			var minDmg = 2
+			var maxDmg = 3
+			var speed = 125
+			var recoilForce = Globals.getRecoilForce(minDmg, maxDmg, speed)
+			var proc = {"type": 1, "faction": faction, "dmgType": 0, "speed": speed, "minDmg": minDmg, "maxDmg": maxDmg, "aoe": 20, "lifetime": 0.5, "projNumber": 1, "projSize": 1, "recoilForce": recoilForce}
 
-	var weapon = Globals.weapon_aoe.instance()
-	var dmg = {"dmgType": 0, "min": 12, "max": 16, "aoe": 75}
-	weapon.construct(3, "AA Artillery", false, 1, 1, 1, 6.0, dmg, 0, 0, proc, 24, 1)
-	return weapon
+			var weapon = Globals.getWeaponBase("Arty_Gun");
+			weapon.proc = proc
+			weapon.procAmount = 12
+			weapon.minFireDist = 200
+			return weapon
+		1:
+			return Globals.getWeaponBase("Flak")
 
 func isLegalTarget():
 	return true
 	if curTarget.global_position.y > Globals.HEIGHT - 200:
 		return false
 	return true
+	
+func get_dmg_gfx_scale():
+	return rand_range(0.8, 1.4)

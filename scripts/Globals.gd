@@ -3,36 +3,49 @@ extends Node
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
-const BLACK = preload("res://styles/blackBorder.tres")
-const RED = preload("res://styles/redBorder.tres")
-const YELLOW = preload("res://styles/yellowBorder.tres")
+
+const AIMDEBUG:bool = false
+const SIGHTDEBUG:bool = false
 
 const AOE_MARK = preload("res://scenes/AoE_Marker.tscn")
 
 const EXPLO_00_01 = preload("res://scenes/Explosion_00_01.tscn")
 const EXPLO_01_01 = preload("res://scenes/Explosion_01_01.tscn")
 const EXPLO_PART = preload("res://scenes/PartExplo.tscn")
+const EXPLO_PART_RADIAL = preload("res://scenes/PartExploRadial.tscn")
 const EXPLO_PART_S = preload("res://scenes/PartExploShield.tscn")
 const EXPLO_PART_W = preload("res://scenes/PartExploWreckage.tscn")
 const BEAM_IMPACT = preload("res://scenes/BeamImpact.tscn")
+const HULL_DMG =  preload("res://scenes/HullDmg.tscn")
 
-const BULLET_BLUE = preload("res://scenes/Proj/Proj_Bullet_Blue.tscn")
-const BULLET_RED = preload("res://scenes/Proj/Proj_Bullet_Red.tscn")
+const POI = preload("res://addon/POI.tscn")
+const MARKER = preload("res://addon/Marker.tscn")
 
+const BULLET = preload("res://scenes/Proj/Proj_Bullet.tscn")
+#const BULLET_BLUE = preload("res://scenes/Proj/Proj_Bullet_Blue.tscn")
+#const BULLET_RED = preload("res://scenes/Proj/Proj_Bullet_Red.tscn")
+
+const shock_shader = preload("res://scenes/Shockwave_Shader.tscn")
 const MISSILE = preload("res://scenes/Proj/Proj_Missile.tscn")
+const TORP = preload("res://scenes/Proj/Proj_Torp.tscn")
 const BOMB = preload("res://scenes/Proj/Proj_Bomb.tscn")
+const MINE = preload("res://scenes/Proj/Proj_Mine.tscn")
 const SHELL = preload("res://scenes/Proj/Proj_Shell.tscn")
 const BEAM = preload("res://scenes/Proj/Proj_Beam.tscn")
 const RAIL = preload("res://scenes/Proj/Proj_Rail.tscn")
+const MACE = preload("res://scenes/Proj/Proj_Mace.tscn")
 
 const ROCK = preload("res://scenes/Units/Obstacle.tscn")
 
 const DMG_LABEL: PackedScene = preload("res://scenes/DamageLabel.tscn")
-const RTLABEL: PackedScene = preload("res://scenes/Mission_UI.tscn")
+const TEXT_LABEL: PackedScene = preload("res://scenes/Text_Label.tscn")
+#const RTLABEL: PackedScene = preload("res://scenes/Mission_UI.tscn")
 const SMOKE: PackedScene = preload("res://scenes/Parti_Smoke.tscn")
 const SMOKE_GROUND: PackedScene = preload("res://scenes/Parti_Smoke_Ground.tscn")
 const SMOKE_WIDE: PackedScene = preload("res://scenes/Parti_Smoke_Wide.tscn")
-const FIRE: PackedScene = preload("res://scenes/Parti_Fire.tscn")
+#const FIRE: PackedScene = preload("res://scenes/Parti_Fire.tscn")
+const FIRESMOKE: PackedScene = preload("res://scenes/Parti_FireSmoke.tscn")
+const EMPTY_SHELL: PackedScene = preload("res://scenes/Part_Shell_Emitter.tscn")
 const HEALTHBAR: PackedScene = preload("res://scenes/Health_Bar.tscn")
 const SHIELDBAR: PackedScene = preload("res://scenes/Shield_Bar.tscn")
 const HEALTHLABEL: PackedScene = preload("res://scenes/Health_Label.tscn")
@@ -50,15 +63,20 @@ const ITEM_PASSIVE = preload("res://scenes/Utilities/Item_Passive.tscn")
 const WEAPONENTRYCONT = preload("res://ui//WeaponEntryCont.tscn")
 const ITEMENTRYCONT = preload("res://ui//ItemEntryCont.tscn")
 
-var PLAYER
+var PLAYER:Node = null
+
+var GAMESCREEN:Node = null
+var MAP_SCENE:Node = null
+var MAIN_MENU:Node = null
+
 var INTERMISSION = load("res://scenes/Intermission.tscn")
 var STAGEZERO = load("res://scenes/Stage_0.tscn")
 
 var handler_spawner
 var handler_mission
+var handler_map
 
-var curLevel:int
-var curScene = null
+var curScene:Base_Level
 
 var ENEMYAI =  load("res://scenes/EnemyList.tscn")
 
@@ -75,22 +93,36 @@ var UI = null
 var ENVI = null
 var PAUSE = null
 
-var frameCounter:int = 0
+var LIME = Color(0.04, 0.88, 0.53, 1.0)
+var MAGENTA = Color(0.7, 0, 1.0, 1.0)
+var ORANGE = Color(0.91, 0.17, 0.0, 1.0)
+var YELLOW = Color(1.0, 0.63, 0.0, 1.0)
+var WHITE = Color(1.0, 1.0, 1.0, 1.0)
+var LIGHTGREEN = Color(0.73, 0.91, 0, 1.0)
+var GREEN = Color(0.17, 1.0, 0.0, 1.0)
+
+var reso_options = [Vector2(2560, 1440), Vector2(1920, 1080), Vector2(1600, 900), Vector2(1366, 768)]
+var zoom_options =  [1.33, 1.0, 0.66, 2.0]
+
+#var frameCounter:int = 0
 
 var mod = 1
 var rng
-var wpn
 var isPaused = false
 var idcounter = 0
-var weapon_proj
-var weapon_shell
-var weapon_aoe
-var weapon_missile
-var weapon_rail
-var weapon_beam
-var weapon_shield
+var weapon_proj:PackedScene
+var weapon_shell:PackedScene
+var weapon_aoe:PackedScene
+var weapon_missile:PackedScene
+var weapon_rail:PackedScene
+var weapon_beam:PackedScene
+var weapon_melee:PackedScene
+var weapon_shield_dir:PackedScene
+var weapon_shield_omni:PackedScene
 var mountain
-var clouds = []
+var clouds_large = []
+var clouds_small = []
+var clouds_all = []
 
 var weaponSprites = []
 var buildingSprites = []
@@ -124,31 +156,46 @@ func _ready():
 	loadWeaponTemplates()
 	SCREEN = get_viewport().size
 	PLAYER = PLAYERSCENE.instance()
-	instancetHandlers()
+	instantiate_handlers()
 	
-func instancetHandlers():
-	print("instancetHandlers")
+func instantiate_handlers():
+	print("instantiate_handlers")
 	handler_spawner = load("res://scripts/Handler_Spawner.gd").new()
+	handler_spawner.name = "Spawner"
 	add_child(handler_spawner)
 	handler_spawner.set_physics_process(false)
+	
 	handler_mission = load("res://scripts/Handler_Mission.gd").new()
+	handler_mission.name = "Mission"
 	add_child(handler_mission)
 	handler_mission.set_physics_process(false)
 	
-func _physics_process(delta):
-	if Input.is_action_just_pressed("reflex"):
+#	handler_map = load("res://scenes/Map.tscn").instance()
+#	handler_map.name = "Map"
+#	add_child(handler_map)
+	
+func _physics_process(_delta):
+	if Input.is_action_just_pressed("middle_click"):
 		Globals.slowed = !Globals.slowed
 		if Globals.slowed:
-#			Engine.set_time_scale(0.25)
-			Engine.set_time_scale(2)
+			Engine.set_time_scale(0.5)
 		else:
 			Engine.set_time_scale(1)
-	frameCounter += 1
+#	frameCounter += 1
+	
+	if Input.is_action_just_pressed("nullGravity"):
+		if Globals.BASEGRAVITY != Vector2.ZERO:
+			Globals.BASEGRAVITY = Vector2.ZERO
+		else:
+			Globals.BASEGRAVITY = Vector2(0, 300)
 #
 #	 var image = Image.new()
 #    image.load(ProjectSettings.globalize_path(filepath))
 #    return image
-	
+
+func set_resolution():
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D, SceneTree.STRETCH_ASPECT_EXPAND, Globals.SCREEN)
+	Globals.GAMESCREEN.get_node("Menu_BG").rect_min_size = Globals.SCREEN
 	
 func loadSprites(path, target):
 #	print("loadWeaponSprites")
@@ -204,19 +251,37 @@ func loadWeapons():
 	weapon_shell = preload("res://scenes/Weapon_Shell.tscn")
 	weapon_aoe = preload("res://scenes/Weapon_AoE.tscn")
 	weapon_beam = preload("res://scenes/Weapon_Beam.tscn")
-	weapon_shield = preload("res://scenes/Weapon_Shield.tscn")
+	weapon_rail = preload("res://scenes/Weapon_Rail.tscn")
+	weapon_melee = preload("res://scenes/Weapon_Melee.tscn")
+	weapon_shield_dir = preload("res://scenes/Weapon_Shield_Dir.tscn")
+	weapon_shield_omni = preload("res://scenes/Weapon_Shield_Omni.tscn")
 	
 func loadMountains():
-	mountain = preload("res://scenes/Mountain_L_1.tscn")
+	return
 
 func loadClouds():
-	var amount = 4
-	
-	for n in amount:
-		var scene = load(str("res://scenes/Cloud_" + str(n+1) + ".tscn"))
-		clouds.append(scene)
+	for n in 7:
+		var number:String = str(n+1)
+		if len(number) < 2:
+			number = str("0", number) 
+		var sprite = load(str("res://textures/Cloud_L_0" + number + ".png"))
+		clouds_large.append(sprite)
+		
+	for n in 6:
+		var number:String = str(n+1)
+		if len(number) < 2:
+			number = str("0", number) 
+		var sprite = load(str("res://textures/Cloud_S_0" + number + ".png"))
+		clouds_small.append(sprite)
+		
+	for n in 20:
+		var number:String = str(n+1)
+		var sprite = load(str("res://textures/background/clouds/Cloud " + number + ".png"))
+		clouds_all.append(sprite)
+		
 		
 func loadBuildings():
+	return
 	var amount = 4
 	for n in amount:
 		var name = "building_0" + str(n+1)
@@ -238,20 +303,19 @@ func getRandomEntryAndRemove(array):
 	array.remove(pick)
 	return ret
 	
-func getExplo(type, damage):
+func getExplo(type:String, scale:float = 1.0, delay: float = 0.0):
 	var explo
 	match type:
 		"basic": 
 			explo = EXPLO_PART.instance()
+		"radial": 
+			explo = EXPLO_PART_RADIAL.instance()
 		"wreck":
 			explo = EXPLO_PART_W.instance()
 		"shield":
 			explo = EXPLO_PART_S.instance()
 			
-	explo.construct()
-	var baseDmg = 6.0
-	var scale:float  = sqrt(damage/baseDmg)
-	explo.scale = Vector2(scale, scale)
+	explo.construct(scale, delay)
 	return explo
 
 func getPointInDir(dist, angle, origin):
@@ -259,10 +323,8 @@ func getPointInDir(dist, angle, origin):
 	var y = round(origin.y + dist * sin(angle* PI / 180));
 	return Vector2(x, y)
 
-func getSpecificBaseWeaponByName(display):
+func getWeaponBase(display):
 	for n in weaponTemplates:
-		#print("getSpecificBaseWeaponByName")
-		#print(n.display)
 		if n.display == display:
 			return constructWeapon(n.duplicate(true))
 			
@@ -283,23 +345,22 @@ func constructWeapon(data):
 	match data.type:
 		1:
 			weapon = Globals.weapon_proj.instance()
-#			weapon.construct(data.type, data.display, data.texture, data.projSize, data.projNumber, data.burst, data.rof, dmg, data.lifetime, data.deviation, data.speed)
-			weapon.constructNew(data)
 		2:
 			weapon = Globals.weapon_missile.instance()
-			weapon.constructNew(data)
-#			weapon.construct(data.type, data.display, data.texture, data.projSize, data.projNumber, data.burst, data.rof, dmg, data.deviation, data.speed, data.steerForce)
+		3:
+			weapon = Globals.weapon_aoe.instance()
 		4:
 			weapon = Globals.weapon_beam.instance()
-			weapon.constructNew(data)
-#			weapon.construct(data.type, data.display, data.texture, data.speed, data.beamWidth, data.lifetime, data.projNumber, data.burst, data.rof, dmg, data.deviation)
 		6:
-			weapon = Globals.weapon_proj.instance()
-			weapon.constructNew(data)
-#			weapon.construct(data.type, data.display, data.texture, data.projSize, data.projNumber, data.burst, data.rof, dmg, data.lifetime, data.deviation, data.speed)
+			weapon = Globals.weapon_rail.instance()
+		7:
+			weapon = Globals.weapon_missile.instance()
+		8:
+			weapon = Globals.weapon_melee.instance()
 		
+	weapon.constructWpn(data)
 	weapon.desc = data.desc
-#	print(weapon.get_node("Sprite").scale)
+#	print(weapon.get_node("Sprites/Main").scale)
 	return weapon
 
 func loadWeaponTemplates():
@@ -347,17 +408,19 @@ func loadWeaponTemplates():
 			dict[header[18]] = int(csv[18])
 			dict[header[19]] = int(csv[19])
 			dict[header[20]] = int(csv[20])
+			dict[header[21]] = int(csv[21])
+			dict[header[22]] = float(csv[22])
+			dict[header[23]] = float(csv[23])
+			dict[header[24]] = float(csv[24])
 			weaponTemplates.append(dict)
 
-func getItemByName(display):
+func getItemBase(display):
 	for n in itemTemplates:
-		#print("getSpecificBaseWeaponByName")
-		#print(n.display)
 		if n.display == display:
-			return constructItem(n)
+			return instantiateAndConstructItem(n)
 			
-func constructItem(pick):
-	print("constructItem ", pick.display)
+func instantiateAndConstructItem(pick):
+	print("instantiateAndConstructItem ", pick.display)
 	var base = Globals.get(pick.constructor).instance()
 	if pick.script != "":
 		var string = str("res://scenes/Utilities/Item_", pick.script, ".gd")
@@ -382,7 +445,7 @@ func loadItemTemplatesJSON():
 
 func loadItemResources():
 	return
-	var dirPath = "res://ressources/items/"
+	var dirPath = "res://resources/items/"
 	var dir = Directory.new()
 	dir.open(dirPath)
 	dir.list_dir_begin()
@@ -397,7 +460,7 @@ func loadItemResources():
 
 
 func getPossibleWeaponMods(type):
-	print("getPossibleWeaponMods")
+#	print("getPossibleWeaponMods")
 	var table = []
 	var file = File.new()
 	var line = -1
@@ -440,79 +503,15 @@ func getPossibleWeaponMods(type):
 	file.close()
 	return table
 
-func doAdvanceLevel():
-	PLAYER.exitLevel()
-#	PAUSE = curScene.get_node("Pause")
-#	curScene.remove_child(PAUSE)
-	curScene.remove_child(UI)
-	
-	var index = -1
-	for n in UI.get_node("Place/Topright/AI_PC/VBoxC").get_children():
-		index += 1
-		#print(n.display)
-		if index > 0: n.queue_free()
-	
-	for n in UI.get_node("LootNodes").get_children():
-		n.queue_free()
-		
-	for root in curScene.get_node("Neutral_Units").get_children():
-		for n in root.get_children():
-			if n.name == "Item":
-				n.doUnloadBits()
-			if n.name == "Item" or n.name == "Weapon":
-				if not n.UI_node == null:
-					n.UI_node.queue_free()
-				if not n.statsPanel == null:
-					n.statsPanel.queue_free()
-		root.queue_free()
-
-	for n in UI.get_node("Place/TopleftLower/WeaponStatsPos").get_children():
-		n.get_node("Tween").stop_all()
-		n.set("modulate", Color(1, 1, 1, 1))
-		n.hide()
-	for n in UI.get_node("Place/BottomleftHigher/ItemStatsPos").get_children():
-		n.get_node("Tween").stop_all()
-		n.set("modulate", Color(1, 1, 1, 1))
-		n.hide()
-	
-	curScene.get_node("Player_Pos").remove_child(PLAYER)
-	curScene.queue_free()
-	
-	match curLevel:
-		0:
-			curLevel = 1
-			curScene = STAGEZERO.instance()
-		1:
-			curLevel = 0
-			curScene = INTERMISSION.instance()
-
-	curScene.add_child(UI)
-	get_tree().get_root().add_child(curScene)
-	get_tree().set_current_scene(curScene)
-
-func isOutOfBounds(position):
-	if position.x < 0 or position.x > Globals.WIDTH:
-		#print("is out of bounds LEFT RIGHT!")
-		return true
-#		print(self.display, " out of bounds X", global_position)
-#		self.lootValue = 0
-#		kill()
-	if position.y < 0 or position.y > Globals.ROADY + 10:
-		#print("is out of bounds UP DOWN!")
-		return true
-#		print(self.display, " out of bounds Y", global_position)
-#		self.lootValue = 0
-#		kill()
-	return false
 	
 func getSmokeNode(scale = 1):
 	var smoke = SMOKE.instance()
 	smoke.scale = Vector2(scale, scale)
 	return smoke
 	
-func getFireNode(scale = 1):
-	var fire = FIRE.instance()
-	fire.scale = Vector2(scale, scale)
+func getFireSmokeNode(scale:float = 1, delay:float = 0.0):
+	var fire = FIRESMOKE.instance()
+	fire.construct(scale, delay)
 	return fire
 
 func getTex(search, texType):
@@ -534,57 +533,90 @@ func getTex(search, texType):
 	
 #	print("cant get weapon tex")
 	return data[len(data)-1]
+
+func toggle_pause_and_menu():
+	if PLAYER.ready == false:
+		return
 	
-func togglePause():
 	isPaused = !isPaused
 	get_tree().paused = !get_tree().paused
-	curScene.get_node("UI/Pause").visible = !curScene.get_node("UI/Pause").visible
+	curScene.get_node("UI/Pause_details").visible = !curScene.get_node("UI/Pause_details").visible
 	curScene.get_node("UI/PauseSep").visible = !curScene.get_node("UI/PauseSep").visible
+	
 	
 	if not isPaused:
 		for item in PLAYER.get_node("Items").get_children():
 			if item.type == 0:
-				item.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
-				item.subPanel_Stats.hide()
-		for wpn in PLAYER.get_node("Weapons").get_children():
-				wpn.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
-				wpn.subPanel_Stats.hide()
+				item.leave_pause()
+#				item.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
+#				item.subPanel_Stats.hide()
+		for wpn in PLAYER.get_node("Mounts/A").get_children():
+				wpn.leave_pause()
+#				wpn.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
+#				wpn.subPanel_Stats.hide()
 	else:
 		for item in PLAYER.get_node("Items").get_children():
 			if item.type == 0:
-				item.subPanel_Stats.get_node("Timer").stop()
-				item.subPanel_Stats.get_node("Tween").stop_all()
-				item.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
-		for wpn in PLAYER.get_node("Weapons").get_children():
-				wpn.subPanel_Stats.get_node("Timer").stop()
-				wpn.subPanel_Stats.get_node("Tween").stop_all()
-				wpn.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
+				item.enter_pause()
+#				item.subPanel_Stats.get_node("Timer").stop()
+#				item.subPanel_Stats.get_node("Tween").stop_all()
+#				item.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
+		for wpn in PLAYER.get_node("Mounts/A").get_children():
+				wpn.enter_pause()
+#				wpn.subPanel_Stats.get_node("Timer").stop()
+#				wpn.subPanel_Stats.get_node("Tween").stop_all()
+#				wpn.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
+				
+		if PLAYER.aWeapon > -1:
+			PLAYER.getActiveWeapon().subPanel_Stats.show()
+		if PLAYER.aItem > -1:
+			PLAYER.items[PLAYER.aItem].subPanel_Stats.show()
 
-func addBigTextAndFade(text):
-	var font = DynamicFont.new()
-	font.font_data = load("res://various/Roboto-Medium.ttf")
-	font.size = 32
-	var node = Globals.DMG_LABEL.instance()
-	node.get_node("CenterContainer/Label").set("custom_fonts/font", font)
-	#node.get_node("CenterContainer/Label").set("custom_fonts/size", 50)
-	node.get_node("CenterContainer/Label").text = text
-	Globals.curScene.get_node("UI/Center").add_child(node)
 	
-	node.modulate.a = 0
-	var tween = node.get_node("Tween")
+func getRecoilForce(minDmg, maxDmg, speed):
+	return Vector2(round(pow((minDmg+maxDmg)*speed, 0.8)), 0)
 	
-	tween.interpolate_property(node, "modulate:a",
-			0, 1, 1,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	tween.start()
-	yield(tween, "tween_all_completed")
+func add_shockwave_at(pos):
+	var shader = Globals.shock_shader.instance()
+	shader.position = pos
+	Globals.curScene.get_node("Projectiles").add_child(shader)
+
+func add_poi_marker(target):
+	curScene.get_node("UI/POI").add_indicator(target, PLAYER)
 	
-	tween.interpolate_property(node, "scale",
-			Vector2(1, 1), Vector2(4, 4), 2,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	tween.interpolate_property(node, "modulate:a",
-			1, 0, 2,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)#
-	tween.start()
-	yield(tween, "tween_all_completed")
-	node.queue_free()
+func remove_poi_marker(target):
+	if "target_indicator" in target and target.target_indicator != null and is_instance_valid(target.target_indicator):
+		target.target_indicator.queue_free()
+	
+func getRawDamage(minDmg, maxDmg, multi):
+	return round(rng.randi_range(minDmg, maxDmg) * multi)
+	
+#func init_resolution():
+#
+#	var index:int = -1
+#	for option in Globals.reso_options:
+#		index += 1
+#		var string = str(option.x, " x ", option.y)
+#		UI.pause.res.add_item(string)
+#		if Globals.SCREEN == option:
+#			UI.pause.res.selected = index
+#
+#	index = -1
+#	for i in Globals.zoom_options:
+#		index += 1
+#		UI.pause.zoom.add_item(str(i))
+#		if Globals.ZOOM == Vector2(i, i):
+#			UI.pause.zoom.selected = i
+#
+#	UI.pause._on_Resolution_item_selected(UI.pause.res.selected)
+#	UI.pause._on_Zoom_item_selected(UI.pause.zoom.selected)
+#	curScene._on_resolutionChange()
+	
+func increase_difficulty(value:int):
+	DIFFICULTY += value
+	handler_spawner.enemy_str_max += value
+	UI.set_diffi_info(DIFFICULTY)
+	UI.set_main_text("Diff up")
+	
+	print("adding difficulty: ", value, ", now: ", DIFFICULTY)
+	

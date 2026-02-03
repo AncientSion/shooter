@@ -7,14 +7,21 @@ func _ready():
 	pass
 		
 func doInit():
-	for n in effects[0].amount:
-		var bit = Globals.handler_spawner.get(effects[0].prop).instance()
-		Globals.curScene.get_node("Various").add_child(bit)
+	addSelfDrones()
+	
+func addSelfDrones():
+	if bits.size() > 0:
+		return
+		
+	for stack in result[0].stacks:
+		var bit = Globals.handler_spawner.get(result[0].prop).instance()
+		Globals.curScene.get_node("Neutral_Units").add_child(bit)
 #		func construct(init_orbit_radius, init_orbit_speed, init_orbit_radius_offset):
-		bit.construct(effects[0].orbit_radius, effects[0].orbit_speed, TAU/effects[0].amount*(n+1))
-		bit.setOrbitTarget(curTarget)
+		bit.construct(result[0].orbit_radius, result[0].orbit_speed, TAU/result[0].stacks*(stack+1))
+		bit.setOrbitTarget(targetProp)
 		bit.setArmament()
 		bit.doInit()
+		bit.setActive()
 		bits.append(bit)
 		
 func doUse():
@@ -35,22 +42,19 @@ func setQualityMods():
 		1:
 			mods.append({"name": "More Missiles", "prop": "amount", "effect": 1.1, "type": "pct"})
 		2:
-			mods.append({"name": "Way more Missiles", "prop": "amount", "effect": 1.2, "type": "pct"})
-			mods.append({"name": "Way more Damage", "prop": "damage", "effect": 1.1, "type": "pct"})
+			mods.append({"name": "Way More Missiles", "prop": "amount", "effect": 1.2, "type": "pct"})
+			mods.append({"name": "Way More Damage", "prop": "damage", "effect": 1.1, "type": "pct"})
 			
 func doTrigger():
 	pass
-	
-func canBeOutOutBounds():
-	return true
 	
 func needsTarget():
 	return true
 	
 func setItemTarget(init_target):
-	target = init_target
+	targetProp = init_target
 	
-func doUnloadBits():
+func doUnload():
 	for bit in bits:
 		bit.queue_free()
 	bits = []

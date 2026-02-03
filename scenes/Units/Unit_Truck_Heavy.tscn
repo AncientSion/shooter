@@ -1,26 +1,29 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://textures/truck_02.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Units/Unit_Truck_Heavy.gd" type="Script" id=2]
 [ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sm/Truck_SM.gd" type="Script" id=4]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=5]
+[ext_resource path="res://resources/Truck_Heavy.tres" type="Resource" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 61.5, 13.5 )
+extents = Vector2( 76.75, 14.5 )
 
 [node name="Truck" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
+stats = ExtResource( 6 )
 
-[node name="Sprite" parent="." index="1"]
-scale = Vector2( 0.25, 0.25 )
+[node name="SM" parent="." index="0" instance=ExtResource( 5 )]
+script = ExtResource( 4 )
+
+[node name="Main" parent="Sprites" index="0"]
 texture = ExtResource( 1 )
-__meta__ = {
-"_editor_description_": "	"
-}
 
-[node name="VisibilityNotifier2D" parent="." index="2"]
+[node name="VisibilityNotifier2D" parent="." index="7"]
 position = Vector2( 9.23872e-07, -2.08616e-07 )
 scale = Vector2( 2.2, 0.9 )
 
 [node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
-position = Vector2( -1.5, 0.5 )
+position = Vector2( 2.25, -1.5 )
 shape = SubResource( 1 )

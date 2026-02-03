@@ -16,4 +16,4 @@ export var charges:int
 export var cooldown:float
 export var script_src:String
 
-export var effects:Resource
+export var result:Resource

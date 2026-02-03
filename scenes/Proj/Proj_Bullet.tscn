@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/Proj/Proj_Bullet.gd" type="Script" id=1]
+[ext_resource path="res://textures/bullet_03.png" type="Texture" id=2]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0.881818 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.236364 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 6.10938, 3.28125 )
 
 [node name="Bullet" type="Node2D"]
 script = ExtResource( 1 )
@@ -15,6 +30,24 @@ scale = Vector2( 0.9, 0.4 )
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="Trail" type="Line2D" parent="."]
+visible = false
+position = Vector2( -6, 0 )
+points = PoolVector2Array( 0, 0, -60, 0 )
+width = 3.0
+width_curve = SubResource( 1 )
+default_color = Color( 1, 0.890196, 0, 0.211765 )
+
+[node name="Sprites" type="Position2D" parent="."]
+
+[node name="Main" type="AnimatedSprite" parent="Sprites"]
+frames = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="Sprites"]
+modulate = Color( 0, 0, 0, 1 )
+self_modulate = Color( 0.956863, 0.956863, 0.956863, 1 )
+texture = ExtResource( 2 )
+
 [node name="ColNodes" type="Position2D" parent="."]
 
 [node name="DmgNormal" type="Area2D" parent="ColNodes"]
@@ -22,9 +55,10 @@ collision_layer = 0
 collision_mask = 0
 monitoring = false
 
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal"]
+shape = SubResource( 3 )
+
 [node name="AoeArea" type="Area2D" parent="ColNodes"]
 collision_layer = 0
 collision_mask = 0
 monitorable = false
-
-[connection signal="area_entered" from="ColNodes/DmgNormal" to="." method="_on_DmgNormal_area_entered"]

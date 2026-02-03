@@ -9,5 +9,5 @@ var states = {}
 onready var parent = get_parent()
 
 #func _physics_process(delta):
-func _process_state_logic(delta):
+func _process_state_logic(_delta):
 	pass

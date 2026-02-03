@@ -4,10 +4,16 @@
 
 [resource]
 script = ExtResource( 1 )
-health = 15
+health = 22
 armor = 0
-speed = 220
-minSpeed = 160
+maxSpeed = 230
+minSpeed = 0
+enginePower = 0
 lootValue = 3
-sightRange = 600
-look_ahead = 300
+sightRange = 900
+look_ahead = 500
+num_rays = 8
+canCrash = true
+crashTresh = 0.9
+can_withdraw = true
+flee_tresh = 0.5

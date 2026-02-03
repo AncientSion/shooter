@@ -2,37 +2,51 @@ extends Ground_Entity
 class_name City
 
 var	display = "City"
-var behaviors = ["Guard"]
 
 func _ready():
 	faction = 0
 	add_to_group("skyscraper")
 	modify()
-	
-func _physics_process(delta):
-	pass
-	
+
 func setStats():
-	pass
+	.setStats()
+	coreRange = 150
 
 func getSpawnY(viewFrom, viewTo):
 	return Globals.ROADY + Globals.rng.randi_range(-10, 10) - self.texDim.y/2
 
 func getPossibleWeapons(index):
-#func construct(init_type, init_display, init_shield, init_shieldDist = 60, init_shieldLength = 36):
+#	var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
+#	shield.construct(5, "Shield", stats)
+#	shield.add_shield_bar()
+#	shield.scaleBar("shieldbar", 0.5)
+#	
+	var	shield = Globals.weapon_shield_dir.instance()
+	var stats = {}
 	match index:
 		0:
-			var weapon = Globals.weapon_shield.instance()
-			weapon.construct(5, "Shield", 15, 140, 85)
-			return weapon
+			stats = {"maxShield": 120, "shieldRegenTime": 0.5, "shieldBreakTime": 18.0, "shieldFastCharge": 0.25, "shieldDist": 110, "shieldLength": 90}
+#			stats = {"maxShield": 180, "shieldRegenTime": 0.5, "shieldBreakTime": 24.0, "shieldFastCharge": 0.25, "shieldDist": 150, "shieldLength": 200}
+#			var weapon = Globals.weapon_shield_dir.instance()
+#			weapon.construct(5, "Shield", 50, 140, 85)
+#			return weapon
 		1:
-			var weapon = Globals.weapon_shield.instance()
-			weapon.construct(5, "Shield", 15, 165, 85)
-			return weapon
+			stats = {"maxShield": 120, "shieldRegenTime": 0.5, "shieldBreakTime": 18.0, "shieldFastCharge": 0.25, "shieldDist": 135, "shieldLength": 90}
+#			var weapon = Globals.weapon_shield_dir.instance()
+#			weapon.construct(5, "Shield", 50, 165, 85)
+#			return weapon
 		2:
-			var weapon = Globals.weapon_shield.instance()
-			weapon.construct(5, "Shield", 15, 140, 85)
-			return weapon
+			stats = {"maxShield": 120, "shieldRegenTime": 0.5, "shieldBreakTime": 18.0, "shieldFastCharge": 0.25, "shieldDist": 110, "shieldLength": 90}
+#			var weapon = Globals.weapon_shield_dir.instance()
+#			weapon.construct(5, "Shield", 50, 140, 85)
+#			return weapon
+			
+	shield.construct(5, "Shield", stats)
+	shield.shield = shield.maxShield
+	shield.add_shield_bar()
+	shield.scaleBar("shieldbar", 0.8)
+	return shield
+#	pass
 
 func modify():
 	return

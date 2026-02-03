@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=2]
 
-[sub_resource type="Gradient" id=1]
+[sub_resource type="Gradient" id=4]
 offsets = PoolRealArray( 0, 0.664516, 1 )
 colors = PoolColorArray( 1, 0.890625, 0, 1, 1, 0.539063, 0, 1, 1, 0, 0, 1 )
 
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
 
-[sub_resource type="ParticlesMaterial" id=3]
+[sub_resource type="ParticlesMaterial" id=6]
 emission_shape = 2
 emission_box_extents = Vector3( 6, 1, 1 )
 flag_disable_z = true
@@ -18,11 +18,11 @@ initial_velocity = 50.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
-color_ramp = SubResource( 2 )
+color_ramp = SubResource( 5 )
 
 [node name="Fire" type="Particles2D"]
 amount = 13
 lifetime = 0.3
 speed_scale = 0.6
 visibility_rect = Rect2( -20, -60, 40, 80 )
-process_material = SubResource( 3 )
+process_material = SubResource( 6 )

@@ -1,0 +1,4159 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"monit",
+				"monitorable"
+			],
+			[
+				"var",
+				"var_export"
+			],
+			[
+				"query",
+				"queryB"
+			],
+			[
+				"getS",
+				"getSetCodeBySetName"
+			],
+			[
+				"getPri",
+				"getPriceDataByCardId"
+			],
+			[
+				"setco",
+				"setcode"
+			],
+			[
+				"auti",
+				"autoHideUI"
+			],
+			[
+				"daas",
+				"dataSets"
+			],
+			[
+				"set",
+				"setcode"
+			],
+			[
+				"optio",
+				"options"
+			],
+			[
+				"glob",
+				"GLOBALS"
+			],
+			[
+				"foilAvai",
+				"foilAvailCtx"
+			],
+			[
+				"s",
+				"stmt"
+			],
+			[
+				"var_",
+				"var_dump"
+			],
+			[
+				"insertne",
+				"insertNewCardsWithSetID"
+			],
+			[
+				"prn",
+				"print"
+			],
+			[
+				"tur",
+				"trueerrors"
+			],
+			[
+				"analy",
+				"analyzeFolder"
+			],
+			[
+				"break",
+				"breakpoint"
+			],
+			[
+				"php",
+				"php_sapi_name"
+			],
+			[
+				"DIR",
+				"__DIR__"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"avail",
+				"maxAvail"
+			],
+			[
+				"cards",
+				"cardsets"
+			],
+			[
+				"rar",
+				"rarities"
+			],
+			[
+				"crawl",
+				"crawlBaseSet"
+			],
+			[
+				"deleteFro",
+				"deleteFromWithin"
+			],
+			[
+				"allc",
+				"recreateAllCardsTable"
+			],
+			[
+				"deletef",
+				"deleteFromEnd"
+			],
+			[
+				"availC",
+				"availChangeMax"
+			],
+			[
+				"dele",
+				"deleteDoubledCardEntries"
+			],
+			[
+				"auto",
+				"autoHideUI"
+			],
+			[
+				"build",
+				"buildAllCards"
+			],
+			[
+				"inli",
+				"inline-block\tdisplay"
+			],
+			[
+				"time",
+				"timeStamp"
+			],
+			[
+				"jsc",
+				"json_encode"
+			],
+			[
+				"min",
+				"minAvail"
+			],
+			[
+				"fun",
+				"func_get_args"
+			],
+			[
+				"jso",
+				"json_encode"
+			],
+			[
+				"json",
+				"json_last_error"
+			],
+			[
+				"JSON",
+				"json_decode"
+			],
+			[
+				"sub",
+				"substr"
+			],
+			[
+				"foil",
+				"foilprice"
+			],
+			[
+				"mkm",
+				"mkmBaseUrl"
+			],
+			[
+				"url",
+				"urlencode"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"cur",
+				"cursor"
+			],
+			[
+				"text-a",
+				"text-align"
+			],
+			[
+				"rarit",
+				"rarityStr"
+			],
+			[
+				"foilAvail",
+				"foilAvailShift"
+			],
+			[
+				"getCard",
+				"getCardDataSet"
+			],
+			[
+				"foilP",
+				"foilPrice"
+			],
+			[
+				"label",
+				"labels"
+			],
+			[
+				"normalstock",
+				"normalStockCtx"
+			],
+			[
+				"normalPri",
+				"normalPriceCtx"
+			],
+			[
+				"foilStockC",
+				"foilStockCtx"
+			],
+			[
+				"foilPrice",
+				"foilPriceCtx"
+			],
+			[
+				"normalPric",
+				"normalPriceCtx"
+			],
+			[
+				"normalS",
+				"normalStockCanvas"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"jsn_",
+				"json_encode"
+			],
+			[
+				"getDm",
+				"getDmgsPerShot"
+			],
+			[
+				"combat",
+				"combatlogWrapper"
+			],
+			[
+				"reinfr",
+				"reinforceTurn"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"offse",
+				"offsetY"
+			],
+			[
+				"isDe",
+				"isDestroyedThisTurn"
+			],
+			[
+				"setSub",
+				"setSubSystemState"
+			],
+			[
+				"getBoo",
+				"getBoostEffect"
+			],
+			[
+				"animateU",
+				"animateunitExplos"
+			],
+			[
+				"setLa",
+				"setlastPosCC"
+			],
+			[
+				"button",
+				"buttonTD"
+			],
+			[
+				"getCrew",
+				"getCrewLevel"
+			],
+			[
+				"getBoos",
+				"getBoostLevel"
+			],
+			[
+				"getBoost",
+				"getBoostEffect"
+			],
+			[
+				"shie",
+				"shieldDmg"
+			],
+			[
+				"getRem",
+				"getRemEP"
+			],
+			[
+				"em",
+				"emDmg"
+			],
+			[
+				"baseHit",
+				"baseHitChance"
+			],
+			[
+				"stroke",
+				"strokeStyle"
+			],
+			[
+				"preloadf",
+				"preLoadFighters"
+			],
+			[
+				"getSyste",
+				"getSystemByName"
+			],
+			[
+				"primary",
+				"primaryTable"
+			],
+			[
+				"getUn",
+				"getUnusedPower"
+			],
+			[
+				"getPl",
+				"getPlannedFacing"
+			],
+			[
+				"getShor",
+				"getShortenTurnCost"
+			],
+			[
+				"getEf",
+				"getEffectiveEP"
+			],
+			[
+				"getRemaining",
+				"getRemainingEP"
+			],
+			[
+				"test",
+				"testForCrits"
+			],
+			[
+				"getArc",
+				"getArcDir"
+			],
+			[
+				"delet",
+				"deleteAllReinforcements"
+			],
+			[
+				"new",
+				"newTarget"
+			],
+			[
+				"ne",
+				"newTarget"
+			],
+			[
+				"instruct",
+				"instructWrapper"
+			],
+			[
+				"setUnit",
+				"setUnitStatus"
+			],
+			[
+				"handelJum",
+				"handleJumpOutActions"
+			],
+			[
+				"jum",
+				"jumpOut"
+			],
+			[
+				"salvo",
+				"salvoCtx"
+			],
+			[
+				"conc",
+				"concat"
+			],
+			[
+				"getSy",
+				"getSystemByName"
+			],
+			[
+				"createMove",
+				"createMoveStartEntries"
+			],
+			[
+				"ships",
+				"shipsBought"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"roa",
+				"rotate270"
+			],
+			[
+				"inte",
+				"integrity"
+			],
+			[
+				"an",
+				"animating"
+			],
+			[
+				"baseI",
+				"baseImpulse"
+			],
+			[
+				"hidei",
+				"hideInfoDiv"
+			],
+			[
+				"int",
+				"integrity"
+			],
+			[
+				"remaining",
+				"remainingIntegrity"
+			],
+			[
+				"rem",
+				"remainingNegation"
+			],
+			[
+				"remainig",
+				"remainingNegation"
+			],
+			[
+				"bonus",
+				"bonusNegation"
+			],
+			[
+				"reinforc",
+				"reinforceFaction"
+			],
+			[
+				"prev",
+				"preventDefault"
+			],
+			[
+				"armour",
+				"armourElement"
+			],
+			[
+				"getSystem",
+				"getSystemById"
+			],
+			[
+				"update",
+				"updateShipPower"
+			],
+			[
+				"Squ",
+				"Squadron"
+			],
+			[
+				"high",
+				"highlightAllSelectedWeapons"
+			],
+			[
+				"prri",
+				"primary"
+			],
+			[
+				"create",
+				"createElement"
+			],
+			[
+				"rien",
+				"reinforce"
+			],
+			[
+				"ammo",
+				"ammoId"
+			],
+			[
+				"getLock",
+				"getLockEffect"
+			],
+			[
+				"heavy",
+				"UltraHeavy"
+			],
+			[
+				"offs",
+				"offsetX"
+			],
+			[
+				"getMiss",
+				"getMissionTypeString"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "scripts/AoE_Marker.gd",
+			"settings":
+			{
+				"buffer_size": 1422,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Boundary.gd",
+			"settings":
+			{
+				"buffer_size": 1679,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/CamA.gd",
+			"settings":
+			{
+				"buffer_size": 1076,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/DamageLabel.gd",
+			"settings":
+			{
+				"buffer_size": 889,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Explosion.gd",
+			"settings":
+			{
+				"buffer_size": 203,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Globals.gd",
+			"settings":
+			{
+				"buffer_size": 18902,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Handler_Mission.gd",
+			"settings":
+			{
+				"buffer_size": 16435,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Handler_Spawner.gd",
+			"settings":
+			{
+				"buffer_size": 9280,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Intermission.gd",
+			"settings":
+			{
+				"buffer_size": 5388,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Menu.gd",
+			"settings":
+			{
+				"buffer_size": 541,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Mission_Hold.gd",
+			"settings":
+			{
+				"buffer_size": 889,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Mission_ObjWithUnit.gd",
+			"settings":
+			{
+				"buffer_size": 167,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Mission_Survive.gd",
+			"settings":
+			{
+				"buffer_size": 135,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Mount.gd",
+			"settings":
+			{
+				"buffer_size": 1473,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\nfunc loadItemTemplatesJSON():\n\tvar file_path = \"res://json/items.json\"\n\tvar file = File.new()\n\tfile.open(file_path, File.READ)\n\tvar content_as_text = file.get_as_text()\n\tvar json = parse_json(content_as_text)\n\t\n\tfor item in json:\n\t\titem.type = int(item.type)\n\tfor n in json:\n\t\titemTemplates.append(n)\n\n\nfunc getItemByName(display):\n\tfor n in itemTemplates:\n\t\t#print(\"getSpecificBaseWeaponByName\")\n\t\t#print(n.display)\n\t\tif n.display == display:\n\t\t\treturn constructItem(n)\n\t\t\t\nfunc constructItem(pick):\n\tprint(\"constructItem \", pick.display)\n\tvar base = Globals.get(pick.constructor).instance()\n\tif pick.script != \"\":\n\t\tvar string = str(\"res://scenes/Utilities/Item_\", pick.script, \".gd\")\n\t\tbase.set_script(load(string))\n\tbase.constructNew(pick)\n\treturn base\n",
+			"file": "scripts/new_script.gd",
+			"file_size": 758,
+			"file_write_time": 133350562056039163,
+			"settings":
+			{
+				"buffer_size": 758,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "json/missile.json",
+			"settings":
+			{
+				"buffer_size": 10922,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Player.gd",
+			"settings":
+			{
+				"buffer_size": 23179,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/shader.gd",
+			"settings":
+			{
+				"buffer_size": 665,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/ShipShield.gd",
+			"settings":
+			{
+				"buffer_size": 551,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Stage_0.gd",
+			"settings":
+			{
+				"buffer_size": 18144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Base.gd",
+			"settings":
+			{
+				"buffer_size": 26078,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/UI.gd",
+			"settings":
+			{
+				"buffer_size": 5913,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_AoE.gd",
+			"settings":
+			{
+				"buffer_size": 944,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_Base.gd",
+			"settings":
+			{
+				"buffer_size": 13665,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_Beam.gd",
+			"settings":
+			{
+				"buffer_size": 4587,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_Missile.gd",
+			"settings":
+			{
+				"buffer_size": 1500,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_Proj.gd",
+			"settings":
+			{
+				"buffer_size": 136,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Weapon_Shell.gd",
+			"settings":
+			{
+				"buffer_size": 731,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Fighter.gd",
+			"settings":
+			{
+				"buffer_size": 6320,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Jeep.gd",
+			"settings":
+			{
+				"buffer_size": 480,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Ground_Entity.gd",
+			"settings":
+			{
+				"buffer_size": 445,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Ground_Vehicle.gd",
+			"settings":
+			{
+				"buffer_size": 2056,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 63 files for \"unc setSpriteF\"\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Base.gd:\n  287  \ttimer.start()\n  288  \t\n  289: func setSpriteFacing():\n  290  \tif velocity.x < 0:\n  291  \t\tsprite.flip_v = true\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Helicopter.gd:\n   53  \t\t\t$SM.set_state($SM.states.oob)\n   54  \n   55: func setSpriteFacing():\n   56  \tif curTarget == null:\n   57  \t\tif moveTarget.x - position.x < 0:\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Jeep.gd:\n   30  \tpass\n   31  \t\n   32: func setSpriteFacing():\n   33  \tif velocity.x < 0:\n   34  \t\tsprite.flip_v = true\n\n3 matches across 3 files\n\n\nSearching 63 files for \"unc setSpriteF\"\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Base.gd:\n  287  \ttimer.start()\n  288  \t\n  289: func setSpriteFacing():\n  290  \tif velocity.x < 0:\n  291  \t\tsprite.flip_v = true\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Helicopter.gd:\n   53  \t\t\t$SM.set_state($SM.states.oob)\n   54  \n   55: func setSpriteFacing():\n   56  \tif curTarget == null:\n   57  \t\tif moveTarget.x - position.x < 0:\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Jeep.gd:\n   30  \tpass\n   31  \t\n   32: func setSpriteFacing():\n   33  \tif velocity.x < 0:\n   34  \t\tsprite.flip_v = true\n\n3 matches across 3 files\n\n\nSearching 62 files for \"setupDelayedWarpIn\"\n\nC:\\Godot\\topdown\\scripts\\Handler_Mission.gd:\n  192  \t\t\tattacker.addHealthBar()\n  193  \t\t\tattacker.doInit()\n  194: \t\t\t#attacker.setupDelayedWarpIn(1)\n  195: \t\t\tattacker.setupDelayedWarpIn(6 + i*3)\n  196  \tmissionStart()\n  197  \n  ...\n  247  \t\t\ty = initialY + (i*-Globals.getRandomEntry([-225, -150, 150, 225]))\n  248  \t\t\tsingle.connect(\"hasWarpedIn\", self, \"missionStart\")\n  249: \t\t\tsingle.setupDelayedWarpIn(3 + i*3)\n  250  \t\t\t\n  251  \t\tsingle.position = Vector2((Globals.WIDTH / 2) + x, y)\n\nC:\\Godot\\topdown\\scripts\\Units\\Unit_Base.gd:\n  270  \t\tdebug_ui_node.show()\n  271  \t\n  272: func setupDelayedWarpIn(time):\n  273: \tprint(\"setupDelayedWarpIn for \", self.display, \": \", time, \" seconds.\")\n  274  \thideSelf()\n  275  \tsetInactive()\n\n5 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 1992,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "scripts/Units/Base_Entity.gd",
+			"settings":
+			{
+				"buffer_size": 20315,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Dummy.gd",
+			"settings":
+			{
+				"buffer_size": 388,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Obstacle.gd",
+			"settings":
+			{
+				"buffer_size": 258,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Skyscraper.gd",
+			"settings":
+			{
+				"buffer_size": 987,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_AA_Tower.gd",
+			"settings":
+			{
+				"buffer_size": 703,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Air.gd",
+			"settings":
+			{
+				"buffer_size": 3659,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Arty.gd",
+			"settings":
+			{
+				"buffer_size": 643,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "extends Base_Unit\nclass_name Blob\n\nvar display = \"Blob\"\nvar time = 0.0\nvar orbit_radius:int\nvar orbit_speed:float\nvar orbit_radius_offset:float\nvar orbitTarget:Base_Entity\n\nfunc _ready():\n\tprint(\"adding\")\n\tindestructable = true\n\tif faction == 0:\n\t\tsetFriendly()\n\telif faction == 1:\n\t\tsetHostile()\n\telif faction == 2:\n\t\tsetNeutral()\n\tpass\n\t\nfunc construct(init_orbit_radius, init_orbit_speed, init_orbit_radius_offset):\n\torbit_radius = init_orbit_radius\n\torbit_speed = init_orbit_speed\n\torbit_radius_offset = init_orbit_radius_offset\n\t\nfunc doInit():\n\tpass\n\t\nfunc setStats():\n\tpass\n\t\nfunc _physics_process(_delta):\n\ttime += _delta\n\tposition = Vector2(\n\t\tsin(time * orbit_speed + orbit_radius_offset) * orbit_radius,\n\t\tcos(time * orbit_speed + orbit_radius_offset) * orbit_radius\n\t)\n\t\n\tif orbitTarget != null:\n\t\tposition += orbitTarget.global_position\n\t\n#\trotation_degrees -= 1\n#\trotation_degrees = round(rotation_degrees)\n#\tprint(rotation_degrees)\n\nfunc initAIList():\n\treturn\n\nfunc takeDamage(entity, dmgMulti):\n\tvar pos = entity.getPointOfImpact(self)\n\tvar angle = entity.getAttackAngle(self)\n\thandleShieldDamage(10, pos, angle)\n\t\t\nfunc handleShieldDamage(shieldDmgTaken, pos, angle):\n\taddShieldExplosion(shieldDmgTaken, pos, angle)\n\tvar labelPos = pos + Vector2(0, -(texDim.y/2) -10)\n\tcreateFloatingLabel(0, labelPos, Vector2(0, -100), Color(0, 0, 1, 1))\n\t\nfunc setOrbitTarget(target):\n\torbitTarget = target\n",
+			"file": "scripts/Units/Unit_Blob.gd",
+			"file_size": 1409,
+			"file_write_time": 133352243555871834,
+			"settings":
+			{
+				"buffer_size": 1409,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Boss.gd",
+			"settings":
+			{
+				"buffer_size": 4978,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Capital.gd",
+			"settings":
+			{
+				"buffer_size": 2207,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Cargo_Hauler.gd",
+			"settings":
+			{
+				"buffer_size": 986,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_City.gd",
+			"settings":
+			{
+				"buffer_size": 1471,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Cruiser.gd",
+			"settings":
+			{
+				"buffer_size": 680,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Destroyer.gd",
+			"settings":
+			{
+				"buffer_size": 537,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Drone_new.gd",
+			"settings":
+			{
+				"buffer_size": 3677,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Frigate.gd",
+			"settings":
+			{
+				"buffer_size": 2613,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Mobile_AA_Heavy.gd",
+			"settings":
+			{
+				"buffer_size": 522,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Mobile_AA_Light.gd",
+			"settings":
+			{
+				"buffer_size": 249,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Truck_Heavy.gd",
+			"settings":
+			{
+				"buffer_size": 85,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Units/Unit_Truck_Light.gd",
+			"settings":
+			{
+				"buffer_size": 75,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Base.gd",
+			"settings":
+			{
+				"buffer_size": 4080,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Beam.gd",
+			"settings":
+			{
+				"buffer_size": 10148,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Bomb.gd",
+			"settings":
+			{
+				"buffer_size": 958,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Bullet.gd",
+			"settings":
+			{
+				"buffer_size": 889,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Missile.gd",
+			"settings":
+			{
+				"buffer_size": 1782,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Rail.gd",
+			"settings":
+			{
+				"buffer_size": 736,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "scripts/Proj/Proj_Shell.gd",
+			"settings":
+			{
+				"buffer_size": 1939,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: isntal",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"package instal",
+				"Package Control: Install Package"
+			],
+			[
+				"gdscr",
+				"Package Control: Discover Packages"
+			],
+			[
+				"GDScr",
+				"Package Control: Discover Packages"
+			],
+			[
+				"Package Control: list",
+				"Package Control: List Packages"
+			],
+			[
+				"package control install package",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"brack",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 428.0
+	},
+	"console":
+	{
+		"height": 426.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Godot/topdown/scripts/Weapon_Shield.gd",
+		"/C/Godot/topdown/scripts/Parti_Smoke.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Drone.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Helicopter_02.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Helicopter.gd",
+		"/C/Godot/topdown/csv/weapontemplates.csv",
+		"/C/Godot/topdown/scripts/Units/Unit_Fighter.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Jeep.gd",
+		"/C/Godot/topdown/sm/FighterSM.gd",
+		"/C/Godot/topdown/sm/HeliSM.gd",
+		"/C/Godot/topdown/sm/JeepSM.gd",
+		"/C/Godot/topdown/sm/ObstacleSM.gd",
+		"/C/Godot/topdown/sm/PlayerSM.gd",
+		"/C/Godot/topdown/sm/SM.gd",
+		"/C/Godot/topdown/json/missile.json",
+		"/C/Godot/topdown/scripts/AoE_Marker.gd",
+		"/C/Godot/topdown/scripts/Boundary.gd",
+		"/C/Godot/topdown/scripts/CamA.gd",
+		"/C/Godot/topdown/scripts/DamageLabel.gd",
+		"/C/Godot/topdown/scripts/Explosion.gd",
+		"/C/Godot/topdown/scripts/Globals.gd",
+		"/C/Godot/topdown/scripts/Handler_Mission.gd",
+		"/C/Godot/topdown/scripts/Handler_Spawner.gd",
+		"/C/Godot/topdown/scripts/Intermission.gd",
+		"/C/Godot/topdown/scripts/Menu.gd",
+		"/C/Godot/topdown/scripts/Mission_Hold.gd",
+		"/C/Godot/topdown/scripts/Mission_ObjWithUnit.gd",
+		"/C/Godot/topdown/scripts/Mission_Survive.gd",
+		"/C/Godot/topdown/scripts/Mount.gd",
+		"/C/Godot/topdown/scripts/new_script.gd",
+		"/C/Godot/topdown/scripts/Player.gd",
+		"/C/Godot/topdown/scripts/shader.gd",
+		"/C/Godot/topdown/scripts/ShipShield.gd",
+		"/C/Godot/topdown/scripts/Stage_0.gd",
+		"/C/Godot/topdown/scripts/UI.gd",
+		"/C/Godot/topdown/scripts/Weapon_AoE.gd",
+		"/C/Godot/topdown/scripts/Weapon_Base.gd",
+		"/C/Godot/topdown/scripts/Weapon_Beam.gd",
+		"/C/Godot/topdown/scripts/Weapon_Missile.gd",
+		"/C/Godot/topdown/scripts/Weapon_Proj.gd",
+		"/C/Godot/topdown/scripts/Weapon_Shell.gd",
+		"/C/Godot/topdown/scripts/Units/Base_Entity.gd",
+		"/C/Godot/topdown/scripts/Units/Dummy.gd",
+		"/C/Godot/topdown/scripts/Units/Ground_Entity.gd",
+		"/C/Godot/topdown/scripts/Units/Ground_Vehicle.gd",
+		"/C/Godot/topdown/scripts/Units/Obstacle.gd",
+		"/C/Godot/topdown/scripts/Units/Skyscraper.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_AA_Tower.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Air.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Arty.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Base.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Blob.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Boss.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Capital.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Cargo_Hauler.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_City.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Cruiser.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Destroyer.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Drone_new.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Frigate.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Mobile_AA_Heavy.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Mobile_AA_Light.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Truck_Heavy.gd",
+		"/C/Godot/topdown/scripts/Units/Unit_Truck_Light.gd",
+		"/C/Godot/topdown/sm/SM.tscn",
+		"/C/xampp/htdocs/crawl/new.php",
+		"/C/xampp/htdocs/crawl/favs.php",
+		"/C/xampp/htdocs/crawl/multi.php",
+		"/C/xampp/htdocs/crawl/script.js",
+		"/C/xampp/htdocs/crawl/global.php",
+		"/C/xampp/htdocs/crawl/shakers.php",
+		"/C/xampp/htdocs/crawl/edh.php",
+		"/C/xampp/htdocs/crawl/charts.php",
+		"/C/xampp/htdocs/crawl/localChart.js",
+		"/C/xampp/htdocs/crawl/libs/hover.js",
+		"/C/xampp/htdocs/crawl/server/db.php",
+		"/C/xampp/htdocs/crawl/helper.php",
+		"/C/xampp/htdocs/crawl/api.php",
+		"/C/xampp/htdocs/crawl/style/style.css",
+		"/C/xampp/htdocs/crawl/showcase.php",
+		"/C/xampp/htdocs/fire/lobby.php",
+		"/C/xampp/htdocs/crawl/simple_html_dom.php",
+		"/C/Users/Chris/Downloads/asgardex-keystore-thor1t5...p82.json",
+		"/C/Godot/topdown/csv/loot_items.csv",
+		"/C/Users/Chris/AppData/Local/nuclearthrone/NuclearThroneTogether.sav",
+		"/C/Users/Chris/AppData/Local/nuclearthrone/data/teassets.mod/save.sav",
+		"/C/Steam/steamapps/common/Nuclear Throne/mods/blaac/concentration.skill.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/mods/Metamorphosis/camoflauge.skill.gml",
+		"/C/Users/Chris/AppData/Local/nuclearthrone/NuclearThrone.sav",
+		"/C/Godot/topdown/assets/.gdignore",
+		"/C/Users/Chris/AppData/Local/nuclearthrone/mods/NTTE/teevents.mod.gml",
+		"/C/Godot/topdown/data/weaponmods2.csv",
+		"/C/Users/Chris/AppData/Local/nuclearthrone/mods/NTTE/teassets.mod.gml",
+		"/C/Users/Chris/AppData/Local/Temp/report.xml",
+		"/C/xampp/htdocs/fire/systems.js",
+		"/C/xampp/htdocs/fire/index.php",
+		"/C/xampp/htdocs/crawl/style/datatables.min.css",
+		"/C/xampp/htdocs/crawl/libs/Chart.bundle.min.js",
+		"/C/cdda/game/data/json/items/ranged/archery.json",
+		"/C/Users/Chris/Saved Games/Arkane Studios/Prey/Profiles/default/profile.xml",
+		"/C/cdda/game/save/Roseland_copy/uistate.json",
+		"/C/Users/Chris/Downloads/facebook-christianefunke4455/about_you/friend_peer_group.html",
+		"/C/cdda/game/save/Roseland_copy/worldoptions.json",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/main.txt",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/examplepet.mod.gml",
+		"/C/Users/Chris/AppData/Local/AMD/CN/1.xml",
+		"/C/Steam/steamapps/common/Nuclear Throne/bosshudredux.mod.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/main2.txt",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/main3.txt",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/ntte.mod.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/NTTE-Changelog.txt",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/petlib.mod.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/teassets.mod.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/teloader.mod.gml",
+		"/C/Steam/steamapps/common/Nuclear Throne/NTTE/telib.mod.gml",
+		"/C/Steam/steamapps/workshop/content/392110/1855261346/GalaxyGenerator/WeightTableDefinitions.xml",
+		"/C/Steam/steamapps/workshop/content/392110/1855261346/Better Systems.xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Simulation/SimulationDescriptors[SpecialNodeEffectResources].xml",
+		"/C/Games/Stellaris/launcher-settings - Kopie.json",
+		"/C/Games/Stellaris/launcher-settings.json",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Simulation/SimulationDescriptors[SpecialNodeOrbitResources].xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Simulation/SpecialNodeDefinitions.xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/GalaxyGenerator/WeightTableDefinitions.xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Gui/GuiElements[SpecialNodeEffects].xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Gui/GuiElements[SpecialNodes].xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/Gui/GuiElements[Strategics].xml",
+		"/C/Steam/steamapps/workshop/content/392110/1263186686/DeepSpaceMining.xml",
+		"/C/Games/Stellaris/settings-layout.json"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 121.0,
+		"where_history":
+		[
+			"",
+			"*.js",
+			"*.s",
+			"",
+			"css",
+			"\n*.css",
+			"",
+			"*.js\t",
+			".js",
+			",js",
+			"",
+			".*js",
+			".js",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"js",
+			".js",
+			"*.js",
+			"*.php",
+			"*.js",
+			"*.php",
+			"",
+			"*.js",
+			"*.php",
+			"",
+			"global.php",
+			"crawl.php",
+			"",
+			"BOXES.json",
+			"",
+			"shakers.php",
+			"",
+			"script.js",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"*,js",
+			"\t\t\t",
+			"\t",
+			"",
+			"squadron.js",
+			"sqaudron.js",
+			"mixed.js",
+			"",
+			"mixed.js",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"*-php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"\t\t\t",
+			"\t\t",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"(graph",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"*.js",
+			"*,js",
+			"",
+			"*.php",
+			"",
+			"*.js",
+			"",
+			"squadron.php",
+			"",
+			"squadron.js",
+			"squadron.php",
+			"",
+			"*.js",
+			"",
+			"*.php",
+			"",
+			"*.php",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"setupDelayedWarpIn",
+			"missionState",
+			"setupProtectObj",
+			"projnumber",
+			"on_shield",
+			"unc setSpriteF",
+			"setSpriteFacing",
+			"initSteering",
+			"effect",
+			"bomb ra",
+			"bombr r",
+			"beam",
+			"result",
+			"orbital a",
+			"fish",
+			"handleNewSetCreation",
+			"handlenew",
+			"wep_fire_frame\":59747",
+			"\"wep\":45",
+			"\"45\"",
+			"\"wep\":45,",
+			"\"fish\":{\"main\":{\"wep\":\"tewrapper\",\"tewrapper\":{\"wep\":45,",
+			"\"wep\":45",
+			"char",
+			"charData_1",
+			"cwep\": 100",
+			"\"wep\":",
+			"gun",
+			"machine",
+			"fish",
+			"handleNewSetCreation",
+			"crawlBaseSet",
+			"handleNewSetCreation",
+			"ammo[5] -=",
+			"energyrate",
+			"no html",
+			"ho html",
+			"handle",
+			"handleNewSetCreation",
+			"handle",
+			"handlenew",
+			"f (guiOptions.autoHideUI){",
+			"doc",
+			"handleNewSetCreation",
+			"loadSelectedCardsAndDrawMerged",
+			"contextm",
+			"clearActiveRows",
+			"checkbox",
+			"each",
+			"checked",
+			"getform",
+			"loadCardEntriesBySetAndRarity",
+			"setVariants",
+			"for (let i = 0; i < results.length; i++){\n\t\t\tlet value = results[i].setcode;",
+			"length for",
+			"checkAllForNull",
+			"null",
+			"checkAllForNull",
+			"handleNewSetCreation",
+			"(V.1)",
+			"'\"",
+			"variants",
+			"handleNewSetCreation",
+			"handleNewSetCreation(); return;\nhandleNewSetCreation(); return;\nsettings = ",
+			"handleNewSetCreation(); return;\nsettings = ",
+			"settings = ",
+			"const.settings = ",
+			"Weapon.call(this, system);",
+			"beam.pro",
+			"select ",
+			"addSingleFavorite",
+			"mkm",
+			"add>",
+			"add",
+			"insertsingle",
+			"and cardid is ",
+			"checkAllForNull",
+			"checkVersions",
+			"loadCardEntriesBySetAndRarity",
+			"get all",
+			"single l",
+			"ps://www.cardmarket.co",
+			"cardurl",
+			"_php",
+			"cardname dis",
+			"cardnae dis",
+			"linkToMKM_JS",
+			"linktomkm",
+			"toggleUI()",
+			"#card",
+			".mainContainer",
+			"mainContainer",
+			"setVariants(){\n\t\tconsole.log(setVariants);",
+			".reprints",
+			"preset",
+			"loadSelectedCardsAndDrawMerged",
+			"drawmer",
+			"addnewr",
+			"loadSelectedCardsAndDrawMerged",
+			"linkToMKM_JS",
+			"getvariants",
+			"loadSelectedCardsAndDrawMerged",
+			"draw sel",
+			"reprints",
+			"addNewRow",
+			"setVariants",
+			"vars",
+			"linkToMKM_JS",
+			"setcode",
+			"movetable",
+			"linkToMKM_JS",
+			"large",
+			"picsizelar",
+			"picsizel",
+			"#card",
+			"picSizeNormal",
+			"picsi",
+			"picsizenr",
+			"normal",
+			"picnormal",
+			"\";\n",
+			"handleNewSetCreation",
+			"fakeSearch moveTable",
+			"assem",
+			"setvar",
+			"preset",
+			"=preset",
+			"lookup"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"setVariants",
+			"getLinkToChartPHP_withUID",
+			"linkToChartsPHP_ByString",
+			"loadSelectedCardsAndDrawMerged",
+			"loadDataAndDataAllSelected",
+			"initAllCardSearchInput",
+			"initCardSearchInput",
+			"1",
+			"getMKMCardURL_JS",
+			"linkToMKM_JS",
+			"2",
+			"'",
+			"=> 0",
+			"=> 1",
+			"getVariants",
+			"Value=\"3\"",
+			"Value=\"100\"",
+			"Value=\"50\"",
+			"LEB",
+			"'",
+			" \".LR",
+			"echo \"",
+			"'charter.addNewRow()",
+			"$cardAmounts",
+			"msg",
+			"$tbn",
+			"$card",
+			"$j",
+			"$rarities",
+			"requestAllShakers",
+			"1sets",
+			"Aetherspout",
+			"handleSetCreationFromJSON",
+			"\"JRW\"",
+			"\"JR\"",
+			"assembleFavData",
+			"this.screens[screen].",
+			"this.screens[screen]",
+			"$k",
+			"$i",
+			"$j",
+			"$3",
+			"$i",
+			"$j",
+			"$i",
+			"getSets",
+			"\"",
+			"'",
+			"name",
+			"$date, $context){",
+			"($date, $ctx){",
+			"$label",
+			"'",
+			"Booster Boxes",
+			"Booster Displays",
+			"\"rarity\": \"Special\"",
+			"avail.json",
+			"GLOBALS",
+			"$GLOBALs[\"gets\"]",
+			"basePrice",
+			"baseAvail",
+			"$total += $get;",
+			"availChange",
+			"$k",
+			"'",
+			"$compareType",
+			"extract",
+			"$html .=",
+			"Change",
+			"buildAllChards",
+			"foilAvail",
+			"basePrice",
+			"baseAvail",
+			"points.",
+			"stockStock",
+			"stockPrice",
+			"getStandSets",
+			"game.ui.logWrapper",
+			"JSON",
+			"getLogTitleSpan",
+			"\" + this.getFullLogTitleSpan() + \"",
+			"\" + this.getFullLogTitleSpan + \"",
+			"this.getFullLogTitleSpan",
+			"$i",
+			"launch",
+			"\",\n\t\t\t\t\t\"units\" => array(),\n\t\t\t\t\t\"loads\" =>",
+			"\"amount\" =>",
+			"\"amount\"",
+			"verifyFleetCost",
+			"public static $value = ",
+			".doDraw)",
+			".doDraw = ",
+			"$emitter",
+			"$tPos",
+			"$target",
+			"$origin->",
+			"$origin",
+			"this.",
+			"div",
+			"addSysEvents",
+			"addMainDivEvents",
+			"$cost",
+			"public static $value",
+			"public $cost",
+			"public $cost = ",
+			"myGames",
+			"getRemNegation",
+			"remNegation",
+			"remNeg",
+			"addDamage($dmg);",
+			"->addDamage($dmg, $gameturn)",
+			"armour.style",
+			"GSten",
+			"Debug::open()",
+			"Debug::close();",
+			"Vran",
+			"animateUnitExplos",
+			"$trigger",
+			" + this.getLogNameEntry() + \" </fo",
+			"div",
+			"ParticleTorpedo",
+			"TorpedoLauncher",
+			"PTorpLauncher",
+			"getBoostOutput",
+			"weaponDiv",
+			"hangarDiv",
+			"switchWeaponDiv"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 15,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "scripts/AoE_Marker.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 63,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "scripts/Boundary.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1679,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 62,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "scripts/CamA.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1076,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 61,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "scripts/DamageLabel.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 889,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 60,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "scripts/Explosion.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 203,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 59,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "scripts/Globals.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18902,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 58,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "scripts/Handler_Mission.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16435,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 798.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "scripts/Handler_Spawner.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9280,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1121.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "scripts/Intermission.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 57,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "scripts/Menu.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 541,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 56,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "scripts/Mission_Hold.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 889,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 55,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "scripts/Mission_ObjWithUnit.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 167,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 42,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "scripts/Mission_Survive.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 135,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 54,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "scripts/Mount.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1473,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 53,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "scripts/new_script.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 758,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "json/missile.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10922,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1622.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "scripts/Player.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23179,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 52,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "scripts/shader.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 51,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "scripts/ShipShield.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 551,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								300,
+								300
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 41,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "scripts/Stage_0.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 50,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "scripts/Units/Unit_Base.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26078,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4635.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "scripts/UI.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5913,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 49,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "scripts/Weapon_AoE.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 944,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 48,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "scripts/Weapon_Base.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 47,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "scripts/Weapon_Beam.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4587,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 46,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "scripts/Weapon_Missile.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1500,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 45,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "scripts/Weapon_Proj.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 136,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 44,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "scripts/Weapon_Shell.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 43,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "scripts/Units/Unit_Fighter.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6320,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "scripts/Units/Unit_Jeep.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 480,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "scripts/Units/Ground_Entity.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 445,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "scripts/Units/Ground_Vehicle.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2056,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1992,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										125,
+										139
+									],
+									[
+										313,
+										327
+									],
+									[
+										485,
+										499
+									],
+									[
+										718,
+										732
+									],
+									[
+										906,
+										920
+									],
+									[
+										1078,
+										1092
+									],
+									[
+										1358,
+										1376
+									],
+									[
+										1399,
+										1417
+									],
+									[
+										1620,
+										1638
+									],
+									[
+										1819,
+										1837
+									],
+									[
+										1860,
+										1878
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1830,
+								1830
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 3,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 968.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 33,
+					"file": "scripts/Units/Base_Entity.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 20315,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 40,
+					"type": "text"
+				},
+				{
+					"buffer": 34,
+					"file": "scripts/Units/Dummy.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 39,
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "scripts/Units/Obstacle.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 258,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 38,
+					"type": "text"
+				},
+				{
+					"buffer": 36,
+					"file": "scripts/Units/Skyscraper.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 987,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 37,
+					"type": "text"
+				},
+				{
+					"buffer": 37,
+					"file": "scripts/Units/Unit_AA_Tower.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 703,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 36,
+					"type": "text"
+				},
+				{
+					"buffer": 38,
+					"file": "scripts/Units/Unit_Air.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3659,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 39,
+					"file": "scripts/Units/Unit_Arty.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 643,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 35,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "scripts/Units/Unit_Base.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26078,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 31.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "scripts/Player.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23179,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 13439.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 40,
+					"file": "scripts/Units/Unit_Blob.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1409,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 34,
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "scripts/Units/Unit_Boss.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4978,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 33,
+					"type": "text"
+				},
+				{
+					"buffer": 42,
+					"file": "scripts/Units/Unit_Capital.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 32,
+					"type": "text"
+				},
+				{
+					"buffer": 43,
+					"file": "scripts/Units/Unit_Cargo_Hauler.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 986,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 31,
+					"type": "text"
+				},
+				{
+					"buffer": 44,
+					"file": "scripts/Units/Unit_City.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1471,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 30,
+					"type": "text"
+				},
+				{
+					"buffer": 45,
+					"file": "scripts/Units/Unit_Cruiser.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 680,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 46,
+					"file": "scripts/Units/Unit_Destroyer.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 537,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 47,
+					"file": "scripts/Units/Unit_Drone_new.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3677,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "scripts/Units/Unit_Fighter.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6320,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1184.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 48,
+					"file": "scripts/Units/Unit_Frigate.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2613,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "scripts/Units/Unit_Jeep.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 480,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 49,
+					"file": "scripts/Units/Unit_Mobile_AA_Heavy.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 50,
+					"file": "scripts/Units/Unit_Mobile_AA_Light.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 249,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 51,
+					"file": "scripts/Units/Unit_Truck_Heavy.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 85,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 52,
+					"file": "scripts/Units/Unit_Truck_Light.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 75,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 53,
+					"file": "scripts/Proj/Proj_Base.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4080,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "scripts/Proj/Proj_Beam.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 55,
+					"file": "scripts/Proj/Proj_Bomb.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 958,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 56,
+					"file": "scripts/Proj/Proj_Bullet.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 889,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 57,
+					"file": "scripts/Proj/Proj_Missile.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1782,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 58,
+					"file": "scripts/Proj/Proj_Rail.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 736,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 59,
+					"file": "scripts/Proj/Proj_Shell.gd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1939,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GDScript (Godot Engine)/GDScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.933196300103,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 94.0
+	},
+	"pinned_build_system": "",
+	"project": "top.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"miss",
+				"C:\\Godot\\topdown\\json\\missile.json"
+			],
+			[
+				"spaw",
+				"C:\\Godot\\topdown\\scripts\\Handler_Spawner.gd"
+			],
+			[
+				"hand",
+				"C:\\Godot\\topdown\\scripts\\Handler_Mission.gd"
+			],
+			[
+				"jeep",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Jeep.gd"
+			],
+			[
+				"fig",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Fighter.gd"
+			],
+			[
+				"unit_Bas",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Base.gd"
+			],
+			[
+				"air",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Air.gd"
+			],
+			[
+				"figh",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Fighter.gd"
+			],
+			[
+				"",
+				"C:\\Godot\\topdown\\scripts\\Units\\Unit_Jeep.gd"
+			],
+			[
+				"mis",
+				"C:\\Godot\\topdown\\json\\missile.json"
+			],
+			[
+				"edh",
+				"C:\\xampp\\htdocs\\crawl\\edh.php"
+			],
+			[
+				"ed",
+				"C:\\xampp\\htdocs\\crawl\\edh.php"
+			],
+			[
+				"help",
+				"C:\\xampp\\htdocs\\crawl\\helper.php"
+			],
+			[
+				"hel",
+				"C:\\xampp\\htdocs\\crawl\\helper.php"
+			],
+			[
+				"e",
+				"C:\\xampp\\htdocs\\crawl\\edh.php"
+			],
+			[
+				"showc",
+				"C:\\xampp\\htdocs\\crawl\\showcase.php"
+			],
+			[
+				"show",
+				"C:\\xampp\\htdocs\\crawl\\showcase.php"
+			],
+			[
+				"shak",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				"scr",
+				"C:\\xampp\\htdocs\\crawl\\script.js"
+			],
+			[
+				"muti",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"dh",
+				"C:\\xampp\\htdocs\\crawl\\server\\db.php"
+			],
+			[
+				"cou",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"he",
+				"C:\\xampp\\htdocs\\crawl\\helper.php"
+			],
+			[
+				"db",
+				"C:\\xampp\\htdocs\\crawl\\server\\db.php"
+			],
+			[
+				"sc",
+				"C:\\xampp\\htdocs\\crawl\\script.js"
+			],
+			[
+				"glob",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"glo",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"styl",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"charts",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"multi",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"mult",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"fav",
+				"C:\\xampp\\htdocs\\crawl\\favs.php"
+			],
+			[
+				"css",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"cha",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"mul",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"muli",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"chart",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"crawl",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"cahrt",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"cahrts",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"sha",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				"ch",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"g",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"chartp",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"gl",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"cr",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"shart",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"charts.",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"shaker",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				"mut",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"mu",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"php",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"sty",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"craw",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"cahr",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"st",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"SCR",
+				"C:\\xampp\\htdocs\\crawl\\script.js"
+			],
+			[
+				"mt",
+				"C:\\xampp\\htdocs\\crawl\\multi.php"
+			],
+			[
+				"chapr",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"shwoc",
+				"C:\\xampp\\htdocs\\crawl\\showcase.php"
+			],
+			[
+				"crl",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"showcase",
+				"C:\\xampp\\htdocs\\crawl\\showcase.php"
+			],
+			[
+				"style",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"stsyle",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"sim",
+				"C:\\xampp\\htdocs\\crawl\\simple_html_dom.php"
+			],
+			[
+				"localc",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"char",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"loc",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				".js",
+				"C:\\xampp\\htdocs\\crawl\\script.js"
+			],
+			[
+				"x",
+				"C:\\xampp\\htdocs\\crawl\\edh.php"
+			],
+			[
+				"hek",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				"sho",
+				"C:\\xampp\\htdocs\\crawl\\showcase.php"
+			],
+			[
+				"d",
+				"C:\\xampp\\htdocs\\crawl\\server\\db.php"
+			],
+			[
+				"new",
+				"C:\\xampp\\htdocs\\crawl\\new.php"
+			],
+			[
+				"ew",
+				"C:\\xampp\\htdocs\\crawl\\new.php"
+			],
+			[
+				"fa",
+				"C:\\xampp\\htdocs\\crawl\\favs.php"
+			],
+			[
+				"nw",
+				"C:\\xampp\\htdocs\\crawl\\new.php"
+			],
+			[
+				"ne",
+				"C:\\xampp\\htdocs\\crawl\\new.php"
+			],
+			[
+				"lo",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"eh",
+				"C:\\xampp\\htdocs\\crawl\\edh.php"
+			],
+			[
+				"car",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"ca",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"cah",
+				"C:\\xampp\\htdocs\\crawl\\charts.php"
+			],
+			[
+				"av",
+				"C:\\xampp\\htdocs\\crawl\\output\\avail.json"
+			],
+			[
+				"lgo",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"log",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"favs",
+				"C:\\xampp\\htdocs\\crawl\\favs.php"
+			],
+			[
+				"slic",
+				"C:\\xampp\\htdocs\\crawl\\slice.php"
+			],
+			[
+				"sl",
+				"C:\\xampp\\htdocs\\crawl\\slice.php"
+			],
+			[
+				"local",
+				"C:\\xampp\\htdocs\\crawl\\localChart.js"
+			],
+			[
+				"api",
+				"C:\\xampp\\htdocs\\crawl\\api.php"
+			],
+			[
+				"cra",
+				"C:\\xampp\\htdocs\\crawl\\crawl.php"
+			],
+			[
+				"c",
+				"C:\\xampp\\htdocs\\crawl\\output\\cardlist.json"
+			],
+			[
+				"ava",
+				"C:\\xampp\\htdocs\\crawl\\input\\avail.json"
+			],
+			[
+				"avai",
+				"C:\\xampp\\htdocs\\crawl\\input\\avail.json"
+			],
+			[
+				"card",
+				"C:\\xampp\\htdocs\\crawl\\output\\cardlist.json"
+			],
+			[
+				"kt",
+				"C:\\xampp\\htdocs\\crawl\\output\\KTK.json"
+			],
+			[
+				"k",
+				"C:\\xampp\\htdocs\\crawl\\input\\KTK.json"
+			],
+			[
+				"box",
+				"C:\\xampp\\htdocs\\crawl\\output\\BOXES.json"
+			],
+			[
+				"fetch",
+				"C:\\xampp\\htdocs\\crawl\\input\\fetch.json"
+			],
+			[
+				"avail",
+				"C:\\xampp\\htdocs\\crawl\\input\\avail.json"
+			],
+			[
+				"bo",
+				"C:\\xampp\\htdocs\\crawl\\output\\BOXES.json"
+			],
+			[
+				"sets",
+				"C:\\xampp\\htdocs\\crawl\\input\\sets.json"
+			],
+			[
+				"set",
+				"C:\\xampp\\htdocs\\crawl\\input\\sets.json"
+			],
+			[
+				"input",
+				"C:\\xampp\\htdocs\\crawl\\input\\TMP.json"
+			],
+			[
+				"mox",
+				"C:\\xampp\\htdocs\\crawl\\output\\BOXES.json"
+			],
+			[
+				"aja",
+				"C:\\xampp\\htdocs\\crawl\\output\\A25.json"
+			],
+			[
+				"em",
+				"C:\\xampp\\htdocs\\crawl\\output\\EMA.json"
+			],
+			[
+				"7d",
+				"C:\\xampp\\htdocs\\crawl\\output\\7ED.json"
+			],
+			[
+				"a2",
+				"C:\\xampp\\htdocs\\crawl\\output\\A25.json"
+			],
+			[
+				"cral",
+				"C:\\xampp\\htdocs\\crawl\\crawl.php"
+			],
+			[
+				"ww",
+				"C:\\xampp\\htdocs\\crawl\\input\\WWK.json"
+			],
+			[
+				"2e",
+				"C:\\xampp\\htdocs\\crawl\\output\\2ED.json"
+			],
+			[
+				"wwk",
+				"C:\\xampp\\htdocs\\crawl\\input\\WWK.json"
+			],
+			[
+				"se",
+				"C:\\xampp\\htdocs\\crawl\\input\\sets.json"
+			],
+			[
+				"inde",
+				"C:\\xampp\\htdocs\\crawl\\index.php"
+			],
+			[
+				"te",
+				"C:\\xampp\\htdocs\\crawl\\test.php"
+			],
+			[
+				"ind",
+				"C:\\xampp\\htdocs\\crawl\\index.php"
+			],
+			[
+				"s",
+				"C:\\xampp\\htdocs\\crawl\\style\\style.css"
+			],
+			[
+				"shake",
+				"C:\\xampp\\htdocs\\crawl\\shakers.php"
+			],
+			[
+				"glb",
+				"C:\\xampp\\htdocs\\crawl\\global.php"
+			],
+			[
+				"som",
+				"C:\\xampp\\htdocs\\crawl\\output\\SOM.json"
+			],
+			[
+				"ema",
+				"C:\\xampp\\htdocs\\crawl\\output\\EMA.json"
+			],
+			[
+				"np",
+				"C:\\xampp\\htdocs\\crawl\\output\\NPH.json"
+			],
+			[
+				"mb",
+				"C:\\xampp\\htdocs\\crawl\\output\\MBS.json"
+			],
+			[
+				"leb",
+				"C:\\xampp\\htdocs\\crawl\\output\\LEB.json"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\xampp\\htdocs\\fire\\p1.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 200.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

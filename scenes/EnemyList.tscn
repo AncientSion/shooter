@@ -1,106 +1,126 @@
-[gd_scene load_steps=5 format=2]
-
-[ext_resource path="res://styles/Box.tres" type="StyleBox" id=1]
-[ext_resource path="res://various/Roboto-Medium.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://default_theme.tres" type="Theme" id=3]
-
-[sub_resource type="DynamicFont" id=1]
-size = 12
-font_data = ExtResource( 2 )
+[gd_scene format=2]
 
 [node name="AI_PC" type="PanelContainer"]
-margin_right = 600.0
-margin_bottom = 100.0
-rect_min_size = Vector2( 600, 0 )
-custom_styles/panel = ExtResource( 1 )
+margin_right = 700.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 700, 0 )
 
 [node name="VBoxC" type="VBoxContainer" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 595.0
-margin_bottom = 95.0
+margin_left = 15.0
+margin_top = 8.0
+margin_right = 685.0
+margin_bottom = 25.0
 
 [node name="HBox" type="HBoxContainer" parent="VBoxC"]
-margin_right = 590.0
-margin_bottom = 15.0
+margin_right = 670.0
+margin_bottom = 17.0
 alignment = 1
 
-[node name="name" type="Label" parent="VBoxC/HBox"]
-margin_right = 70.0
-margin_bottom = 15.0
+[node name="name" type="MarginContainer" parent="VBoxC/HBox"]
+margin_right = 87.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
+
+[node name="label" type="Label" parent="VBoxC/HBox/name"]
+margin_right = 87.0
+margin_bottom = 17.0
 size_flags_vertical = 0
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
 text = "name"
 align = 1
+valign = 1
 
-[node name="pos" type="Label" parent="VBoxC/HBox"]
-margin_left = 74.0
-margin_right = 144.0
-margin_bottom = 15.0
+[node name="pos" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 91.0
+margin_right = 178.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+
+[node name="label" type="Label" parent="VBoxC/HBox/pos"]
+margin_right = 87.0
+margin_bottom = 17.0
 text = "pos"
 align = 1
+valign = 1
 
-[node name="velo" type="Label" parent="VBoxC/HBox"]
-margin_left = 148.0
-margin_right = 218.0
-margin_bottom = 15.0
+[node name="velo" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 182.0
+margin_right = 227.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+size_flags_stretch_ratio = 0.51
+
+[node name="label" type="Label" parent="VBoxC/HBox/velo"]
+margin_right = 45.0
+margin_bottom = 17.0
+size_flags_stretch_ratio = 0.66
 text = "velo"
 align = 1
+valign = 1
 
-[node name="accel" type="Label" parent="VBoxC/HBox"]
-margin_left = 222.0
-margin_right = 293.0
-margin_bottom = 15.0
+[node name="accel" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 231.0
+margin_right = 318.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+
+[node name="label" type="Label" parent="VBoxC/HBox/accel"]
+margin_right = 87.0
+margin_bottom = 17.0
 text = "accel"
 align = 1
+valign = 1
 
-[node name="extF" type="Label" parent="VBoxC/HBox"]
-margin_left = 297.0
-margin_right = 367.0
-margin_bottom = 15.0
+[node name="extF" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 322.0
+margin_right = 409.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+
+[node name="label" type="Label" parent="VBoxC/HBox/extF"]
+margin_right = 87.0
+margin_bottom = 17.0
 text = "extF"
 align = 1
+valign = 1
 
-[node name="behavior" type="Label" parent="VBoxC/HBox"]
-margin_left = 371.0
-margin_right = 441.0
-margin_bottom = 15.0
+[node name="behavior" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 413.0
+margin_right = 501.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+
+[node name="label" type="Label" parent="VBoxC/HBox/behavior"]
+margin_right = 88.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
 text = "behavior"
 align = 1
+valign = 1
 
-[node name="target" type="Label" parent="VBoxC/HBox"]
-margin_left = 445.0
-margin_right = 515.0
-margin_bottom = 15.0
+[node name="target" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 505.0
+margin_right = 592.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+
+[node name="label" type="Label" parent="VBoxC/HBox/target"]
+margin_right = 87.0
+margin_bottom = 17.0
 text = "target"
 align = 1
+valign = 1
 
-[node name="hp" type="Label" parent="VBoxC/HBox"]
-margin_left = 519.0
-margin_right = 590.0
-margin_bottom = 15.0
+[node name="hp" type="MarginContainer" parent="VBoxC/HBox"]
+margin_left = 596.0
+margin_right = 670.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
+size_flags_stretch_ratio = 0.84
+
+[node name="label" type="Label" parent="VBoxC/HBox/hp"]
+margin_right = 74.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
 text = "hp"
 align = 1
+valign = 1

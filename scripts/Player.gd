@@ -1,38 +1,43 @@
 extends Base_Unit
+class_name Player
 
-onready var ui = Globals.curScene.get_node("UI")
+onready var mainUI = Globals.curScene.get_node("UI")
 
 var frame = 0
 
 var display = "Player"
 
 var aItem:int = -1
-var items = Array()
 
-var baseHealth:int
+#var baseHealth:int
 var healthRegenTime:float
-var baseShield:int
-var baseShieldRegenTime:float
-var baseShieldBreakTime:float
-var enginePower:int
+var maxSideThrustDuration:float
+#var enginePower:int
 var friction:float
 var agility:float
-var boostCharge:int
-var boostMaxCharge:int
-var boostPower:int
+var boostCharge:float
+var boostMaxCharge:float
+var boostRegenTime:float
+#var boostPower:int
+var boostPower:float
+var shiftDuration:float
+var shiftCooldown:float
 
-var isBoosting = false
+var sideThrust = false
+var sideThrustDuration:float
+var isRechargingBoost = false
+var isShifting = false
 
 var shieldRegenTime:float
 var shieldBreakTime:float
 
-var ressources = 0
+var materials = 0
 
 var new:bool = true
 
-var weapon
-signal updatePlayerHP
-signal updatePlayerRes
+#var weapon
+signal update_player_health
+signal update_player_materials
 signal updateShieldCooldown
 
 var thrusters =  Array()
@@ -41,67 +46,72 @@ var baseStats
 
 var mouseDown = false
 
-var ticksShieldBreakTimer = 0
-var ticksSinceGroundDamage = 0
+var time_since_ground_dmg:float = 0.0
+var time_since_ground_smoke:float = 0.0
 
 
 func _ready():
-	#print("ready ship")
-	texDim = Vector2($Sprite.texture.get_width() * $Sprite.scale.x, $Sprite.texture.get_height() * $Sprite.scale.y)
+	print("ready ship")
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	isPlayer = true
 	setFriendly()
+#	setHostile()
 	setBaseStats()
 	#addKeyForItem()
-	health = baseHealth
+	health = baseStats.maxHealth
+	maxHealth = health
+	gravity_vec = Globals.BASEGRAVITY
 #	maxSpeed = 350
+		
+#	for n in weapons:
+#		n.doDisable()
 	
 		
 #var groceries = {"Orange": 20, "Apple": 2, "Banana": 4}
 #for fruit in groceries:
 #	var amount = groceries[fruit]
 
+func setStats():
+	pass
+
 func setBaseStats():
-#	Globals.BASEGRAVITY = Vector2(0, 0)
 	var stats = {
-		"baseHealth": 30,
+		"maxHealth": 30,
 		"healthRegenTime": 0.0,
-		"baseShield": 30,
-		"baseShieldRegenTime": 1.0,
-		"baseShieldBreakTime": 4.0,
-		"enginePower": 350,
-		"maxSpeed": 500,
-		"friction": 0.011,
-#		"agility": 0.05,
+		"enginePower": 1200, #500
+		"friction": 0.995, # 0.014
 		"agility": 4.5,
-		"boostCharge": 60,
-		"boostMaxCharge": 60,
-		"boostPower": 800,
+		"boostCharge": 45,
+		"boostMaxCharge": 45,
+		"maxSideThrustDuration": 0.20,
+		"boostRegenTime": 30.0,
+		"boostPower": 12.0,
+		"shiftDuration": 2.0,
+		"shiftCooldown": 1.0,
+		"shieldStats": {"maxShield": 30, "shieldRegenTime": 1.0, "shieldBreakTime": 4.0, "shieldFastCharge": 0.6, "shieldRadius": 30},
+#		"shieldStats": {"maxShield": 10, "shieldRegenTime": 10.0, "shieldBreakTime": 40.0, "shieldFastCharge": 0.6, "shieldRadius": 30},
 	}
 	
 	baseStats = stats
 	for stat in stats:
-		self[stat] = stats[stat]
+		if stat in self:
+			self[stat] = stats[stat]
 		
-	coreRange = 75
+	coreRange = 60
 
 func doInit():
 	visible = false
-	shield = 0
 	updateStats()
-#	weapons[0].toggle()
-	ui.get_node("Bars/Panel/Shield/Value").text = str(shield, " / ", maxShield)
-	$ShieldBreak.wait_time = shieldBreakTime
-	$ShieldRegen.wait_time = shieldRegenTime
 	
-	if not is_connected("hasWarpedOut", Globals, "doAdvanceLevel"):
-		connect("hasWarpedOut", Globals, "doAdvanceLevel")
+	if not is_connected("hasWarpedOut", Globals.GAMESCREEN, "doAdvanceLevel"):
+		connect("hasWarpedOut", Globals.GAMESCREEN, "doAdvanceLevel")
 		
 	$Label.set_as_toplevel(true)
 
 	addPhysCollision()
-	addSightCollision()
+#	addSightCollision()
 
-func exitLevel():
+func on_exit_level():
 	for item in items:
 		item.addCharge()
 		
@@ -110,52 +120,98 @@ func exitLevel():
 		disconnect("hasWarpedIn", Globals.handler_mission, "missionStart")
 		print("is connected")
 
-func addRessources(val):
-	ressources += val
-	emit_signal("updatePlayerRes", ressources)
+func add_resources(val):
+	materials += val
+	emit_signal("update_player_materials", materials)
 	
 func setInactive():
+	ready = false
+	disableCollisionNodes()
 	set_physics_process(false)
+	disableItems()
+	for n in $Mounts/A.get_children():
+		n.doDisable()
+	for n in $ThrusterNodes.get_children():
+		disableThruster(n)
+		
 	$Mounts.visible = false
-	$Weapons.visible = false
 
 func setActive():
+	ready = true
+	enableCollisionNodes()
 	set_physics_process(true)
-	updateShield()
+	enableItems()
+	enableShield()
+	setFirstWeaponActive()
+	getActiveWeapon().doSelect()
+#	updateShield()
 	$Mounts.visible = true
-	$Weapons.visible = true
+#	$Weapons.visible = true
+
+func enableShield():
+	$Mounts/A.get_child(0).doEnable()
+
+func setFirstWeaponActive():
+	var count = -1
+	for wpn in $Mounts/A.get_children():
+		count += 1
+		if wpn.canBeSelected():
+			aWeapon = count
+			return
 	
 func doSelectItem(key):
-	#if aItem == key: return
-	#else:
-	var hits = -1
+	var hits = 0
 	var index = -1
 	for item in items:
 		index += 1
+		print(item.display)
 		if item.type == 0:
 			hits += 1
-			if hits == key:
+			if hits == key and aItem != index:
+#				print("toggling!")
 				items[aItem].toggle()
 				aItem = index
 				items[aItem].toggle()
 				return
+			elif hits == key and aItem == index:
+				items[aItem].subPanel_Stats.showandfadeout()
+#	print("no item to toggle foudn")
 
 func selectWeapon(step):
-	if not weapons[aWeapon].canToggle(): return
-	weapons[aWeapon].toggle()
-	aWeapon += step
+	if not ready:
+		return
+	if not getActiveWeapon().canBeUnselected():
+		return false
 	
-	if aWeapon > len(weapons)-1:
-		aWeapon = 0
-	elif aWeapon < 0:
-		aWeapon = len(weapons)-1
+	getActiveWeapon().doUnselect()
+		
+	aWeapon += step
+	if aWeapon > $Mounts/A.get_child_count()-1:
+		aWeapon = 1
+	elif aWeapon < 1:
+		aWeapon = $Mounts/A.get_child_count()-1
 
-	weapons[aWeapon].toggle()
-	#emit_signal("weaponToggle", getActiveWeapon())
+	getActiveWeapon().doSelect()
 	
 func getActiveWeapon():
-	return weapons[aWeapon]
+	return $Mounts/A.get_child(aWeapon)
 	
+func doUnselectWeapons():
+	for n in $Mounts/A.get_children():
+		n.doUnselect()
+			
+func disableItemsAndWeapons():
+		print("error")
+	
+func enableWeapons():
+	for n in $Mounts/A.get_children():
+		n.doEnable()
+	getActiveWeapon().doSelect()
+	
+func enableItems():
+	for n in $Items.get_children():
+		n.doEnable()
+		
 func getActiveItem():
 	if aItem >= 0: return items[aItem]
 	return false
@@ -170,126 +226,106 @@ func doPrintFacing():
 	print("dif: ", dif)
 	
 func on_damage_taken():
-	emit_signal("updatePlayerHP", health, maxHealth, shield, maxShield)
-	
-func handleShieldDamagxe(shieldDmgTaken, pos, angle):
-	addShieldExplosion(shieldDmgTaken, pos, angle)
-	var offset = Vector2(Globals.rng.randi_range(-15, 15), Globals.rng.randi_range(-20, -40))
-	createFloatingLabel(shieldDmgTaken, global_position + offset, Vector2(0, -100), Color(0, 0, 1, 1))
-	updateShield()
-	checkForTriggers("on_shield_damage")
-	if shield <= 0:
-		call_deferred("unpowerShield")
-
-func handleHullDamagex(remDmg, pos, angle):
-	addHitExplosion(remDmg, pos, angle)
-	var offset = Vector2(Globals.rng.randi_range(-15, 15), Globals.rng.randi_range(-20, -40))
-	createFloatingLabel(remDmg, global_position + offset, Vector2(0, -100), Color(1, 0, 0, 1))
-	checkForTriggers("on_damage")
-	
-	var trauma = remDmg/25.0
-	Globals.curScene.get_node("CamA").add_trauma(trauma)
+	emit_signal("update_player_health", health, maxHealth)
 
 func get_class():
 	return "Player"
 	
 func checkForTriggers(condition):
-	#print("checkForTriggers ", get_class())
+	#print("checkForTriggers ", get_class(ww))
 	for item in items:
 		if item.trigger == condition:
 			item.call_deferred("doUse")
-		
-func unpowerShield():
-	$ShieldPos/ShieldSprite.show()
-	$ShieldPos/ShieldSprite.scale = Vector2(0.5, 0.5)
-	$ShieldPos/ShieldSprite.modulate.a = 1
+			#
+func can_warp_in():
+	return true
 	
-	var dur = 0.5
-	
-	$Tween.interpolate_property($ShieldPos/ShieldSprite, "modulate:a",
-		1.0, 0.0, dur,
-		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
-	
-	$Tween.interpolate_property($ShieldPos/ShieldSprite, "scale",
-		Vector2(0.5, 0.5), Vector2(2, 2), dur,
-		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
-	
-	$ShieldRegen.stop()
-	$ShieldBreak.start()
-	ticksShieldBreakTimer = 1
-	checkForTriggers("on_shieldbreak")
-	handleShieldCooldownStuff()
-	
-func powerShield():
-#	print("powerShield")
-	shield = 0
-	$ShieldRegen.wait_time = 0.05
-	$ShieldRegen.start()
-	
-	$Tween.interpolate_property($ShieldPos/ShieldSprite, "modulate:a",
-		0.4, 0.8, 1.0,
-		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
-	
-	$Tween.interpolate_property($ShieldPos/ShieldSprite, "scale",
-		Vector2(2.5, 2.5), Vector2(0.5, 0.5), 1.0,
-		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
-	
-	yield($Tween, "tween_all_completed")
-	#shield = floor(maxShield/3)-1
-	#print("tween_all_completed")
-	$ShieldRegen.wait_time = shieldRegenTime
-	$ShieldRegen.start()
-	#updateShield()
-	#_on_ShieldRegen_timeout()
-
-func handleShieldCooldownStuff():
-	ticksShieldBreakTimer += 1
-	if ticksShieldBreakTimer == 4:
-		ticksShieldBreakTimer = 1
-		emit_signal("updateShieldCooldown", round(($ShieldBreak.time_left)*10)/10)
-		
-func _on_ShieldRegen_timeout():
-	#print("_on_ShieldRegen_timeout")
-	#print("shield +1")
-	shield = min(maxShield, shield + 1)
-	updateShield()
-	
-func _on_ShieldBreak_timeout():
-	ticksShieldBreakTimer = 0
-	$ShieldBreak.stop()
-	powerShield()
-	
-func updateShield():
-	var factor:float = float(shield) / maxShield  # 27 / 30
-	$ShieldPos/ShieldSprite.modulate.a = factor
-	emit_signal("updatePlayerHP", health, maxHealth, shield, maxShield)
-	#update()
-	if ready and shield > 0 and shield < maxShield:
-		$ShieldRegen.start()
-	
-#	$ShieldPos/Node2D.maxShield = maxShield
-#	$ShieldPos/Node2D.ratio = factor
-#	$ShieldPos/Node2D.update()
-
-func canWarpOut():
+func can_warp_out():
+#	print("can_warp_out")
+	if isWarping: 
+		return false
 	if ready and not isWarping:
 		return true
-		if Globals.handler_mission != null and Globals.handler_mission.isMissionCompleted():
-			return true
-		elif Globals.handler_mission == null:
-			return true
+	if Globals.handler_mission != null and Globals.handler_mission.isMissionCompleted():
+		return true
+	elif Globals.handler_mission == null:
+#		print("Globals.handler_mission == null")
+		return true
 	return false
+	
+func enableThruster(node):
+	for n in node.get_children():
+		n.emitting = true
+#	node.get_node("Particle2D").emitting = true
+	
+func disableThruster(node):
+	for n in node.get_children():
+		n.emitting = false
+#	node.get_node("Particle2D").emitting = false
+	
+func enableShifting():
+	print("enableShifting")
+	if isShifting or shiftCooldown > 0.0:
+		return
+	isShifting = !isShifting
+	disableCollisionNodes()
+	$Sprites.hide()
+	disableAllThrusterParticles()
+	disableBoosting()
+#	getShield().unpowerShield()
+		
+func disableShifting():
+	print("disableShifting")
+	if not isShifting:
+		return
+	isShifting = !isShifting
+	enableCollisionNodes()
+	$Sprites.show()
+	enableAllThrusterParticles()
+	shiftCooldown = baseStats["shiftCooldown"]
+	shiftDuration = baseStats["shiftDuration"]
+#	getShield().powerShield()
 
+func disableAllThrusterParticles():
+	disableBoosting()
+	for thruster in $ThrusterNodes.get_children():
+		for n in thruster.get_children():
+			n.emitting = false
+
+func enableAllThrusterParticles():
+	return
+#	for thruster in $ThrusterNodes.get_children():
+#		for n in thruster.get_children():
+#			n.emitting = true
+#	$ThrusterNodes/Aft_Boost/Particle2D.emitting = false
+			
+			
+#	for n in $ThrusterNodes.get_children():
+#		n.get_node("Particle2D").emitting = true
+#	$ThrusterNodes/Aft_Boost/Particle2D.emitting = false
+
+func x_unhandled_input(event):
+	print("unhandled_input")
+	if Input.is_action_pressed("fire"):
+		mouseDown = true
+#		
+		if getActiveWeapon().canFire():
+			getActiveWeapon().doFire(null)
+		
+	elif Input.is_action_just_released("fire"):
+		mouseDown = false
+	
 func get_input(_delta):
+	if not ready:
+		return
+#	print(extForces*_delta)
+#	print("get_input")
 	
 	if Input.is_action_pressed("ui_select"):
-		if canWarpOut():
-			Globals.handler_mission.missionState = 0
-			doWarpOut()
+		if can_warp_out():
+#			print("can_warp_out")
+			warpOutStepOne()
+			Globals.handler_mission.do_end_mission()
 			
 	if Input.is_action_just_pressed("alt_use_item"):
 		if aItem >= 0: getActiveItem().doUse()
@@ -297,18 +333,16 @@ func get_input(_delta):
 	if Input.is_action_pressed("fire"):
 		mouseDown = true
 #		
-		if weapons[aWeapon].canFire():
-			weapons[aWeapon].doFire(null)
-		
-	if Input.is_action_just_released("fire"):
+		if getActiveWeapon().canFire():
+			getActiveWeapon().doFire(null)
+	elif Input.is_action_just_released("fire"):
 		mouseDown = false
-		#weapons[aWeapon].stopFiring()
-#		print("release")
-
 		
 	if Input.is_action_just_pressed("right_click"):
-		pass
-		
+		enableShifting()
+		print("right click")
+	elif Input.is_action_just_released("right_click"):
+		disableShifting()
 		
 	var input = Vector2.ZERO
 	
@@ -319,51 +353,115 @@ func get_input(_delta):
 		
 		return Vector2.ZERO 
 	
-	$ThrusterNodes/Front_A.visible = 0
-	$ThrusterNodes/Front_B.visible = 0
-	$ThrusterNodes/Port.visible = 0
-	$ThrusterNodes/Starboard.visible = 0
+	if not isShifting:
 	
+		disableThruster($ThrusterNodes/Front)
+		disableThruster($ThrusterNodes/Port)
+		disableThruster($ThrusterNodes/Starboard)
 		
-	if Input.is_action_pressed("270"):
-#		input += Vector2(0, -1)
-		$ThrusterNodes/Port.visible = 1
-	if Input.is_action_pressed("90"):
-#		input += Vector2(0, 1)
-		$ThrusterNodes/Starboard.visible = 1
-	if Input.is_action_pressed("180"):
-#		input += Vector2(-1, 0)
-		$ThrusterNodes/Front_A.visible = 1
-		$ThrusterNodes/Front_B.visible = 1
-	if Input.is_action_pressed("0"):
-#		input += Vector2(1, 0)
-		$ThrusterNodes/Aft_A.emitting = true
-		$ThrusterNodes/Aft_B.emitting = true
-		if not isBoosting and boostCharge > 0:
-			isBoosting = true
-			$ThrusterNodes/Aft_Boost.emitting = true
-		elif isBoosting and boostCharge == 0:
-			isBoosting = false
-			$ThrusterNodes/Aft_Boost.emitting = false
-	elif not Input.is_action_pressed("0"):
-		if isBoosting:
-			isBoosting = false
-			$ThrusterNodes/Aft_Boost.emitting = false
-		boostCharge = min(boostMaxCharge, boostCharge +1)
-		$ThrusterNodes/Aft_A.emitting = false
-		$ThrusterNodes/Aft_B.emitting = false
+		if Input.is_action_pressed("270"):
+			enableThruster($ThrusterNodes/Port)
+		if Input.is_action_pressed("90"):
+			enableThruster($ThrusterNodes/Starboard)
+		if Input.is_action_pressed("180"):
+			enableThruster($ThrusterNodes/Front)
+			if front_boosting and boostCharge == 0:
+				disable_front_boosting()
+		if Input.is_action_pressed("0"):
+			enableThruster($ThrusterNodes/Aft)
+			if aft_boosting and boostCharge == 0:
+				disable_aft_boosting()
+		else:
+			disableThruster($ThrusterNodes/Aft)
+			
+			
+		if not is_aft_boosting():
+			if Input.is_action_just_pressed("0") and boostCharge > 0:
+				enable_aft_boosting()
+		elif Input.is_action_just_released("0"):
+			disable_aft_boosting()
+			
+		if not is_front_boosting():
+			if Input.is_action_just_pressed("180") and boostCharge > 0:# and rotation_degrees > 35 and rotation_degrees < 125:
+				enable_front_boosting()
+		elif Input.is_action_just_released("180"):
+			disable_front_boosting()
+				
+		if sideThrust:
+			if sideThrustDuration <= 0.0 or Input.is_action_just_released("90") or Input.is_action_just_released("270"):
+				disableSideThrusting()
+#		elif sideThrustDuration == maxSideThrustDuration and Input.is_action_just_pressed("270") or Input.is_action_just_pressed("90"):
+		elif sideThrustDuration > maxSideThrustDuration/2 and Input.is_action_just_pressed("270") or Input.is_action_just_pressed("90"):
+			enableSideThrusting()
 		
-#	print("boosting ", isBoosting)
-	#print(thrusters)
+	handleMainBoostCharge(_delta)
 	return Input.get_vector("180","0","270","90")
-#	return Input.get_vector("90","180","0","270")
-#	return input
 	
-#func _physics_process(delta):
-func handleAimRectangle(delta):
+func disableSideThrusting():
+	print("disableSideThrusting")
+#	$ThrusterNodes/Port.get_node("Particle2D").process_material.scale /= 2
+#	$ThrusterNodes/Starboard.get_node("Particle2D").process_material.scale /= 2
+	sideThrust = false
+	
+func enableSideThrusting():
+	print("enableSideThrusting")
+#	$ThrusterNodes/Port.get_node("Particle2D").process_material.scale *= 2
+#	$ThrusterNodes/Starboard.get_node("Particle2D").process_material.scale *= 2
+	sideThrust = true
+	
+func isBoosting():
+	if boosting == true:
+		return true
+	return false
+	
+func is_aft_boosting():
+	return aft_boosting
+
+func is_front_boosting():
+	return front_boosting
+	
+func enable_aft_boosting():
+	aft_boosting = true
+	isRechargingBoost = false
+#	$BoostRegen.stop()
+	enableThruster($ThrusterNodes/Aft_Boost)
+
+func disable_aft_boosting():
+	aft_boosting = false
+	isRechargingBoost = true
+#	$BoostRegen.start()
+	disableThruster($ThrusterNodes/Aft_Boost)
+	
+func enable_front_boosting():
+	front_boosting = true
+	isRechargingBoost = false
+#	$BoostRegen.stop()
+	enableThruster($ThrusterNodes/Front_Boost)
+
+func disable_front_boosting():
+	front_boosting = false
+	isRechargingBoost = true
+#	$BoostRegen.start()
+	disableThruster($ThrusterNodes/Front_Boost)
+	
+func handleMainBoostCharge(_delta):
+	if isRechargingBoost:
+		boostCharge = min(boostMaxCharge, boostCharge + boostRegenTime * _delta)
+		if boostCharge >= boostMaxCharge:
+			isRechargingBoost = false
+			
+	if not sideThrust:
+#		print("before: ", sideThrustDuration)
+		sideThrustDuration = min(maxSideThrustDuration, sideThrustDuration + _delta/5)
+#		print("after: ", sideThrustDuration)
+		
+
+func handleAimRectangle(_delta):
 #	print("handleAimRectangle player")
 
 	var angle:int = getActiveWeapon().deviation
+	if angle == 0: 
+		angle = 1
 	
 	var targetUp = Vector2.ZERO
 	var targetDown = Vector2.ZERO
@@ -398,12 +496,8 @@ func wrapf(value, min_value, max_value):
 	var ran = max_value - min_value
 	return min_value + fmod(fmod(value - min_value, ran) + ran, ran)
 	
-	
-	
-	
-	
 
-func handleAngularRotation(_delta):
+func xxhandleAngularRotation(_delta):
 	
 #	var old = rotation_degrees
 #
@@ -415,7 +509,7 @@ func handleAngularRotation(_delta):
 #
 #	return
 
-	var amount_to_turn = agility * _delta  # or whatever
+#	var amount_to_turn = agility * _delta  # or whatever
 	var forwardV = Vector2(cos(rotation), sin(rotation))
 #	var omega = forwardV.angle_to((Globals.MOUSE - global_position))
 #	var change
@@ -453,150 +547,149 @@ func handleAngularRotation(_delta):
 #
 #	var change = sign(omega) * _delta
 #	rotation += change
-#
-func processMovement(_delta):
-#	print("playewr processmove")
-#	print(Engine.get_idle_frames())
-	handleAngularRotation(_delta)
-	handleAimRectangle(_delta)
-	if ticksShieldBreakTimer > 0:
-		handleShieldCooldownStuff()
+func handleAngularRotation(_delta):
+	var forwardV = Vector2(cos(rotation), sin(rotation))	
+	rotation = forwardV.move_toward((Globals.MOUSE - global_position), _delta * agility).angle()
+
+func process_movement(delta):
+	var acceleration: int = 1200
+#	var max_speed: int = 600.0
+	var friction: float = 0.998
+	var thrust:Vector2 = Vector2.ZERO
 	
-#	print("boosting: ", isBoosting)
+	var max_speed:int = enginePower/2
 	
-#	var dir = Input.get_vector("270","90","180","0")
+	var back_weight: float = 0.5   # Counter-thrust is 30% power
+	var side_weight: float = 0.5   # Side-thrust is 60% power
+	var forward_weight: float = 1.0 # Forward is 100% power
+
+	var direction = get_input(delta)
 	
-	var direction = get_input(_delta)#.rotated(rotation)
-	
-	var sideBoost = 4
-	var sideBoosting = false
-#	print(directionw)
-	if direction:
-		var thrust = (direction * enginePower/20)
-		if thrust.y != 0:
-			sideBoosting = true
-			thrust.y *= sideBoost
-		if isBoosting and boostCharge:
-			thrust.x *= boostPower
-			boostCharge -= 1
-#		print(thrust.x)
+	handleAngularRotation(delta)
+
+	if direction != Vector2.ZERO:
+		var dot = direction.dot(Vector2.RIGHT)
+		var power_multiplier = forward_weight
+#		print(dot)
 		
-		thrust = thrust.rotated(rotation)
-		accel += thrust
-		if isBoosting:
-			accel = accel.limit_length(enginePower + boostPower)
+		if dot < 0: 
+			power_multiplier = lerp(side_weight, back_weight, abs(dot))
 		else:
-			accel = accel.limit_length(enginePower + 300 if sideBoosting else enginePower)
-		gravity_vec = Vector2.ZERO
+			power_multiplier = lerp(side_weight, forward_weight, dot)
+#		print(power_multiplier)
+
+		thrust = direction.rotated(rotation)
+		accel = thrust * (enginePower * power_multiplier)
+		velocity += accel * delta
 	else:
 		accel = Vector2.ZERO
-		gravity_vec = Globals.BASEGRAVITY
-	
 		
-	velocity = lerp(velocity, Vector2.ZERO, friction)
-	velocity += accel * _delta
-#	velocity = velocity.limit_length(maxSpeed)
-	velocity += gravity_vec * _delta
-	
-	position += velocity * _delta
-	position += extForces * _delta
-#	print(position)
-
-	if extForces:
-		print(extForces)
-	
-	isPlayerOutOfBounds()
-	
-	
-func processMovement2(_delta):
-#	print("processMovement")
-#	handleAngularRoätation(_delta)
-	
-	var direction = get_input(_delta)#.rotated(rotation)
-	if direction.length() > 0:
-		accel = direction.normalized() * enginePower
-		
+	if direction.x == 1:
 		gravity_vec = Vector2.ZERO
-		if isBoosting and boostCharge:
-			accel.x += boostPower
-			boostCharge -= 1
 	else:
-		accel = Vector2.ZERO
-		velocity = lerp(velocity, Vector2.ZERO, friction)
 		gravity_vec = Globals.BASEGRAVITY
-	
-	accel = accel.rotated(rotation)
-	velocity += accel * _delta
-	velocity = velocity.limit_length(maxSpeed)
-	velocity += gravity_vec
-	
-	position += velocity * _delta
-	position += extForces * _delta
-	
-	isPlayerOutOfBounds()
-#
-#func _draw():
-#	if ready and shield > 0 and ticksShieldBreakTimer == 0 and not isWarping:
-#		$ShieldPos/Node2D.ratio = float(shield)/maxShield
-#		$ShieldPos/Node2D._draw()
-	
-func isPlayerOutOfBounds():
-#	print("isPlayerOutOfBounds")
-	position.x = clamp(position.x, 5, Globals.WIDTH -5)
-	position.y = clamp(position.y, 5, Globals.HEIGHT -5)
+#	print(gravity_vec)
 		
-	if position.y > Globals.MUDY - 30 and accel.length():
-		var smoke = Globals.SMOKE_GROUND.instance()
-		Globals.curScene.get_node("Various").add_child(smoke)
-		smoke.position = position
-		smoke.emitting = true
+	velocity *= friction
+	
+	if velocity.length() > max_speed:
+		velocity = velocity.normalized() * max_speed
 
-	if position.y > Globals.MUDY:
-		if ticksSinceGroundDamage == 60:
-			print("GROUND DMG")
-			return
-			ticksSinceGroundDamage = 0
+func xprocess_movement(_delta):
+		
+	var direction = get_input(_delta)
+#	print(direction)
+	handleAngularRotation(_delta)
+	
+	if isShifting:
+		shiftDuration = max(0.0, shiftDuration - _delta)
+		if shiftDuration <= 0.0:
+			disableShifting()
+	else:
+		shiftCooldown = max(0.0, shiftCooldown - _delta)
+	
+#	if not isShifting:
+	if not 0:
+	#	print("playewr processmove")
+	#	print(Engine.get_idle_frames())
+
+		if direction:
+			var thrust:Vector2 = (direction * enginePower/40)
+#			thrust.y /= 3
+			if aft_boosting:
+				thrust.x *= boostPower * 1.0
+				boostCharge = max(0, boostCharge - 60.0 * _delta)
+			elif front_boosting:
+#				print("ding")
+				thrust.x *= boostPower * 0.5
+				boostCharge = max(0, boostCharge - 60.0 * 1.5 * _delta)
+				
+			if sideThrust:
+				thrust.y *= boostPower * 1.5
+				sideThrustDuration = max(0.0, sideThrustDuration - _delta)
+			else:
+#				print("cutting side thrust")
+				thrust.y *= 1.25
+
+#			if thrust.x != 0:
+#				if thrust.x < 0:
+#					thrust.x *= 0.5
+			if sideThrust:
+				gravity_vec = Globals.BASEGRAVITY * 0.25
+#				print(gravity_vec)
+			elif thrust.x > 0 or position.y >= Globals.ROADY -5:
+				gravity_vec = Vector2.ZERO
+			elif thrust.x < 0:
+				gravity_vec = Vector2.ZERO
+			else:
+				gravity_vec = Globals.BASEGRAVITY
 			
-			var proc = Globals.BULLET_RED.instance()
-			Globals.curScene.get_node("Refs").add_child(proc)
-		#func construct(init_dmgType, init_speed, init_minDmg, init_maxDmg, init_impactForce, init_faction, init_projSize, init_projNumber = 1, init_shooter = false):
-			proc.construct(0, 125, 10, 10, Vector2.ZERO, faction, 1)
-#			proc.set_physics_process(false)
-#			proc.disableCollisionNodes()
+			thrust = thrust.rotated(rotation)
+#			print(thrust)
+			accel += thrust
+#			print(accel)
+
+			if aft_boosting:
+				accel = accel.limit_length(enginePower * boostPower)
+			elif front_boosting:
+				accel = accel.limit_length(enginePower * boostPower)
+			elif sideThrust:
+				accel = accel.limit_length(enginePower * boostPower)
+			elif direction.x == 0:
+				accel = accel.limit_length(enginePower)
+			else:
+				accel = accel.limit_length(enginePower)
+							
+		else:
+			accel = Vector2.ZERO
+			gravity_vec = Globals.BASEGRAVITY
+		
+		velocity += accel * _delta
+		velocity = velocity.limit_length(enginePower*1)
+#		friction = 2.0 * _delta
+#		velocity = lerp(velocity, Vector2.ZERO, friction)
+
+		mainUI.updateBoostChargeBar()
+		
+func limit_vector_magnitude(vector: Vector2, max_y: float) -> Vector2:
+	var magnitude = sqrt(vector.x * vector.x + vector.y * vector.y)
+	var desired_y = clamp(vector.y, -max_y, max_y)
+	var new_x = (vector.x / magnitude) * sqrt(desired_y * desired_y + vector.x * vector.x)
+	var new_y = desired_y
+	return Vector2(new_x, new_y)
 	
-#	func construct(init_type:int, init_display:String
-			takeDamage(proc, 1)
-			proc.postImpacting()
-		else: ticksSinceGroundDamage += 1
-	else: ticksSinceGroundDamage = 0	
-	
-func doInitGear():
+func do_init_gear():
 	for n in items:
 		n.doInit()
-		n.set_physics_process(true)
 
-func addItem(item):
-	$Items.add_child(item)
-	items.append(item)
-	if item.needsTarget():
-		item.setItemTarget(self)
-	item.doInitUI()
-	item.position = Vector2(0, 0)
-	item.makeUntargetable()
-	item.makeInvisible()
-#	item.UI_node = item.getItemIconContainer()
-#	item.getStatsPanel()
-#	item.set_physics_process(true)
-#	item.statsPanel.show()
-	updateStats()
-	
+func addItemToUI(item):
 	if item.type == 0: #actives
 		item.full_ui_box.get_node("Vbox").remove_child(item.UI_node)
 		item.full_ui_box.get_node("Vbox").remove_child(item.subPanel_Stats)
-		ui.get_node("Place/Bottomleft/ItemsActive/HB").add_child(item.UI_node)
-		ui.get_node("Place/BottomleftHigher").add_child(item.subPanel_Stats)
+		mainUI.get_node("Place/Bottomleft/ItemsActive/HB").add_child(item.UI_node)
+		mainUI.get_node("Place/BottomleftHigher").add_child(item.subPanel_Stats)
 		item.subPanel_Stats.hide()
-#		item.statsPanel.hide()
+		item.full_ui_box.queue_free()
 		if aItem == -1:
 			for n in items:
 				aItem += 1
@@ -605,64 +698,119 @@ func addItem(item):
 					items[aItem].toggle()
 					break
 	elif item.type == 1: #stats
-		item.full_ui_box.get_node("Vbox").grow_horizontal = 1
-		item.full_ui_box.get_node("Vbox").grow_vertical = 1
+#		item.full_ui_box.get_node("Vbox").grow_horizontal = 1
+#		item.full_ui_box.get_node("Vbox").grow_vertical = 1
 		if item.full_ui_box.is_inside_tree():
-			ui.get_node("LootNodes").remove_child(item.full_ui_box)
-		ui.get_node("Pause/MC/VBC/HBC/PC/VBC/HBC").add_child(item.full_ui_box)
+			mainUI.get_node("LootNodes").remove_child(item.full_ui_box)
+		mainUI.get_node("Pause_details/MC/VBC/HBC/PC/VBC/HBC").add_child(item.full_ui_box)
 		item.subPanel_Stats.show()
-	elif item.type == 2: #assive actives
-		item.full_ui_box.get_node("Vbox").grow_horizontal = 1
-		item.full_ui_box.get_node("Vbox").grow_vertical = 1
+	elif item.type == 2: #passives actives
+#		item.full_ui_box.get_node("Vbox").grow_horizontal = 1
+#		item.full_ui_box.get_node("Vbox").grow_vertical = 1
 		if item.full_ui_box.is_inside_tree():
-			ui.get_node("LootNodes").remove_child(item.full_ui_box)
-		ui.get_node("Pause/MC/VBC/HBC/PC/VBC/HBC").add_child(item.full_ui_box)
+			mainUI.get_node("LootNodes").remove_child(item.full_ui_box)
+		mainUI.get_node("Pause_details/MC/VBC/HBC/PC/VBC/HBC").add_child(item.full_ui_box)
 		item.subPanel_Stats.show()
 		
-func addWeapon(weapon):
-	$Weapons.add_child(weapon)
-	weapon.active = false
-	weapons.append(weapon)
-	weapon.get_node("Aim").queue_free()
+func addWeapon(weapon, mount = $Mounts/A):
+	if not weapon:
+		return
+	mount.add_child(weapon)
+	weapon.active = true
+	weapon.isSelected = false
 	weapon.shooter = self
-	weapon.faction = faction
+	weapon.setFaction(faction)
 	weapon.makeInvisible()
-	weapon.position = Vector2(0, 0)
-#	weapon.statsPanel.rect_position = Vector2(0, 0)
-#	weapon.statsPanel.hide()
+	weapon.doInit()
 	weapon.doInitUI()
 	
-#	Globals.curScene.get_node("UI/Place/Topleft/WeaponsOverview/VB").add_child(weapon.UI_node)
-
-	weapon.full_ui_box.get_node("Vbox").remove_child(weapon.UI_node)
-	weapon.full_ui_box.get_node("Vbox").remove_child(weapon.subPanel_Stats)
-	Globals.curScene.get_node("UI/Place/Topleft/WeaponsOverview/VB").add_child(weapon.UI_node)
-	Globals.curScene.get_node("UI/Place/TopleftLower/WeaponStatsPos").add_child(weapon.subPanel_Stats)
-	weapon.subPanel_Stats.hide()
+	if weapon.UI_node:
+		weapon.full_ui_box.get_node("Vbox").remove_child(weapon.UI_node)
+		weapon.full_ui_box.get_node("Vbox").remove_child(weapon.subPanel_Stats)
+		Globals.curScene.get_node("UI/Place/Topleft/WeaponsOverview/VB").add_child(weapon.UI_node)
+		Globals.curScene.get_node("UI/Place/TopleftLower/WeaponStatsPos").add_child(weapon.subPanel_Stats)
+		weapon.subPanel_Stats.hide()
 		
 func addStartingWeapons():
-	addWeapon(Globals.getSpecificBaseWeaponByName("Autocannon"))
-	addWeapon(Globals.getSpecificBaseWeaponByName("Hvy Autocannon"))
-	addWeapon(Globals.getSpecificBaseWeaponByName("Expl. Autocannon"))
-#	addWeapon(Globals.getSpecificBaseWeaponByName("Missilelauncher"))
-#	addWeapon(Globals.getSpecificBaseWeaponByName("Laserlance"))
+	addWeapon(setShield())
+	addWeapon(Globals.getWeaponBase("Autocannon"))
+	addWeapon(Globals.getWeaponBase("Laserblaster"))
+#	addWeapon(Globals.getWeaponBase("Mace"))
+#	addWeapon(Globals.getWeaponBase("Twin Autocannon"))
+#	addWeapon(Globals.getWeaponBase("Scattergatling+"))
+#	addWeapon(Globals.getWeaponBase("Player Rail"))
+#	addWeapon(Globals.getWeaponBase("Burstblaster")) 
+#	addWeapon(Globals.getWeaponBase("Hvy Autocannon"))
+#	addWeapon(Globals.getWeaponBase("Expl. Autocannon"))
+#	addWeapon(Globals.getWeaponBase("Torpedolauncher"))
+#	addWeapon(Globals.getWeaponBase("Swarmlauncher"))
+
+func getShield():
+	for n in $Mounts/A.get_children():
+		if n.display == "Shield":
+			return n
+	return null
+
+func setShield():
+	var shield_omni = Globals.weapon_shield_omni.instance()
+	shield_omni.construct(5, "Shield", baseStats.shieldStats)
+	shield_omni.position = Vector2(-15, 0)
+	shield_omni.connect("updateShield_UI_Nodes", mainUI, "_on_updateShield_UI_Nodes")
+	shield_omni.connect("updateShieldBreakCooldown", mainUI, "_on_updateShieldBeakCooldown")
+	shield_omni.shieldbar = Globals.UI.get_node("Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield")
+	
+	return shield_omni
 	
 func addStartingItems():
-#	addItem(Globals.getItemByName("Counterbarrage System"))
-	addItem(Globals.getItemByName("Orbital Strike (Arty)"))
-#	addItem(Globals.getItemByName("Conv. Bomb Rack"))
-#	addItem(Globals.getItemByName("Missile Pod"))
-#	addItem(Globals.getItemByName("Conv. Bomb Rack"))
-#	addItem(Globals.getItemByName("Hail Support: Frigate"))
-#	addItem(Globals.getItemByName("Health UP Shield DOWN"))
+##	addItem(Globals.getItemBase("Nearfield Deflector"))
+#	return
+	addItem(Globals.getItemBase("Reactive Armor"))
+#	addItem(Globals.getItemBase("Conv. Bomb Rack (P)"))
+#	addItem(Globals.getItemBase("Conv. Bomb Rack (P)"))
+#	addItem(Globals.getItemBase("Orbital Strike: Beam (A)"))
 	
 	
+#	addItem(Globals.getItemBase("Minelayer (P)"))
+#	addItem(Globals.getItemBase("Hail Support: Fighter"))
+#	addItem(Globals.getItemBase("Reactive Armor"))
+#	addItem(Globals.getItemBase("Orbital Strike (Arty)"))
+#	pass
+#	addItem(Globals.getItemBase("Counterbarrage System"))
+#	addItem(Globals.getItemBase("Nearfield Deflector"))
+#	addItem(Globals.getItemBase("Orbital Strike (Beam)"))
+#	for n in items:
+#		print("#", n.id)
+#		print("stacks: ", n.result[0].stacks)
+#
+#	items[0].result[0].stacks = 5
+	
+		
+		
+#	items[0].full_ui_box.queue_free()
+#	items[0].UI_node.queue_free()
+#	items[0].subPanel_Stats.queue_free()
+#	items[0].full_ui_box = null
+#	items[0].setQuality(1)
+#	items[0].setQuality(2)
+#	items[0].setQuality(0)
+#	items[0].setQuality(-2)
+#	items[0].doInitUI()
+#	addItemToUI(items[0])
+#	addItem(Globals.getItemBase("Conv. Bomb Rack"))
+#	addItem(Globals.getItemBase("Missile Pod"))
+#	addItem(Globals.getItemBase("Conv. Bomb Rack"))
+#	addItem(Globals.getItemBase("Hail Support: Frigate"))
+#	addItem(Globals.getItemBase("Health UP Shield DOWN"))
+
+#	for n in items:
+#		print("#", n.id)
+#		print("stacks: ", n.result[0].stacks)
 
 #	get = "Health+Shield+"
 #	get = "Orbital Strike (Beam)"
 #	get = "Orbital Strike (Arty)"
 #	get = "Hail Support: Fighter"
-#	item = Globals.getItemByName(get)
+#	item = Globals.getItemBase(get)
 #	item.quality = 2
 #	item.initQuality()
 #	addItem(item)
@@ -671,19 +819,15 @@ func isLegalTarget():
 	return true
 
 func updateStats():
-#	print("updateStats")
 	setBaseStats()
-	#health = baseHealth
-	maxHealth = baseHealth
-	#shield = baseShield
-	maxShield = baseShield
-	shieldRegenTime = baseShieldRegenTime
-	shieldBreakTime = baseShieldBreakTime
+	maxHealth = baseStats.maxHealth
+	sideThrustDuration = maxSideThrustDuration
+	boostMaxCharge = baseStats.boostMaxCharge
 	
 	for item in items:
 		if item.trigger == "":
 			for n in item.result:
-				if "isStat" in n:
+				if n.prop in self and "isStat" in n and n.isStat == true:
 					if n.amount != 0:
 						#print(entry)
 						match n.modType:
@@ -691,18 +835,33 @@ func updateStats():
 								self[n.prop] += n.amount
 							"pct":
 								self[n.prop] *= n.amount
-
-	$ShieldRegen.wait_time = shieldRegenTime
-	$ShieldBreak.wait_time = shieldBreakTime
 	 
 	health = min(health, maxHealth)
-	shield = min(shield, maxShield)
 	
-	ui.get_node("Bars/Panel/Shield").max_value = maxShield
-	ui.get_node("Bars/Panel/Health").max_value = maxHealth
+	emit_signal("update_player_health", health, maxHealth)
+	mainUI.updateBoostChargeProps()
+	mainUI.updateBoostChargeBar()
 	
-	updateShield()
-	#$ShieldRegen.start()
+	updateShieldStats()
+	
+func updateShieldStats():
+	var shield = getShield()
+	if not shield: return
+	shield.setShieldBaseStats()
+	for item in items:
+		if item.trigger == "":
+			for n in item.result:
+				if n.prop in shield and "isStat" in n and n.isStat == true:
+					if n.amount != 0:
+						#print(entry)
+						match n.modType:
+							"flat":
+								shield[n.prop] += n.amount
+							"pct":
+								shield[n.prop] *= n.amount
+	 
+	
+	shield.updateShield()
 	
 func reInitItems():
 	for n in player.items:
@@ -711,13 +870,16 @@ func reInitItems():
 func checkAggro(shooterObj):
 	return
 	
-func handleWeapons(_delta):
+func handle_weapons(_delta):
 	return
 	
-func initAIList():
+func handleItems(_delta):
 	return
 	
-func updateAIList():
+func init_debug_menu_entry():
+	return
+	
+func update_debug_menu_entry():
 	return
 	
 func updateDebugList():
@@ -726,20 +888,92 @@ func updateDebugList():
 func handleControlNodes():
 	return
 
-func canBeOutOutBounds():
-	return true
-
 func initSteering():
 	return
 
 func setMass():
-	mass = 2.0
+	mass = 20.0
 
-func getRamDamasge():
-	return false
-	var ramBullet = Globals.BULLET_BLUE.instance()
-	Globals.curScene.get_node("Refs").add_child(ramBullet)
-	ramBullet.minDmg = 1
-	ramBullet.maxDmg = 1
-	ramBullet.impactForce = Vector2.ZERO
-	return ramBullet
+#func getRamDamasge():
+#	return false
+#	var ramBullet = Globals.BULLET_BLUE.instance()
+#	Globals.curScene.get_node("Refs").add_child(ramBullet)
+#	ramBullet.minDmg = 1
+#	ramBullet.maxDmg = 1
+#	ramBullet.impactForce = Vector2.ZERO
+#	return ramBullet
+	
+func onWarpInDone():
+	print("onWarpInDone")
+	isWarping = false
+	setActive()
+#	enableCollisionNodes()
+	do_init_gear()
+
+func kill():
+	return
+	
+func bound_process(_delta):
+	position.x = clamp(position.x, 5, Globals.WIDTH -5)
+	position.y = clamp(position.y, 5, Globals.ROADY -5)
+	gravity_vec = Vector2.ZERO
+	
+#	print(position.y)
+
+	if Globals.curScene.name != "Intermission":
+		if time_since_ground_smoke > 0.1 and accel.length():
+			time_since_ground_smoke = 0.0
+			var smoke = Globals.SMOKE_GROUND.instance()
+			Globals.curScene.get_node("Various").add_child(smoke)
+			smoke.position = position + Vector2(sign(velocity.x) * 15, 0)
+			smoke.emitting = true
+		else: time_since_ground_smoke += _delta
+		
+		if position.y == Globals.ROADY - 5:
+			if time_since_ground_dmg > 0.3:
+				time_since_ground_dmg = 0.0
+		#
+				var ram = Globals.curScene.get_node("Various/Boundary").getRamDamage()
+				ram.global_position = global_position + Vector2(0, 10)
+				ram.velocity = Vector2(0, -10)
+
+				takeDamage(ram, 3)
+				ram.postImpacting()
+			else: time_since_ground_dmg += _delta
+
+func _on_BoostRegen_timeout():
+	isRechargingBoost = true
+	
+func getStatByName(key):
+	match key:
+		"": return ""
+		"maxHealth": return get(key)
+		"maxShield": if getShield(): 
+			return getShield().maxShield
+		"healthRegenTime": return get(key)
+		"shieldBreakTime":  if getShield(): 
+			return str("%.1f" % getShield().shieldBreakTime)
+		"shieldRegenTime":  if getShield():
+			return str("%.1f" % getShield().shieldRegenTime)
+		"enginePower": return get(key)
+		"boostCharge": return str("%.1f" % get(key))
+		"boostMaxCharge": return str("%.0f" % get(key))
+		"boostPower": return str("%.1f" % get(key))
+		"agility": return str("%.1f" % get(key))
+		"materials": return get(key)
+		"enginePower": return get("maxSpeed")
+	return "null"
+
+func hideSelf():
+	hide()
+#	for mount in $Mounts.get_children():
+#		mount.get_node("Weapon/ControlNodes").hide()
+
+	
+func setShieldBarHealth():
+	if shieldbar == null:
+		return
+	shieldbar.value = self.shield
+	shieldbar.max_value = self.maxShield
+	if shieldbar.has_node("Value"):
+		shieldbar.get_node("Value").text = str(round(self.shield), " / ", self.maxShield)

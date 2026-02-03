@@ -1,7 +1,21 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Weapon_Base.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Weapon_Proj.gd" type="Script" id=2]
+[ext_resource path="res://scenes/Part_Shell_Emitter.tscn" type="PackedScene" id=3]
 
 [node name="Weapon" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="AimA" parent="Aim" index="0"]
+width = 3.0
+
+[node name="AimB" parent="Aim" index="1"]
+width = 3.0
+
+[node name="Muzzle" parent="." index="4"]
+position = Vector2( 25, 0 )
+
+[node name="EffectNodes" type="Position2D" parent="." index="8"]
+
+[node name="Shell_Emitter" parent="EffectNodes" index="0" instance=ExtResource( 3 )]

@@ -1,31 +1,25 @@
 extends Proj_Base
 class_name Proj_Bullet
+#
+#var type = 1
+var tracertrigger:float = 0.1
 
 func init():
 	pass
 	
-func constructNew(weapon):
-	faction = weapon.faction
-	dmgType = weapon.dmgType
-	speed = weapon.speed
-	minDmg = weapon.minDmg
-	maxDmg = weapon.maxDmg
-	aoe = weapon.aoe
-	lifetime = weapon.lifetime
-	projSize = weapon.projSize
-	
-	type = 1
-	scale = Vector2(weapon.projSize, weapon.projSize)
-	
-	
 func _ready():
 	velocity = Vector2(1, 0).rotated(rotation)
-
+#	$Trail.set_as_toplevel(true)
+#	$Trail.points[0] = global_position
+#	$Trail.points[1] = global_position
+	
 func _physics_process(delta):
 	position += velocity * speed * delta
-#	position += transform.x * speed * delta
-	if Globals.isOutOfBounds(position):
-		queue_free()
-
+	
+#	if tracertrigger > 0.0:
+#		tracertrigger -= delta
+#		if tracertrigger <= 0:
+#			$Trail.show()
+	
 func get_class():
-	return "Proj_Bullet"
+	return "Proj_Mace"

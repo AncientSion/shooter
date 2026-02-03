@@ -1,17 +1,25 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://various/Roboto-Medium.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/Mission_UI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://styles/Box.tres" type="StyleBox" id=3]
+[ext_resource path="res://styles/Font18.tres" type="DynamicFont" id=3]
 [ext_resource path="res://ui/ItemEntryCont.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=5]
 [ext_resource path="res://scenes/EnemyList.tscn" type="PackedScene" id=6]
 [ext_resource path="res://textures/weapons/bar_back.png" type="Texture" id=7]
-[ext_resource path="res://textures/weapons/bar_front.png" type="Texture" id=8]
-[ext_resource path="res://textures/weapons/shield_bar_back_panel.png" type="Texture" id=9]
-[ext_resource path="res://textures/weapons/bar_blue.png" type="Texture" id=10]
+[ext_resource path="res://textures/weapons/bar_border_reverse.png" type="Texture" id=8]
+[ext_resource path="res://textures/weapons/bar_boost_front_small.png" type="Texture" id=9]
+[ext_resource path="res://scenes/Shaders/Highlight_black.tres" type="Material" id=10]
 [ext_resource path="res://textures/weapons/bar_shield_front.png" type="Texture" id=11]
+[ext_resource path="res://textures/weapons/bar_back_small.png" type="Texture" id=12]
 [ext_resource path="res://ui/Pause.tscn" type="PackedScene" id=13]
+[ext_resource path="res://styles/Font24.tres" type="DynamicFont" id=14]
+[ext_resource path="res://textures/weapons/bar_front_rev.png" type="Texture" id=15]
+[ext_resource path="res://textures/weapons/bar_back_reverse.png" type="Texture" id=16]
+[ext_resource path="res://textures/weapons/shield_bar_back_panel2.png" type="Texture" id=17]
+[ext_resource path="res://default_theme.tres" type="Theme" id=18]
+[ext_resource path="res://textures/weapons/bar_health_back.png" type="Texture" id=19]
+[ext_resource path="res://textures/weapons/bar_health_front.png" type="Texture" id=20]
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 1, 0, 0, 1 )
@@ -29,32 +37,6 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=3]
-resource_local_to_scene = true
-bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=10]
-resource_local_to_scene = true
-content_margin_left = 5.0
-content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 20
-font_data = ExtResource( 1 )
-
 [sub_resource type="DynamicFont" id=5]
 size = 20
 font_data = ExtResource( 1 )
@@ -63,13 +45,47 @@ font_data = ExtResource( 1 )
 pause_mode = 2
 script = ExtResource( 5 )
 
-[node name="Center" type="Position2D" parent="."]
-position = Vector2( 719, 608 )
+[node name="Text_Tween" type="Tween" parent="."]
+
+[node name="Center" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Difficulty_Text" type="Control" parent="Center"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_top = -300.0
+margin_bottom = -300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Center/Difficulty_Text"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -86.0
+margin_top = -21.5
+margin_right = 86.0
+margin_bottom = 21.5
+size_flags_horizontal = 4
+theme_type_variation = "label_font_red"
+custom_fonts/font = ExtResource( 14 )
+text = "Difficulty"
+align = 1
+valign = 1
 
 [node name="PlayerStatsPos" type="Position2D" parent="."]
 position = Vector2( 1737, 797 )
 
 [node name="LootNodes" type="Control" parent="."]
+theme = ExtResource( 18 )
 
 [node name="Toggle" type="Panel" parent="."]
 margin_right = 10.0
@@ -88,10 +104,10 @@ custom_styles/panel = SubResource( 11 )
 [node name="Place" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -111,103 +127,121 @@ custom_constants/separation = 5
 anchor_left = 0.3
 anchor_right = 0.3
 
-[node name="Diffi" type="PanelContainer" parent="Place/TopleftRighter"]
+[node name="Difficulty" type="PanelContainer" parent="Place/TopleftRighter"]
+margin_right = 130.0
+margin_bottom = 117.0
+rect_min_size = Vector2( 130, 25 )
+
+[node name="Vbox" type="VBoxContainer" parent="Place/TopleftRighter/Difficulty"]
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 120.0
+margin_bottom = 109.0
+
+[node name="Diff" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
 margin_right = 110.0
-margin_bottom = 78.0
-rect_min_size = Vector2( 110, 25 )
-custom_styles/panel = ExtResource( 3 )
+margin_bottom = 17.0
 
-[node name="Vbox" type="VBoxContainer" parent="Place/TopleftRighter/Diffi"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 105.0
-margin_bottom = 73.0
-
-[node name="HBox1" type="HBoxContainer" parent="Place/TopleftRighter/Diffi/Vbox"]
-margin_right = 100.0
-margin_bottom = 14.0
-
-[node name="Label1" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox1"]
-margin_right = 48.0
-margin_bottom = 14.0
+[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
+margin_right = 54.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-text = "Diffi"
+text = "strength"
 
-[node name="Label2" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox1"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 14.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
+margin_left = 58.0
+margin_right = 110.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 align = 1
 
-[node name="HBox2" type="HBoxContainer" parent="Place/TopleftRighter/Diffi/Vbox"]
-margin_top = 18.0
-margin_right = 100.0
-margin_bottom = 32.0
+[node name="Wave" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+margin_top = 21.0
+margin_right = 110.0
+margin_bottom = 38.0
 
-[node name="Label1" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox2"]
-margin_right = 48.0
-margin_bottom = 14.0
+[node name="A" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
+margin_right = 57.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
-text = "Wave"
+text = "difficulty"
 
-[node name="Label2" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox2"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 14.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
+margin_left = 61.0
+margin_right = 110.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 align = 1
 
-[node name="HBox3" type="HBoxContainer" parent="Place/TopleftRighter/Diffi/Vbox"]
-margin_top = 36.0
-margin_right = 100.0
-margin_bottom = 50.0
+[node name="Res" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+margin_top = 42.0
+margin_right = 110.0
+margin_bottom = 59.0
 
-[node name="res" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox3"]
-margin_right = 48.0
-margin_bottom = 14.0
+[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Res"]
+margin_right = 53.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 text = "Reso"
 
-[node name="Label2" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox3"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 14.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Res"]
+margin_left = 57.0
+margin_right = 110.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 align = 1
 
-[node name="HBox4" type="HBoxContainer" parent="Place/TopleftRighter/Diffi/Vbox"]
-margin_top = 54.0
-margin_right = 100.0
-margin_bottom = 68.0
+[node name="Zoom" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+margin_top = 63.0
+margin_right = 110.0
+margin_bottom = 80.0
 
-[node name="zoom" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox4"]
-margin_right = 48.0
-margin_bottom = 14.0
+[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Zoom"]
+margin_right = 53.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 text = "Zoom"
 
-[node name="Label2" type="Label" parent="Place/TopleftRighter/Diffi/Vbox/HBox4"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 14.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Zoom"]
+margin_left = 57.0
+margin_right = 110.0
+margin_bottom = 17.0
 size_flags_horizontal = 3
 align = 1
 
-[node name="TopCenter" type="MarginContainer" parent="Place"]
+[node name="Fps" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+margin_top = 84.0
+margin_right = 110.0
+margin_bottom = 101.0
+
+[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Fps"]
+margin_right = 53.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "FPS"
+
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Fps"]
+margin_left = 57.0
+margin_right = 110.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+align = 1
+
+[node name="TopCenter" type="Control" parent="Place"]
+anchor_left = 0.5
+anchor_right = 0.5
+
+[node name="Mission_PC" parent="Place/TopCenter" instance=ExtResource( 2 )]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -125.0
 margin_right = 125.0
-margin_bottom = 90.0
-
-[node name="Mission_PC" parent="Place/TopCenter" instance=ExtResource( 2 )]
-margin_right = 250.0
-margin_bottom = 90.0
-custom_styles/panel = SubResource( 3 )
 
 [node name="TopleftLower" type="MarginContainer" parent="Place"]
+margin_left = 6.0
 margin_top = 100.0
+margin_right = 6.0
+margin_bottom = 100.0
 
 [node name="WeaponStatsPos" type="MarginContainer" parent="Place/TopleftLower"]
 grow_horizontal = 0
@@ -219,8 +253,7 @@ anchor_right = 1.0
 grow_horizontal = 0
 
 [node name="AI_PC" parent="Place/Topright" instance=ExtResource( 6 )]
-margin_bottom = 25.0
-custom_styles/panel = SubResource( 10 )
+margin_bottom = 33.0
 
 [node name="Bottomright" type="MarginContainer" parent="Place"]
 anchor_left = 1.0
@@ -252,15 +285,105 @@ grow_vertical = 0
 
 [node name="ItemStatsPos" type="MarginContainer" parent="Place/BottomleftHigher"]
 
+[node name="Glow" type="PanelContainer" parent="."]
+margin_left = 15.0
+margin_top = 429.0
+margin_right = 155.0
+margin_bottom = 519.0
+
+[node name="MC" type="MarginContainer" parent="Glow"]
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 130.0
+margin_bottom = 98.0
+theme = ExtResource( 18 )
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="HA" type="HBoxContainer" parent="Glow/MC"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 115.0
+margin_bottom = 85.0
+
+[node name="VA" type="VBoxContainer" parent="Glow/MC/HA"]
+margin_right = 73.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="ALL" type="HSlider" parent="Glow/MC/HA/VA"]
+margin_right = 73.0
+margin_bottom = 16.0
+min_value = 100.0
+max_value = 300.0
+value = 100.0
+
+[node name="R" type="HSlider" parent="Glow/MC/HA/VA"]
+margin_top = 20.0
+margin_right = 73.0
+margin_bottom = 36.0
+min_value = 100.0
+max_value = 300.0
+value = 100.0
+
+[node name="G" type="HSlider" parent="Glow/MC/HA/VA"]
+margin_top = 40.0
+margin_right = 73.0
+margin_bottom = 56.0
+min_value = 100.0
+max_value = 300.0
+value = 100.0
+
+[node name="B" type="HSlider" parent="Glow/MC/HA/VA"]
+margin_top = 60.0
+margin_right = 73.0
+margin_bottom = 76.0
+min_value = 100.0
+max_value = 300.0
+value = 100.0
+
+[node name="VSeparator" type="VSeparator" parent="Glow/MC/HA"]
+margin_left = 77.0
+margin_right = 81.0
+margin_bottom = 80.0
+
+[node name="VB" type="VBoxContainer" parent="Glow/MC/HA"]
+margin_left = 85.0
+margin_right = 110.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+
+[node name="ALL" type="Label" parent="Glow/MC/HA/VB"]
+margin_right = 25.0
+margin_bottom = 17.0
+align = 1
+
+[node name="R" type="Label" parent="Glow/MC/HA/VB"]
+margin_top = 21.0
+margin_right = 25.0
+margin_bottom = 38.0
+align = 1
+
+[node name="G" type="Label" parent="Glow/MC/HA/VB"]
+margin_top = 42.0
+margin_right = 25.0
+margin_bottom = 59.0
+align = 1
+
+[node name="B" type="Label" parent="Glow/MC/HA/VB"]
+margin_top = 63.0
+margin_right = 25.0
+margin_bottom = 80.0
+align = 1
+
 [node name="ItemsPassive" type="MarginContainer" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 613.0
-margin_top = 408.0
-margin_right = 713.0
-margin_bottom = 483.0
+margin_left = 1573.0
+margin_top = 948.0
+margin_right = 1673.0
+margin_bottom = 1023.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -275,8 +398,10 @@ custom_constants/separation = 0
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 margin_left = 0.0
 margin_right = 100.0
+mouse_filter = 0
 
-[node name="Pause" parent="." instance=ExtResource( 13 )]
+[node name="Pause_details" parent="." instance=ExtResource( 13 )]
+visible = false
 
 [node name="Bars" type="Control" parent="."]
 anchor_left = 0.5
@@ -289,61 +414,190 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -263.0
-margin_top = -80.0
-margin_right = 263.0
-texture = ExtResource( 9 )
+margin_left = -215.0
+margin_top = -96.0
+margin_right = 285.0
+margin_bottom = -3.0
+texture = ExtResource( 17 )
 expand = true
 
-[node name="Shield" type="TextureProgress" parent="Bars/Panel"]
+[node name="VBox" type="VBoxContainer" parent="Bars/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 6
+alignment = 1
+
+[node name="CC_SideBoost" type="CenterContainer" parent="Bars/Panel/VBox"]
+margin_right = 500.0
+margin_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="Bar_SideBoost" type="TextureProgress" parent="Bars/Panel/VBox/CC_SideBoost"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -200.0
-margin_top = 8.0
-margin_right = 200.0
-margin_bottom = 38.0
+material = ExtResource( 10 )
+margin_left = 175.0
+margin_right = 325.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 150, 20 )
+size_flags_horizontal = 12
+size_flags_vertical = 12
 max_value = 30.0
-value = 3.0
+value = 10.0
+texture_under = ExtResource( 12 )
+texture_progress = ExtResource( 9 )
+fill_mode = 6
+nine_patch_stretch = true
+
+[node name="Value" type="Label" parent="Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 1.0
+margin_top = -10.0
+margin_right = 1.0
+margin_bottom = 12.0
+grow_horizontal = 2
+theme_type_variation = "label_font_black"
+custom_fonts/font = ExtResource( 3 )
+text = "000000"
+align = 1
+valign = 1
+
+[node name="CC_Boost" type="CenterContainer" parent="Bars/Panel/VBox"]
+margin_top = 26.0
+margin_right = 500.0
+margin_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="Bar_Boost" type="TextureProgress" parent="Bars/Panel/VBox/CC_Boost"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+material = ExtResource( 10 )
+margin_left = 100.0
+margin_right = 400.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 300, 20 )
+size_flags_horizontal = 12
+size_flags_vertical = 12
+max_value = 30.0
+value = 10.0
+texture_under = ExtResource( 12 )
+texture_progress = ExtResource( 9 )
+fill_mode = 6
+nine_patch_stretch = true
+
+[node name="Value" type="Label" parent="Bars/Panel/VBox/CC_Boost/Bar_Boost"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 1.0
+margin_top = -10.0
+margin_right = 1.0
+margin_bottom = 12.0
+grow_horizontal = 2
+theme_type_variation = "label_font_black"
+custom_fonts/font = ExtResource( 3 )
+text = "000000"
+align = 1
+valign = 1
+
+[node name="CC_HealthShield" type="CenterContainer" parent="Bars/Panel/VBox"]
+margin_top = 52.0
+margin_right = 500.0
+margin_bottom = 107.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="Bars/Panel/VBox/CC_HealthShield"]
+margin_left = 12.0
+margin_right = 487.0
+margin_bottom = 55.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 7
+alignment = 1
+
+[node name="Bar_Shield" type="TextureProgress" parent="Bars/Panel/VBox/CC_HealthShield/VBox"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+material = ExtResource( 10 )
+margin_right = 475.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 475, 24 )
+max_value = 30.0
 texture_under = ExtResource( 7 )
-texture_over = ExtResource( 10 )
 texture_progress = ExtResource( 11 )
 fill_mode = 6
 nine_patch_stretch = true
 
-[node name="Value" type="Label" parent="Bars/Panel/Shield"]
-anchor_left = 0.5
+[node name="Value" type="Label" parent="Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield"]
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -31.0
-margin_top = -12.0
-margin_right = 31.0
+margin_left = 1.0
+margin_top = -10.0
+margin_right = 1.0
 margin_bottom = 12.0
 grow_horizontal = 2
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 4 )
+theme_type_variation = "label_font_black"
+custom_fonts/font = ExtResource( 3 )
 text = "000000"
 align = 1
+valign = 1
 
-[node name="Health" type="TextureProgress" parent="Bars/Panel"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -250.0
-margin_top = -37.0
-margin_right = 250.0
-margin_bottom = -7.0
-max_value = 50.0
-value = 30.0
-texture_under = ExtResource( 7 )
-texture_over = ExtResource( 10 )
-texture_progress = ExtResource( 8 )
+[node name="Bar_Health" type="TextureProgress" parent="Bars/Panel/VBox/CC_HealthShield/VBox"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+material = ExtResource( 10 )
+margin_top = 31.0
+margin_right = 475.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 475, 24 )
+max_value = 30.0
+texture_under = ExtResource( 19 )
+texture_progress = ExtResource( 20 )
 fill_mode = 6
 nine_patch_stretch = true
 
-[node name="Value" type="Label" parent="Bars/Panel/Health"]
+[node name="Value" type="Label" parent="Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Health"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 1.0
+margin_top = -10.0
+margin_right = 1.0
+margin_bottom = 12.0
+grow_horizontal = 2
+theme_type_variation = "label_font_black"
+custom_fonts/font = ExtResource( 3 )
+text = "000000"
+align = 1
+valign = 1
+
+[node name="Bar3" type="TextureProgress" parent="Bars/Panel/VBox/CC_HealthShield/VBox"]
+visible = false
+margin_top = 62.0
+margin_right = 475.0
+margin_bottom = 87.0
+rect_min_size = Vector2( 475, 25 )
+max_value = 50.0
+value = 30.0
+texture_under = ExtResource( 16 )
+texture_over = ExtResource( 8 )
+texture_progress = ExtResource( 15 )
+fill_mode = 6
+nine_patch_stretch = true
+
+[node name="Value" type="Label" parent="Bars/Panel/VBox/CC_HealthShield/VBox/Bar3"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -357,3 +611,9 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 5 )
 text = "000000"
 align = 1
+valign = 1
+
+[connection signal="value_changed" from="Glow/MC/HA/VA/ALL" to="." method="_on_ALL_value_changed"]
+[connection signal="value_changed" from="Glow/MC/HA/VA/R" to="." method="_on_R_value_changed"]
+[connection signal="value_changed" from="Glow/MC/HA/VA/G" to="." method="_on_G_value_changed"]
+[connection signal="value_changed" from="Glow/MC/HA/VA/B" to="." method="_on_B_value_changed"]

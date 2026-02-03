@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Arty.gd"
 }, {
+"base": "SM",
+"class": "Arty_SM",
+"language": "GDScript",
+"path": "res://sm/Arty_SM.gd"
+}, {
 "base": "Node2D",
 "class": "Base_Entity",
 "language": "GDScript",
@@ -47,12 +52,32 @@ _global_script_classes=[ {
 "base": "Base_Unit",
 "class": "Blob",
 "language": "GDScript",
-"path": "res://scripts/Units/Unit_Blob.gd"
+"path": "res://scripts/Units/Unit_DroneShield.gd"
+}, {
+"base": "Air_Unit",
+"class": "Bomber",
+"language": "GDScript",
+"path": "res://scripts/Units/Unit_Bomber.gd"
+}, {
+"base": "SM",
+"class": "Bomber_SM",
+"language": "GDScript",
+"path": "res://sm/Bomber_SM.gd"
 }, {
 "base": "Capital",
 "class": "Boss",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Boss.gd"
+}, {
+"base": "SM",
+"class": "Boss_SM",
+"language": "GDScript",
+"path": "res://sm/Boss_SM.gd"
+}, {
+"base": "SM",
+"class": "Building_SM",
+"language": "GDScript",
+"path": "res://sm/Building_SM.gd"
 }, {
 "base": "Air_Unit",
 "class": "Capital",
@@ -63,6 +88,11 @@ _global_script_classes=[ {
 "class": "Cargo_Hauler",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Cargo_Hauler.gd"
+}, {
+"base": "SM",
+"class": "Cargohauler_SM",
+"language": "GDScript",
+"path": "res://sm/Cargohauler_SM.gd"
 }, {
 "base": "Ground_Entity",
 "class": "City",
@@ -79,15 +109,30 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Destroyer.gd"
 }, {
-"base": "Air_Unit",
-"class": "Drone",
+"base": "SM",
+"class": "DroneShield_SM",
 "language": "GDScript",
-"path": "res://scripts/Units/Unit_Drone_new.gd"
+"path": "res://sm/DroneShield_SM.gd"
+}, {
+"base": "Drone_Shotgun",
+"class": "Drone_Kamikaze",
+"language": "GDScript",
+"path": "res://scripts/Units/Unit_Drone_Kamikaze.gd"
+}, {
+"base": "SM",
+"class": "Drone_Kamikaze_SM",
+"language": "GDScript",
+"path": "res://sm/DroneSM_Kamikaze.gd"
 }, {
 "base": "Air_Unit",
-"class": "Drone_a",
+"class": "Drone_Shotgun",
 "language": "GDScript",
-"path": "res://scripts/Units/Unit_Drone.gd"
+"path": "res://scripts/Units/Unit_Drone_Shotgun.gd"
+}, {
+"base": "SM",
+"class": "Drone_Shotgun_SM",
+"language": "GDScript",
+"path": "res://sm/DroneSM_Shotgun.gd"
 }, {
 "base": "Air_Unit",
 "class": "Fighter",
@@ -95,14 +140,19 @@ _global_script_classes=[ {
 "path": "res://scripts/Units/Unit_Fighter.gd"
 }, {
 "base": "SM",
-"class": "FighterSM",
+"class": "Fighter_SM",
 "language": "GDScript",
-"path": "res://sm/FighterSM.gd"
+"path": "res://sm/Fighter_SM.gd"
 }, {
 "base": "Capital",
 "class": "Frigate",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Frigate.gd"
+}, {
+"base": "SM",
+"class": "Frigate_SM",
+"language": "GDScript",
+"path": "res://sm/Frigate_SM.gd"
 }, {
 "base": "Base_Unit",
 "class": "Ground_Entity",
@@ -115,19 +165,19 @@ _global_script_classes=[ {
 "path": "res://scripts/Units/Ground_Vehicle.gd"
 }, {
 "base": "SM",
-"class": "HeliSM",
+"class": "Heli_SM",
 "language": "GDScript",
 "path": "res://sm/HeliSM.gd"
 }, {
 "base": "Helicopter_Light",
 "class": "Helicopter_Heavy",
 "language": "GDScript",
-"path": "res://scripts/Units/Unit_Helicopter_02.gd"
+"path": "res://scripts/Units/Unit_Helicopter_Heavy.gd"
 }, {
 "base": "Air_Unit",
 "class": "Helicopter_Light",
 "language": "GDScript",
-"path": "res://scripts/Units/Unit_Helicopter.gd"
+"path": "res://scripts/Units/Unit_Helicopter_Light.gd"
 }, {
 "base": "Base_Level",
 "class": "Intermission",
@@ -140,9 +190,14 @@ _global_script_classes=[ {
 "path": "res://scenes/Utilities/Item_Base.gd"
 }, {
 "base": "Item_Base",
-"class": "Item_BombRack",
+"class": "Item_BombRack_Active",
 "language": "GDScript",
-"path": "res://scenes/Utilities/Item_BombRack.gd"
+"path": "res://scenes/Utilities/Item_BombRack_Active.gd"
+}, {
+"base": "Item_BombRack_Active",
+"class": "Item_BombRack_Passive",
+"language": "GDScript",
+"path": "res://scenes/Utilities/Item_BombRack_Passive.gd"
 }, {
 "base": "Item_Base",
 "class": "Item_Call_Fighter",
@@ -160,44 +215,49 @@ _global_script_classes=[ {
 "path": "res://scenes/Utilities/Item_CounterbarrageSystem.gd"
 }, {
 "base": "Item_Base",
-"class": "Item_MissilePod",
+"class": "Item_Minelayer_Active",
 "language": "GDScript",
-"path": "res://scenes/Utilities/Item_MissilePod.gd"
+"path": "res://scenes/Utilities/Item_Minelayer_Active.gd"
+}, {
+"base": "Item_Minelayer_Active",
+"class": "Item_Minelayer_Passive",
+"language": "GDScript",
+"path": "res://scenes/Utilities/Item_Minelayer_Passive.gd"
+}, {
+"base": "Item_Base",
+"class": "Item_MissilePod_Active",
+"language": "GDScript",
+"path": "res://scenes/Utilities/Item_MissilePod_Active.gd"
+}, {
+"base": "Item_MissilePod_Active",
+"class": "Item_MissilePod_Passive",
+"language": "GDScript",
+"path": "res://scenes/Utilities/Item_MissilePod_Passive.gd"
 }, {
 "base": "Item_Passive",
 "class": "Item_NearfieldDeflector",
 "language": "GDScript",
 "path": "res://scenes/Utilities/Item_NearfieldDeflector.gd"
 }, {
-"base": "Item_Base",
-"class": "Item_OrbitalStrikeArty",
+"base": "Item_OrbitalArtillery_Active",
+"class": "Item_OrbitalArtiller_Passiveww",
 "language": "GDScript",
-"path": "res://scenes/Utilities/Item_OrbitalStrikeArty.gd"
+"path": "res://scenes/Utilities/Item_OrbitalArtillery_Passive.gd"
 }, {
 "base": "Item_Base",
-"class": "Item_OrbitalStrikeBeam",
+"class": "Item_OrbitalArtillery_Active",
 "language": "GDScript",
-"path": "res://scenes/Utilities/Item_OrbitalStrikeBeam.gd"
+"path": "res://scenes/Utilities/Item_OrbitalArtillery_Active.gd"
+}, {
+"base": "Item_Base",
+"class": "Item_OrbitalBeam_Active",
+"language": "GDScript",
+"path": "res://scenes/Utilities/Item_OrbitalBeam_Active.gd"
 }, {
 "base": "Item_Base",
 "class": "Item_Passive",
 "language": "GDScript",
 "path": "res://scenes/Utilities/Item_Passive.gd"
-}, {
-"base": "Item_BombRack",
-"class": "Item_Passive_Bomb",
-"language": "GDScript",
-"path": "res://scenes/Utilities/Item_Passive_Bomb.gd"
-}, {
-"base": "Item_MissilePod",
-"class": "Item_Passive_Missiles",
-"language": "GDScript",
-"path": "res://scenes/Utilities/Item_Passive_Missiles.gd"
-}, {
-"base": "Item_OrbitalStrikeArty",
-"class": "Item_Passive_OrbiArty",
-"language": "GDScript",
-"path": "res://scenes/Utilities/Item_Passive_OrbiArty.gd"
 }, {
 "base": "Item_Passive",
 "class": "Item_ReactiveArmor",
@@ -214,15 +274,60 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Jeep.gd"
 }, {
+"base": "SM",
+"class": "Jeep_SM",
+"language": "GDScript",
+"path": "res://sm/JeepSM.gd"
+}, {
+"base": "Control",
+"class": "Map_Node",
+"language": "GDScript",
+"path": "res://scripts/Map_Node.gd"
+}, {
+"base": "Node2D",
+"class": "Mission_Base",
+"language": "GDScript",
+"path": "res://scripts/Mission_Base.gd"
+}, {
+"base": "Mission_Base",
+"class": "Mission_Hold_Area",
+"language": "GDScript",
+"path": "res://scripts/Mission_Control_Area.gd"
+}, {
+"base": "Mission_Base",
+"class": "Mission_Raid",
+"language": "GDScript",
+"path": "res://scripts/Mission_Raid.gd"
+}, {
+"base": "Mission_Base",
+"class": "Mission_Raid_Building",
+"language": "GDScript",
+"path": "res://scripts/Mission_Raid_Building.gd"
+}, {
+"base": "Mission_Base",
+"class": "Mission_Survive_Time",
+"language": "GDScript",
+"path": "res://scripts/Mission_Survive_Time.gd"
+}, {
 "base": "Ground_Vehicle",
 "class": "Mobile_AA_Heavy",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Mobile_AA_Heavy.gd"
 }, {
+"base": "SM",
+"class": "Mobile_AA_Heavy_SM",
+"language": "GDScript",
+"path": "res://sm/Mobile_AA_H_SM.gd"
+}, {
 "base": "Ground_Vehicle",
 "class": "Mobile_AA_Light",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Mobile_AA_Light.gd"
+}, {
+"base": "SM",
+"class": "Mobile_AA_Light_SM",
+"language": "GDScript",
+"path": "res://sm/Mobile_AA_L_SM.gd"
 }, {
 "base": "Base_Unit",
 "class": "Obstacle",
@@ -234,17 +339,27 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://sm/ObstacleSM.gd"
 }, {
+"base": "Node2D",
+"class": "POI",
+"language": "GDScript",
+"path": "res://addon/POI.gd"
+}, {
+"base": "Base_Unit",
+"class": "Player",
+"language": "GDScript",
+"path": "res://scripts/Player.gd"
+}, {
 "base": "SM",
 "class": "PlayerSM",
 "language": "GDScript",
-"path": "res://sm/PlayerSM.gd"
+"path": "res://sm/Player_SM.gd"
 }, {
 "base": "Node2D",
 "class": "Proj_Base",
 "language": "GDScript",
 "path": "res://scripts/Proj/Proj_Base.gd"
 }, {
-"base": "Node2D",
+"base": "Proj_Base",
 "class": "Proj_Beam",
 "language": "GDScript",
 "path": "res://scripts/Proj/Proj_Beam.gd"
@@ -260,6 +375,16 @@ _global_script_classes=[ {
 "path": "res://scripts/Proj/Proj_Bullet.gd"
 }, {
 "base": "Proj_Base",
+"class": "Proj_Mace",
+"language": "GDScript",
+"path": "res://scripts/Proj/Proj_Mace.gd"
+}, {
+"base": "Proj_Base",
+"class": "Proj_Mine",
+"language": "GDScript",
+"path": "res://scripts/Proj/Proj_Mine.gd"
+}, {
+"base": "Proj_Base",
 "class": "Proj_Missile",
 "language": "GDScript",
 "path": "res://scripts/Proj/Proj_Missile.gd"
@@ -273,6 +398,11 @@ _global_script_classes=[ {
 "class": "Proj_Shell",
 "language": "GDScript",
 "path": "res://scripts/Proj/Proj_Shell.gd"
+}, {
+"base": "Proj_Missile",
+"class": "Proj_Torp",
+"language": "GDScript",
+"path": "res://scripts/Proj/Proj_Torp.gd"
 }, {
 "base": "Base_Entity",
 "class": "Reward",
@@ -294,7 +424,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Skyscraper.gd"
 }, {
-"base": "Ground_Vehicle",
+"base": "Node2D",
+"class": "Target_Indicator",
+"language": "GDScript",
+"path": "res://addon/Marker.gd"
+}, {
+"base": "SM",
+"class": "Truck",
+"language": "GDScript",
+"path": "res://sm/Truck_SM.gd"
+}, {
+"base": "Truck_Light",
 "class": "Truck_Heavy",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Truck_Heavy.gd"
@@ -320,6 +460,11 @@ _global_script_classes=[ {
 "path": "res://scripts/Weapon_Beam.gd"
 }, {
 "base": "Weapon_Base",
+"class": "Weapon_Melee",
+"language": "GDScript",
+"path": "res://scripts/Weapon_Melee.gd"
+}, {
+"base": "Weapon_Base",
 "class": "Weapon_Missile",
 "language": "GDScript",
 "path": "res://scripts/Weapon_Missile.gd"
@@ -330,14 +475,29 @@ _global_script_classes=[ {
 "path": "res://scripts/Weapon_Proj.gd"
 }, {
 "base": "Weapon_Base",
+"class": "Weapon_Rail",
+"language": "GDScript",
+"path": "res://scripts/Weapon_Rail.gd"
+}, {
+"base": "Weapon_Base",
 "class": "Weapon_Shell",
 "language": "GDScript",
 "path": "res://scripts/Weapon_Shell.gd"
 }, {
 "base": "Weapon_Base",
-"class": "Weapon_Shield",
+"class": "Weapon_Shield_Base",
 "language": "GDScript",
-"path": "res://scripts/Weapon_Shield.gd"
+"path": "res://Weapon_Shield_Base.gd"
+}, {
+"base": "Weapon_Shield_Base",
+"class": "Weapon_Shield_Dir",
+"language": "GDScript",
+"path": "res://scripts/Weapon_Shield_Dir.gd"
+}, {
+"base": "Weapon_Shield_Base",
+"class": "Weapon_Shield_Omni",
+"language": "GDScript",
+"path": "res://scripts/Weapon_Shield_Omni.gd"
 }, {
 "base": "Resource",
 "class": "enemy_res",
@@ -353,69 +513,101 @@ _global_script_class_icons={
 "AA_Tower": "",
 "Air_Unit": "",
 "Arty": "",
+"Arty_SM": "",
 "Base_Entity": "",
 "Base_Level": "",
 "Base_Mount": "",
 "Base_Unit": "",
 "Blob": "",
+"Bomber": "",
+"Bomber_SM": "",
 "Boss": "",
+"Boss_SM": "",
+"Building_SM": "",
 "Capital": "",
 "Cargo_Hauler": "",
+"Cargohauler_SM": "",
 "City": "",
 "Cruiser": "",
 "Destroyer": "",
-"Drone": "",
-"Drone_a": "",
+"DroneShield_SM": "",
+"Drone_Kamikaze": "",
+"Drone_Kamikaze_SM": "",
+"Drone_Shotgun": "",
+"Drone_Shotgun_SM": "",
 "Fighter": "",
-"FighterSM": "",
+"Fighter_SM": "",
 "Frigate": "",
+"Frigate_SM": "",
 "Ground_Entity": "",
 "Ground_Vehicle": "",
-"HeliSM": "",
+"Heli_SM": "",
 "Helicopter_Heavy": "",
 "Helicopter_Light": "",
 "Intermission": "",
 "Item_Base": "",
-"Item_BombRack": "",
+"Item_BombRack_Active": "",
+"Item_BombRack_Passive": "",
 "Item_Call_Fighter": "",
 "Item_Call_Frigate": "",
 "Item_CounterbarrageSystem": "",
-"Item_MissilePod": "",
+"Item_Minelayer_Active": "",
+"Item_Minelayer_Passive": "",
+"Item_MissilePod_Active": "",
+"Item_MissilePod_Passive": "",
 "Item_NearfieldDeflector": "",
-"Item_OrbitalStrikeArty": "",
-"Item_OrbitalStrikeBeam": "",
+"Item_OrbitalArtiller_Passiveww": "",
+"Item_OrbitalArtillery_Active": "",
+"Item_OrbitalBeam_Active": "",
 "Item_Passive": "",
-"Item_Passive_Bomb": "",
-"Item_Passive_Missiles": "",
-"Item_Passive_OrbiArty": "",
 "Item_ReactiveArmor": "",
 "Item_ResonanceDissipator": "",
 "Jeep": "",
+"Jeep_SM": "",
+"Map_Node": "",
+"Mission_Base": "",
+"Mission_Hold_Area": "",
+"Mission_Raid": "",
+"Mission_Raid_Building": "",
+"Mission_Survive_Time": "",
 "Mobile_AA_Heavy": "",
+"Mobile_AA_Heavy_SM": "",
 "Mobile_AA_Light": "",
+"Mobile_AA_Light_SM": "",
 "Obstacle": "",
 "ObstacleSM": "",
+"POI": "",
+"Player": "",
 "PlayerSM": "",
 "Proj_Base": "",
 "Proj_Beam": "",
 "Proj_Bomb": "",
 "Proj_Bullet": "",
+"Proj_Mace": "",
+"Proj_Mine": "",
 "Proj_Missile": "",
 "Proj_Rail": "",
 "Proj_Shell": "",
+"Proj_Torp": "",
 "Reward": "",
 "Reward_Box": "",
 "SM": "",
 "Skyscraper": "",
+"Target_Indicator": "",
+"Truck": "",
 "Truck_Heavy": "",
 "Truck_Light": "",
 "Weapon_AoE": "",
 "Weapon_Base": "",
 "Weapon_Beam": "",
+"Weapon_Melee": "",
 "Weapon_Missile": "",
 "Weapon_Proj": "",
+"Weapon_Rail": "",
 "Weapon_Shell": "",
-"Weapon_Shield": "",
+"Weapon_Shield_Base": "",
+"Weapon_Shield_Dir": "",
+"Weapon_Shield_Omni": "",
 "enemy_res": "",
 "item_input": ""
 }
@@ -423,7 +615,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TopDown"
-run/main_scene="res://scenes/Menu.tscn"
+run/main_scene="res://scenes/Game_Screen.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -434,7 +626,6 @@ Globals="*res://scripts/Globals.gd"
 
 window/size/width=1920
 window/size/height=1080
-window/size/resizable=false
 window/size/always_on_top=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
@@ -448,6 +639,14 @@ col=false
 res=false
 stre=false
 coll=false
+the=false
+full=false
+fulls=false
+
+[gui]
+
+theme/custom="res://default_theme.tres"
+theme/custom_font="res://styles/Font14.tres"
 
 [input]
 
@@ -508,7 +707,7 @@ strafe_right={
 }
 fire={
 "deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 0={
@@ -535,17 +734,17 @@ fire={
 }
 wheel_up={
 "deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"pressed":false,"doubleclick":false,"script":null)
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 wheel_down={
 "deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"pressed":false,"doubleclick":false,"script":null)
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 right_click={
 "deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 alt_use_item={
@@ -558,10 +757,14 @@ hold_shift={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777237,"unicode":0,"echo":false,"script":null)
  ]
 }
-reflex={
+middle_click={
 "deadzone": 0.5,
-"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":82,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":3,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+nullGravity={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":71,"unicode":0,"echo":false,"script":null)
  ]
 }
 

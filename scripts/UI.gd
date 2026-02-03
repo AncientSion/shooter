@@ -5,22 +5,24 @@ var ticks = 0
 var shipstats = null
 
 onready var missionUI = $Place/TopCenter/Mission_PC
+onready var main_text = $Center/Difficulty_Text/Label
+onready var text_tween = $Text_Tween
+onready var pause = $Pause_details
+onready var fps = $Place/TopleftRighter/Difficulty/Vbox/Fps/b
 
 func _ready():
 	print("ui rdy")
-#	return
-	#$Place/Topleft/WeaponStatsPos.get_child(0).queue_free()
-	#PlayerStatsPos.get_child(0).queue_free()
-#	$ItemStatsPos.get_child(0).queue_free()
-#	$ItemsActivePos/ItemsActive/HB.get_child(0).queue_free()
 	$ItemsPassive/VB.queue_free()
 	$Toggle.connect("gui_input", self, "_on_Toggle_input_event")
-	$Pause.connect("resolutionChange", Globals.curScene, "_on_resolutionChange")
-	#$Bars.connect("mouse_entered", self, "_on_mouse_in")
-	#$Toggle.connect("mouse_entered", self, "_on_mouse_in")
+	$Place/Topright/AI_PC.connect("gui_input", self, "_on_AI_PC_input_event")
+	text_tween.connect("tween_all_completed", self, "empty_main_text")
 	
-	readyShipStatsPanel()
+	add_child(Globals.POI.instance())
+	add_player_debug_panel()
 	addKeyForItem()
+	
+func _process(delta):
+	fps.text = String(Engine.get_frames_per_second())
 	
 func _on_Toggle_input_event(event):
 	if  event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
@@ -29,60 +31,128 @@ func _on_Toggle_input_event(event):
 			if i > 2:
 				n.visible = !n.visible
 			i += 1
+			
+func _on_AI_PC_input_event(event):
+	if  event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		$Place/Topright/AI_PC/VBoxC.visible = !$Place/Topright/AI_PC/VBoxC.visible
+		
+func reset_ui_ai_debug_list():
+	var i = 0
+	for n in $Place/Topright/AI_PC/VBoxC.get_children():
+		if i > 0:
+			n.queue_free()
+		i+= 1
+		
+func init_pause_menu():
+	$Pause_details.do_init()
+	
+func set_main_text(text):
+	if text == "":
+		empty_main_text()
+		return
+	
+	text_tween.interpolate_property($Center/Difficulty_Text, "modulate:a",
+			0, 1, 1,
+			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	
+	text_tween.interpolate_property($Center/Difficulty_Text, "rect_scale",
+			Vector2(1, 1), Vector2(4, 4), 2,
+			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	text_tween.start()
+	
+func empty_main_text():
+	main_text.text = ""
+	$Center/Difficulty_Text.modulate.a = 0.0
+	$Center/Difficulty_Text.rect_scale = Vector2(1, 1)
 	
 func resetMissionUI():
-	$Place/TopCenter/Mission_PC/VBox/HBox/Time.set("custom_colors/font_color", Color(1, 1, 1, 1))
 	$Place/TopCenter/Mission_PC/VBox/Type.text = ""
-	$Place/TopCenter/Mission_PC/VBox/HBox/Time.text = ""
+#	$Place/TopCenter/Mission_PC/VBox/Time/timeStr.set("custom_colors/font_color", Color(1, 1, 1, 1))
+	$Place/TopCenter/Mission_PC/VBox/Time/timeStr.text = ""
 	$Place/TopCenter/Mission_PC/VBox/Progress.value = 0
-	$Place/TopCenter/Mission_PC/.show()
+	$Place/TopCenter/Mission_PC.show()
+	$Place/TopCenter/Mission_PC/VBox/Time.show()
+	$Place/TopCenter/Mission_PC/VBox/Progress.show()
+	$Place/TopCenter/Mission_PC/VBox/HBox.hide()
+	for n in $Place/TopCenter/Mission_PC/VBox/HBox.get_children():
+		n.queue_free()
+		
+#	$Center/C.hide()
 
-func _on_updatePlayerHP(health, maxhealth, shield, maxshield):	
+func _on_update_player_health(health, maxHealth):
+#	print("_on_update_player_health ", Engine.get_idle_frames())
 	shipstats.get_node("VBox/VBox_Traits/rowHealth/value").text = str(health)
-	shipstats.get_node("VBox/VBox_Traits/rowShield/value").text = str(shield)
+#	shipstats.get_node("VBox/VBox_Traits/rowShield/value").text = str(shield)
 	
-	$Bars/Panel/Shield.value = shield
-	if (shield > 0):
-		$Bars/Panel/Shield/Value.text = str(shield, " / ", maxshield)
-	$Bars/Panel/Health.value = health
-	$Bars/Panel/Health/Value.text = str(health, " / ", maxhealth)
-	
-func _update_shieldBreakCooldown(wait_time):
-	$Bars/Panel/Shield/Value.text = str(wait_time)
-	
-func _on_updatePlayerRes(ressources):
-	$Place/Bottomright/PlayerStats/VBox/VBox_Traits.get_child(3).get_node("value").text = str(ressources)
+#	$Bars/Panel/VBox/CC2/VBox/Shield.max_value = maxShield
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Health.max_value = maxHealth
 
-func readyShipStatsPanel():
+#	if player.ticksShieldBreakTimer == 0:
+#		$Bars/Panel/VBox/CC2/VBox/Shield.value = shield
+#		$Bars/Panel/VBox/CC2/VBox/Shield/Value.text = str(shield, " / ", maxShield)
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Health.value = health
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Health/Value.text = str(health, " / ", maxHealth)
+	
+func _on_updateShield_UI_Nodes(shield, maxShield):
+#	print("_on_updateShield_UI_Nodes")
+	shipstats.get_node("VBox/VBox_Traits/rowShield/value").text = str(shield)
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield.value = shield
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield.max_value = maxShield
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield/Value.text = str(shield, " / ", maxShield)
+	
+func _on_updateShieldBreakCooldown(wait_time):
+#	print("_on_updateShieldBreakCooldown")
+	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield/Value.text = str("%.1f" % wait_time)
+	
+func updateBoostChargeProps():
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.max_value = player.boostMaxCharge
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boostCharge
+	
+	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.max_value = player.maxSideThrustDuration*100
+	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100
+	
+func updateBoostChargeBar():
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boostCharge
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost/Value.text = str(round(player.boostCharge), " / ", player.boostMaxCharge)
+	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100
+	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost/Value.text = str(("%.2f" % player.sideThrustDuration), " / ", ("%.2f" % player.maxSideThrustDuration))
+	
+func _on_update_player_materials(materials):
+#	$Place/Bottomright/PlayerStats/VBox/VBox_Traits.get_child(3).get_node("value").text = str(materials)
+	$Place/Bottomright/PlayerStats/VBox/VBox_Traits.get_node("rowMaterials").get_node("value").text = str(materials)
+
+func add_player_debug_panel():
 	shipstats = load("res://ui/PlayerStats.tscn").instance()
 #	get_node("PlayerStatsPos").add_child(shipstats)
 	
 	$Place/Bottomright.add_child(shipstats)
 	
-	var keys = ["Health", "Shield", "Res", "Accel", "Velocity", "Boost", "BoostCharge", "Position", "Rotation"]
-	var values = ["maxHealth", "maxShield", "ressources", "accel", "velocity", "isBoosting", "boostCharge", "position", "rotation_degrees"]
+	var keys = ["Health", "Materials", "Accel", "Velocity", "Boost", "BoostCharge", "Position", "Rotation", "ShiftCooldown", "ShiftDuration"]
+	var values = ["maxHealth", "materials", "accel", "velocity", "boosting", "boostCharge", "position", "rotation_degrees", "shiftCooldown", "shiftDuration"]
 
 	for n in len(keys):
 		shipstats.addEntry(keys[n], player[values[n]])
 		
 	shipstats.addEntry("Dist", 0)
 	shipstats.addEntry("Mouse", "")
+	shipstats.addEntry("Grav", "")
 
 func _input(_event):
-	if Input.is_action_just_pressed("wheel_up"):
+#	print("input frame: ", Engine.get_idle_frames())
+	if Input.is_action_pressed("wheel_up"):
 #		print("wheel_up")
 		player.selectWeapon(-1)
-	elif Input.is_action_just_pressed("wheel_down"):
+	elif Input.is_action_pressed("wheel_down"):
 #		print("wheel_down")
 		player.selectWeapon(1)
 	elif _event.is_action_pressed("selectItem"):
-		var index = (_event.scancode - 49)
+		var index = (_event.scancode - 48)
 		player.doSelectItem(index)
 	
 func _unhandled_input(event):
 	if event is InputEventKey:
 		if event.pressed and event.scancode == KEY_ESCAPE:
-			Globals.togglePause()
+			Globals.toggle_pause_and_menu()
 			
 func addKeyForItem():
 	InputMap.add_action("selectItem")
@@ -103,8 +173,48 @@ func showMissionUI():
 func showAIUI():
 	$Place/Topright/AI_PC.show()
 	
-func hideMissionUI():
-	$Place/TopCenter/Mission_PC.hide()
-	
 func hideAIUI():
 	$Place/Topright/AI_PC.hide()
+	
+func hideMissionUI():
+	$Place/TopCenter/Mission_PC.hide()
+
+func _on_ALL_value_changed(value):
+	var val:float = value / 100
+	get_node("Glow/MC/HA/VB/ALL").text = str(val)
+	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
+		if n is AnimatedSprite:
+			n.self_modulate = Color (val, val, val, 1)
+			
+	for n in get_node("Glow/MC/HA/VB").get_children():
+		n.text = str(val)
+	get_node("Glow/MC/HA/VA/R").value = value
+	get_node("Glow/MC/HA/VA/G").value = value
+	get_node("Glow/MC/HA/VA/B").value = value
+		
+func _on_R_value_changed(value):
+	var val:float = value / 100
+	get_node("Glow/MC/HA/VB/R").text = str(val)
+	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
+		if n is AnimatedSprite:
+			n.self_modulate.r = val
+
+func _on_G_value_changed(value):
+	var val:float = value / 100
+	get_node("Glow/MC/HA/VB/G").text = str(val)
+	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
+		if n is AnimatedSprite:
+			n.self_modulate.g = val
+
+func _on_B_value_changed(value):
+	var val:float = value / 100
+	get_node("Glow/MC/HA/VB/B").text = str(val)
+	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
+		if n is AnimatedSprite:
+			n.self_modulate.b = val
+
+func set_wave_info():
+	$Place/TopleftRighter/Difficulty/Vbox/Diff/b.text = str(Globals.handler_spawner.enemy_str_cur, " / ", Globals.handler_spawner.enemy_str_max)
+	
+func set_diffi_info(cur):
+	$Place/TopleftRighter/Difficulty/Vbox/Wave/b.text = str(cur)

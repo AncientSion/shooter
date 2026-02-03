@@ -4,17 +4,22 @@ class_name Jeep
 var display = "Jeep"
 
 func _ready():
-	sightRange = 600
+	pass
+
+func _physics_process(_delta):
+	pass
 	
-func setStats():
-	maxHealth = 10
-	armor = 0
-	speed = 90
-	lootValue = 3
+func doInit():
+	.doInit()
+	$Mounts/A.get_node("Weapon").scale.x = 0.7
 	
+func setDirection(_dirVector = false):
+	pass
+
 func getPossibleWeapons(index):
-	var weapon = Globals.getSpecificBaseWeaponByName("Light Missile");
-	#weapon.steering = 24
-#	weapon.makeUntargetable()
-	weapon.makeInvisible()
+#	var weapon = Globals.getWeaponBase("Light Missile");
+#	weapon.makeInvisible()
+	var weapon = Globals.getWeaponBase("Light Machinegun");
+#	weapon.makeInvisible()
+	
 	return weapon

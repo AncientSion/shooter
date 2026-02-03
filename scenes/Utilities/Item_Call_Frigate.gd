@@ -7,18 +7,16 @@ func _ready():
 	initCallMethodTrack("effector", interval, start)
 	
 func setQualityMods():
-	return
+#	return
 	match quality: 
 		-2:
-			mods.append({"name": "Way Less Missiles", "prop": "amount", "effect": 0.8, "type": "pct"})
-			mods.append({"name": "Way Less Damage", "prop": "damage", "effect": 0.9, "type": "pct"})
+			mods.append({"name": "Way Less Duration", "prop": "lifetime", "effect": 0.8, "type": "pct"})
 		-1:
-			mods.append({"name": "Less Missiles", "prop": "amount", "effect": 0.9, "type": "pct"})
+			mods.append({"name": "Less Duration", "prop": "lifetime", "effect": 0.9, "type": "pct"})
 		1:
-			mods.append({"name": "More Missiles", "prop": "amount", "effect": 1.1, "type": "pct"})
+			mods.append({"name": "More Duration", "prop": "lifetime", "effect": 1.1, "type": "pct"})
 		2:
-			mods.append({"name": "Way more Missiles", "prop": "amount", "effect": 1.2, "type": "pct"})
-			mods.append({"name": "Way more Damage", "prop": "damage", "effect": 1.1, "type": "pct"})
+			mods.append({"name": "Way More Duration", "prop": "lifetime", "effect": 1.2, "type": "pct"})
 	
 func effector():
 	var unit = Globals.handler_spawner.frigate.instance()
@@ -28,17 +26,14 @@ func effector():
 		Globals.rng.randi_range(150, 300) * Globals.getRandomEntry([1, -1]),
 		Globals.rng.randi_range(100, 175) * Globals.getRandomEntry([1, -1])
 	)
+	
 	unit.position = Globals.PLAYER.position + position
-	unit.lifetime = effects[0].lifetime
+	unit.position.y = clamp(unit.position.y, 1000, Globals.HEIGHT - 1000)
 	unit.setFriendly()
 	unit.setArmament()
 	unit.setDirection()
+	unit.lifetime = result[0].lifetime
 	unit.doInit()
-	unit.setInactive()
-	unit.doWarpIn()
-	
-	var lifetimer = Timer.new()
-	lifetimer.wait_time = effects[0].lifetime
-	lifetimer.connect("timeout", unit, "_on_lifetime_timeout")
-	unit.get_node("TimerNodes").add_child(lifetimer)
-	
+	unit.add_health_bar()
+#	unit.setInactive()
+	unit.setupDelayedWarpIn(0.1)

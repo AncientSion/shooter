@@ -2,31 +2,33 @@ extends Capital
 class_name Cargo_Hauler
 
 var display = "Cargohauler"
-
-func _ready():
-	set_physics_process(false) 
-	activeBehavior = 0
-#	connect("mouse_entered", self, "_on_mouse_entered")
-#	connect("mouse_exited", self, "_on_mouse_exited")
 	
-func _physics_process(_delta):
-	velocity = direction * self.speed
-	
-func setStats():
-	maxHealth = 90
-	armor = 1
-	speed = 35
-	lootValue = 0
+func process_movement(_delta):
+#	if $SM.state == $SM.states.crash:
+#		return
+		
+	set_interest()
+	set_danger()
+	choose_direction()
+	accel = chosen_dir.rotated(rotation) * maxSpeed
+	accel = accel.limit_length(maxSpeed)
+	velocity += accel * _delta
+	velocity = velocity.limit_length(maxSpeed)
 	
 func getPossibleWeapons(index):
-	var weapon = Globals.weapon_shield.instance()
-#func construct(init_type, init_display, init_shield, init_shieldDist = 60, init_shieldLength = 36):
-	weapon.construct(5, "Shield", 3)
-	return weapon
-	weapon.construct(1, "V Light Gun", 0.7, 1, 10, 200, 500, 1, 2, 10, 0, 8, false, 3)
-	return weapon
+	var shield = Globals.weapon_shield_dir.instance()
+	var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
+	shield.construct(5, "Shield", stats)
+	shield.add_shield_bar()
+	shield.scaleBar("shieldbar", 0.5)
+	return shield
 
-#func _on_mouse_entered():
-#	print("mouse in")
-#func _on_mouse_exited():
-#	print("mouse out")
+func applyForce(force):
+	return
+
+func onWarpInDone():
+	.onWarpInDone()
+	$SM.set_state($SM.states.wander)
+
+func set_new_target():
+	pass

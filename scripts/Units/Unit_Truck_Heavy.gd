@@ -1,10 +1,6 @@
-extends Ground_Vehicle
+extends Truck_Light
 class_name Truck_Heavy
 
-var display = "Heavy Truck"
-	
-func setStats():
-	maxHealth = 40
-	armor = 1
-	speed = 35
-	lootValue = 20
+
+func _ready():
+	display = "Heavy Truck"

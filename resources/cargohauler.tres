@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/enemy_res.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+health = 100
+armor = 1
+maxSpeed = 80
+minSpeed = 20
+enginePower = 0
+lootValue = 25
+sightRange = 500
+look_ahead = 300
+num_rays = 8
+canCrash = false
+crashTresh = 0.3
+can_withdraw = false
+flee_tresh = 0.5

@@ -1,0 +1,124 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://scenes/PartExplo.gd" type="Script" id=1]
+[ext_resource path="res://textures/Explo_Tex.png" type="Texture" id=2]
+[ext_resource path="res://textures/explosion-6.png" type="Texture" id=3]
+[ext_resource path="res://textures/explo_streak.png" type="Texture" id=5]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.216092, 0.395402, 0.692683, 0.990805, 1 )
+colors = PoolColorArray( 1, 0.962269, 0.628906, 1, 0.910156, 0.834384, 0.0284424, 1, 1, 0.307617, 0, 1, 0, 0, 0, 0.894118, 0.184314, 0.133333, 0.0509804, 0.368627, 0.184314, 0.133333, 0.0509804, 0 )
+
+[sub_resource type="GradientTexture" id=24]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.627273 ), 0.0, 0.0, 0, 0, Vector2( 0.70614, 0.909091 ), 0.0183427, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=25]
+width = 100
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=26]
+resource_local_to_scene = true
+emission_shape = 1
+emission_sphere_radius = 5.0
+flag_disable_z = true
+direction = Vector3( 100, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 80.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 20.0
+scale = 0.5
+scale_random = 0.3
+scale_curve = SubResource( 25 )
+color_ramp = SubResource( 24 )
+
+[sub_resource type="ParticlesMaterial" id=27]
+resource_local_to_scene = true
+flag_align_y = true
+flag_disable_z = true
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 20.0
+scale = 0.4
+scale_random = 0.5
+scale_curve = SubResource( 25 )
+color_ramp = SubResource( 24 )
+
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=18]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=19]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=20]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=21]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 240, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=22]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=23]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 336, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=16]
+animations = [ {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
+"loop": true,
+"name": "New Anim",
+"speed": 20.0
+} ]
+
+[node name="PartExplo" type="Position2D"]
+modulate = Color( 1.3, 1.3, 1.3, 1 )
+script = ExtResource( 1 )
+
+[node name="Parts" type="Position2D" parent="."]
+
+[node name="Explo" type="Particles2D" parent="Parts"]
+visible = false
+amount = 12
+lifetime = 0.5
+explosiveness = 0.9
+process_material = SubResource( 26 )
+texture = ExtResource( 2 )
+
+[node name="Explo2" type="Particles2D" parent="Parts"]
+amount = 10
+lifetime = 0.3
+explosiveness = 0.7
+process_material = SubResource( 27 )
+texture = ExtResource( 5 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 16 )
+animation = "New Anim"
+playing = true
+
+[connection signal="animation_finished" from="Sprite" to="." method="_on_Sprite_animation_finished"]

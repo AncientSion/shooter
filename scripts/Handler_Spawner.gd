@@ -1,100 +1,141 @@
 extends Node2D
 
 # Load enemy scenes on game startup
-const truck_light = preload("res://scenes/Units/Unit_Truck_Light.tscn")
-const truck_heavy = preload("res://scenes/Units/Unit_Truck_Heavy.tscn")
-const jeep = preload("res://scenes/Units/Unit_Jeep.tscn")
-const artillery = preload("res://scenes/Units/Unit_Arty.tscn")
-const heli_light = preload("res://scenes/Units/Unit_Helicopter.tscn")
-const heli_heavy = preload("res://scenes/Units/Unit_Helicopter_02.tscn")
-const fighter = preload("res://scenes/Units/Unit_Fighter.tscn")
-const frigate = preload("res://scenes/Units/Unit_Frigate.tscn")
-const destroyer = preload("res://scenes/Units/Unit_Destroyer.tscn")
-const cruiser = preload("res://scenes/Units/Unit_Cruiser.tscn")
-const aa_tower = preload("res://scenes/Units/Unit_AA_Tower.tscn")
-const mobile_aa_light = preload("res://scenes/Units/Unit_Mobile_AA_Light.tscn")
-const mobile_aa_heavy = preload("res://scenes/Units/Unit_Mobile_AA_Heavy.tscn")
-const city = preload("res://scenes/Units/Unit_City.tscn")
-const cargohauler = preload("res://scenes/Units/Unit_Cargo_Hauler.tscn")
-const boss = preload("res://scenes/Units/Unit_Boss.tscn")
-const blob = preload("res://scenes/Units/Unit_Blob.tscn")
-const drone = preload("res://scenes/Units/Unit_Drone.tscn")
+const TRUCK_LIGHT = preload("res://scenes/Units/Unit_Truck_Light.tscn")
+const TRUCK_HEAVY = preload("res://scenes/Units/Unit_Truck_Heavy.tscn")
+const JEEP = preload("res://scenes/Units/Unit_Jeep.tscn")
+const ARTILLERY = preload("res://scenes/Units/Unit_Arty.tscn")
+const HELI_LIGHT = preload("res://scenes/Units/Unit_Helicopter_Light.tscn")
+const HELI_HEAVY = preload("res://scenes/Units/Unit_Helicopter_Heavy.tscn")
+const FIGHTER = preload("res://scenes/Units/Unit_Fighter.tscn")
+const BOMBER = preload("res://scenes/Units/Unit_Bomber.tscn")
+const FRIGATE = preload("res://scenes/Units/Unit_Frigate.tscn")
+const DESTROYER = preload("res://scenes/Units/Unit_Destroyer.tscn")
+const CRUISER = preload("res://scenes/Units/Unit_Cruiser.tscn")
+const AA_TOWER = preload("res://scenes/Units/Unit_AA_Tower.tscn")
+const MOBILE_AA_LIGHT = preload("res://scenes/Units/Unit_Mobile_AA_Light.tscn")
+const MOBILE_AA_HEAVY = preload("res://scenes/Units/Unit_Mobile_AA_Heavy.tscn")
+const CITY = preload("res://scenes/Units/Unit_City.tscn")
+const CARGOHAULER = preload("res://scenes/Units/Unit_Cargo_Hauler.tscn")
+const BOSS = preload("res://scenes/Units/Unit_Boss.tscn")
+const DRONE_SHIELD = preload("res://scenes/Units/Unit_DroneShield.tscn")
+const DRONE_SHOTGUN = preload("res://scenes/Units/Unit_Drone_Shotgun.tscn")
+const DRONE_KAMIKAZE = preload("res://scenes/Units/Unit_Drone_Kamikaze.tscn")
 
 var player
 var wave = Array()
 var enemies = Array()
-var waveFullStrength = int()
-var waveRemStrength = int()
-var totalWeight = 0
-var tickCounter = 0
+var unitData = Array()
+var mission_unit_data = Array()
+var enemy_str_max:int = 0
+var enemy_str_cur:int = 0
+var totalWeight:int = 0
+var timeSinceLastReinforceCheck:float = 0.0
 
-var diffiUI
-var waveUI
-var diffiTimer
+var enabled = false
+
+#var diffiUI
+#var waveUI
+var diffi_add_timer
 
 func _init():
 	pass
 	
-func _physics_process(delta):
-	return
-	tickCounter += 1
-	if tickCounter == 60:
-		tickCounter = 0
-		checkForReinforcing()
-	
-#func _ready():
-	
-func doInit():
-	name = "Handler_Spawner"
-	print("init ", name)
-	player = Globals.PLAYER
-	set_physics_process(true)
-	
-	diffiUI = Globals.curScene.get_node("UI/Place/TopleftRighter/Diffi/Vbox/HBox1/Label2")
-	diffiUI = Globals.curScene.get_node("UI/Place/TopleftRighter/Diffi/Vbox/HBox2/Label2")
-	diffiTimer = Globals.curScene.get_node("Timers/DifficultyTimer")
-	
-	diffiUI.text = str(Globals.DIFFICULTY)
-	diffiTimer.connect("timeout", self, "_on_diffiTimer_timeout")
-	diffiTimer.wait_time = 5.0
-	diffiTimer.start()
+func _physics_process(_delta):
+	timeSinceLastReinforceCheck += _delta
+	if timeSinceLastReinforceCheck >= 5.0:
+		timeSinceLastReinforceCheck = 0.0
+		check_for_reinforce()
 
-	var forceStrength:int = Globals.DIFFICULTY
-	wave = getUnitData()
-	if 0:
-		adjustWaveDataByMission()
-		wave = pickEnemiesIntoWave(wave, forceStrength)
-	spawnWave()
+#	if Globals.curScene.get_node("Enemy_Units").get_children().size() < 1:
+#		spawnSpecial
+
+func do_bare_setup():
+	name = "Handler_Spawner"
+	player = Globals.PLAYER
+	print("do_bare_setup ", name)
+
+func connect_debug_diffi_ui_in_game():
+	diffi_add_timer = Globals.curScene.get_node("Timers/diffi_add_timer")
+	diffi_add_timer.connect("timeout", self, "_on_diffi_add_timer_timeout")
+	
+func do_enable():
+	print("do_enable ", name)
+	enabled = true
+	set_physics_process(true)
+	diffi_add_timer.wait_time = 10.0
+	diffi_add_timer.start()
+	
+	use_mission_spawn_data()
+	pick_units_into_pool(Globals.DIFFICULTY)
+	spawn_all_from_pool()
+	
+func do_disable():
+	enabled = false
+	set_physics_process(false)
+	diffi_add_timer.stop()
 	
 func getSpawnOutsideView(enemy):
 	var cam = Globals.curScene.get_node("CamA")
 	#var viewport = get_viewport_rect().size
 	var camPos = cam.position
+	if camPos == Vector2.ZERO:
+		return enemy.getSelfSpawnPosition(Vector2.ZERO, Vector2.ZERO)
 	var SCREEN = Globals.SCREEN
 	var from = Vector2(camPos - (SCREEN/2))
 	var to = Vector2(from + SCREEN)
 	return enemy.getSelfSpawnPosition(from, to)
 	
-func getUnitData():
+func get_raw_unit_data_for_mission():
 	return [
 		#{"type": truck, "tresh": 1, "amount": 0, "strength": 1, "weight": 10},
-		{"type": fighter, "display": "Fighter", "legal": true, "tresh": 1, "amount": 0, "strength": 3, "weight": 6},
-		{"type": heli_light, "display": "Heli_L", "legal": true, "tresh": 14, "amount": 1, "strength": 5, "weight": 3},
-		{"type": heli_heavy, "display": "Heli_H", "legal": true, "tresh": 22, "amount": 0, "strength": 4, "weight": 3},
-		{"type": frigate, "display": "Frigate", "legal": true, "tresh": 35, "amount": 0, "strength": 3, "weight": 2},
-		{"type": destroyer, "display": "Destroyer", "legal": true, "tresh": 55, "amount": 0, "strength": 7, "weight": 1},
-		{"type": cruiser, "display": "Cruiser", "legal": true, "tresh": 55, "amount": 0, "strength": 7, "weight": 1},
-		{"type": jeep, "display": "Jeep", "legal": true, "tresh": 1, "amount": 0, "strength": 2, "weight": 2},
-		{"type": artillery, "display": "Artillery", "legal": true, "tresh": 25, "amount": 0, "strength": 5, "weight": 1},
-		{"type": aa_tower, "display": "AA Tower", "legal": false, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
-		{"type": mobile_aa_light, "display": "Mobile AA Light", "legal": true, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
-		{"type": mobile_aa_heavy, "display": "Mobile AA Heavy", "legal": true, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
-		{"type": drone, "display": "Drone", "legal": false, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
-		{"type": boss, "display": "Boss", "legal": true, "tresh": 250, "amount": 0, "strength": 4, "weight": 2}]
+		{"const": "FIGHTER", "legal": false, "tresh": 0, "amount": 0, "strength": 3, "weight": 6},
+		{"const": "HELI_LIGHT", "legal": false, "tresh": 12, "amount": 0, "strength": 5, "weight": 3},
+		{"const": "HELI_HEAVY", "legal": false, "tresh": 35, "amount": 0, "strength": 3, "weight": 2},
+		{"const": "JEEP", "legal": false, "tresh": 0, "amount": 0, "strength": 2, "weight": 2},
+		{"const": "FRIGATE", "legal": false, "tresh": 35, "amount": 0, "strength": 3, "weight": 2},
+		{"const": "DESTROYER", "legal": false, "tresh": 55, "amount": 0, "strength": 7, "weight": 1},
+	]
 	
-func pickEnemiesIntoWave(roster, reinforcePoints):
+func use_mission_spawn_data():
+	unitData = mission_unit_data
+	
+func set_spawner_unit_data():
+	
+	unitData =  [
+		#{"type": truck, "tresh": 1, "amount": 0, "strength": 1, "weight": 10},
+		{"type": FIGHTER.instance(), "display": "", "legal": true, "tresh": 0, "amount": 0, "strength": 3, "weight": 6},
+		{"type": BOMBER.instance(), "display": "", "legal": false, "tresh": 0, "amount": 0, "strength": 3, "weight": 6},
+		{"type": HELI_LIGHT.instance(), "display": "", "legal": true, "tresh": 12, "amount": 0, "strength": 5, "weight": 3},
+		{"type": HELI_HEAVY.instance(), "display": "", "legal": true, "tresh": 22, "amount": 0, "strength": 4, "weight": 3},
+		{"type": FRIGATE.instance(), "display": "", "legal": true, "tresh": 35, "amount": 0, "strength": 3, "weight": 2},
+		{"type": DESTROYER.instance(), "display": "", "legal": false, "tresh": 55, "amount": 0, "strength": 7, "weight": 1},
+		{"type": CRUISER.instance(), "display": "", "legal": false, "tresh": 55, "amount": 0, "strength": 7, "weight": 1},
+		{"type": JEEP.instance(), "display": "", "legal": true, "tresh": 0, "amount": 0, "strength": 2, "weight": 2},
+		{"type": ARTILLERY.instance(), "display": "", "legal": true, "tresh": 25, "amount": 0, "strength": 5, "weight": 1},
+		{"type": AA_TOWER.instance(), "display": "", "legal": false, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
+		{"type": MOBILE_AA_LIGHT.instance(), "display": "", "legal": true, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
+		{"type": MOBILE_AA_HEAVY.instance(), "display": "", "legal": true, "tresh": 25, "amount": 0, "strength": 4, "weight": 2},
+		{"type": BOSS.instance(), "display": "", "legal": false, "tresh": 100, "amount": 0, "strength": 4, "weight": 2},
+		{"type": DRONE_SHOTGUN.instance(), "display": "", "legal": true, "tresh": 10, "amount": 0, "strength": 4, "weight": 2},
+		{"type": DRONE_KAMIKAZE.instance(), "display": "", "legal": true, "tresh": 10, "amount": 0, "strength": 4, "weight": 2},
+	]
+	
+	for n in unitData:
+		n.display = n.type.display.to_upper()
+	
+#	if Globals.handler_mission.pick == Globals.handler_mission.missions.SALVAGE_CARGOHAULER:
+#		return
+	return
+	for n in unitData:
+		if n.display != "Fighter":
+			n.legal = false
+#	print("ding")
+	
+func pick_units_into_pool(reinforcePoints):
+#	return
 	totalWeight = 0
-	for entry in roster:
+	for entry in unitData:
 		if entry.tresh >= Globals.DIFFICULTY or entry.legal == false: continue
 		totalWeight += entry.weight
 		
@@ -104,85 +145,83 @@ func pickEnemiesIntoWave(roster, reinforcePoints):
 			var current = dice
 	#		print("totalWeight: ", totalWeight)
 	#		print("rolled ", dice)
-			for entry in roster:
+			for entry in unitData:
 				if entry.tresh >= Globals.DIFFICULTY or entry.legal == false: continue
 				if current > entry.weight:
 					current -= entry.weight
 				else:
+					print("adding: ",  entry.const, " to spawn")
 					entry.amount += 1
 					reinforcePoints -= entry.strength
 					break
-		for entry in roster:
+		for entry in unitData:
 			if entry.amount > 0:
-				print("reinforcing by: ", entry.amount, "x ", entry.display)
-	return roster
+				print("reinforcing by: ", entry.amount, "x ", entry.const)
+#	return roster
 			
 func adjustWaveDataByMission():
 	if Globals.handler_mission.pick == Globals.handler_mission.missions.PROTECT_CITY or Globals.handler_mission.pick ==  Globals.handler_mission.missions.SALVAGE_CARGOHAULER:
-		for entry in wave:
+		for entry in unitData:
 			if entry.display == "Jeep":
 				entry.legal = false
 				
-func checkForReinforcing():
-	#return
-	waveUI.text = str(waveRemStrength, "/", waveFullStrength)
-	if waveRemStrength > waveFullStrength / 2: return
-	print("wave under half initial strength: ", waveRemStrength, "/", waveFullStrength)
+func check_for_reinforce():
+	if enemy_str_cur < enemy_str_max * 0.7:
+		var reinforceStrength:int = floor(enemy_str_max/5)
+		print("enemies under 0.7 of max", enemy_str_cur, "/", enemy_str_max)
+		print("w: ", reinforceStrength)
+		Globals.UI.set_main_text(str("Reinforce by ", reinforceStrength))
 		
-	var reinforceStrength:int = floor(waveFullStrength/4)
-	print("reinforcing by: ", reinforceStrength)
-	Globals.addBigTextAndFade(str("Reinforce by ", reinforceStrength))
+		pick_units_into_pool(reinforceStrength)
+		spawn_all_from_pool()
 	
-	wave = pickEnemiesIntoWave(wave, reinforceStrength)
+#func create_initial_wave():
 	
-	for element in wave:
+func spawn_all_from_pool():
+	for element in unitData:
 		var amount = element["amount"]
 		for i in amount:
 			element["amount"] -= 1
-			waveRemStrength += element.strength
-			spawnSingleFromWave(element["type"].instance())
-		
-	print("post reinforce: ", waveRemStrength, "/", waveFullStrength)	
-	addDifficulty(2)
-	#Globals.curScene.initAIList()
+			var unit = get(element.const).instance()
+			unit.set_wave_strength(element.strength)
+			enemy_str_cur += unit.wave_strength
+			spawn_and_init_unit(unit)
 	
-func spawnWave():
-	for element in wave:
-		var amount = element["amount"]
-		for i in amount:
-			element["amount"] -= 1
-			spawnSingleFromWave(element["type"].instance())
-	
-	waveFullStrength = Globals.DIFFICULTY
-	waveRemStrength = Globals.DIFFICULTY
+#	enemy_str_max = Globals.DIFFICULTY
+	Globals.UI.set_wave_info()
+	Globals.UI.set_diffi_info(Globals.DIFFICULTY)
+	print("post reinforce: ", enemy_str_cur, "/", enemy_str_max)
 
 func doInstanceEnemy(name):
 	return get(name).instance()
 
-func spawnSingleFromWave(enemy):
+func spawn_and_init_unit(enemy):
+#	return
 #	enemy.queue_free()
 #	return
 	Globals.curScene.addUnit("Enemy_Units", enemy)
-	var pos = getSpawnOutsideView(enemy)
-	enemy.position = pos
+	enemy.position = getSpawnOutsideView(enemy)
 #	print("deploying enemy: ", enemy.display, " at ", pos)
-	enemy.position = Vector2(player.position.x, player.position.y - 200 + Globals.curScene.get_node("Enemy_Units").get_children().size() * 125)
+#	enemy.position = Vector2(player.position.x + 100, player.position.y - 700 + Globals.curScene.get_node("Enemy_Units").get_children().size() * 125)
+#	enemy.position = player.position + Vector2(0, - 300)
 #	enemy.rotation = PI/3
 #	enemy.kill()
 	enemy.setHostile()
 	enemy.setArmament()
-#	print(enemy.get_node("Mounts").get_child(0).get_child(0).get_node("Sprite").scale)
+#	print(enemy.get_node("Mounts").get_child(0).get_child(0).get_node("Sprites/Main").scale)
 	enemy.setDirection()
 	enemy.doInit()
+#	enemy.setActive()
 #	enemy.speed = 0
-#	enemy.activeBehavior = 2
 	enemy.connect("isDestroyed", self, "_on_enemy_from_wave_destroyed", [enemy])
+	enemy.setActive()
+#	enemy.doFullyEnable()
 	#print("spawning ", enemy.display, ": ", enemy.position, ", rot: ", enemy.rotation_degrees)
 
-func spawnSpecial(timer):
-	timer.queue_free()
+func spawnSpecial():
+#	timer.queue_free()
 			
-	var enemy = destroyer.instance()
+	var enemy = DRONE_KAMIKAZE.instance()
 	Globals.curScene.addUnit("Enemy_Units", enemy)
 	var pos = getSpawnOutsideView(enemy)
 	enemy.position = pos
@@ -207,24 +246,18 @@ func spawnSpecial(timer):
 	print("spawnSPECIAL ", enemy.display, ": ", enemy.position, ", rot: ", enemy.rotation_degrees)
 	
 func _on_enemy_from_wave_destroyed(enemy):
-	#print("_on_enemy_from_wave_destroyed: ", enemy.display)
-	for n in wave:
-		if n.display == enemy.display:
-			waveRemStrength -= n.strength
-			
-	print("wave strength: ", waveRemStrength, "/", waveFullStrength)
+	print("_on_enemy_from_wave_destroyed: ", enemy.display)
+	enemy_str_cur -= enemy.wave_strength
+	Globals.UI.set_wave_info()
 
-func _on_diffiTimer_timeout():
-	#print("_on_SpawnTimer_timeout")
-	addDifficulty(1)
-#	diffiTimer.stop()
-#	return
-	diffiTimer.start()
-	
-func addDifficulty(value):
-	Globals.DIFFICULTY += value
-	waveFullStrength += value
-	diffiUI.text = str(Globals.DIFFICULTY)
-	#print("difficulty now ", Globals.DIFFICULTY)
-	Globals.addBigTextAndFade("Diff up")
-	
+#	for n in mission_unit_data:
+#		if enemy.display.to_upper() == n.display:
+#			enemy_str_cur -= n.strength
+#			Globals.UI.set_wave_info()
+#			return
+			
+#	print("enemy strength: ", enemy_str_cur, "/", enemy_str_max)
+
+func _on_diffi_add_timer_timeout():
+	Globals.increase_difficulty(1)
+	diffi_add_timer.start()

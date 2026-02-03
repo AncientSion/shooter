@@ -1,36 +1,35 @@
 extends Weapon_Base
 class_name Weapon_Shell
 
-var proc:Proj_Base
+var proc#:Proj_Base
 var procAmount:int
 
-#type, display, turnrate, health, texture, projsize, projnumber, burst, rof, deviation, speed, procType, procAmount
-func construct(init_type:int, init_display:String, init_texture, init_projSize:float, init_projNumber:int, init_burst:int, init_rof:float, init_dmg, init_deviation:int, init_speed:int, init_proc, init_procAmount:int, init_lifetime:float):
-	type = init_type
-	display = init_display
-	texture = init_texture
-	projSize = init_projSize
-	projNumber = init_projNumber
-	burst = init_burst
-	rof = init_rof
-	minDmg = init_dmg.min
-	maxDmg = init_dmg.max
-	aoe = init_dmg.aoe
-	dmgType = init_dmg.dmgType
-	deviation = init_deviation
-	speed = init_speed
-	proc = init_proc
-	procAmount = init_procAmount
-	lifetime = init_lifetime
-	
-	cooldown = init_rof
-	
 func getShell():
 	#return self.proc.duplicate(true)
 	var shell = Globals.SHELL.instance()
 #	func construct(init_dmgType, init_speed, init_minDmg, init_maxDmg, init_aoe, init_lifetime, init_proc, init_procAmount, init_faction, init_projSize, init_projNumber = 1, init_shooter = false):
 #	shell.construct(dmgType, speed, minDmg, maxDmg, aoe, lifetime, proc, procAmount, faction, projSize)
-	shell.constructNew(self)
-	shell.get_node("Sprite").visible = false
-	shell.disableCollisionNodes()
+	shell.constructProj(self)
+#	shell.rotation_degrees = global_rotation_degrees + rand_range(-deviation, deviation)
+	shell.get_node("Sprites/Main").visible = false
+	shell.disableTriggerCollisionNodes()
 	return shell
+
+func get_class():
+	return "Weapon_Shell"
+
+func drawAimVector():
+	var targetUp = Vector2.ZERO
+	var targetDown = Vector2.ZERO
+	
+	var close = 200
+	targetUp = Vector2(close, 0).rotated(deg2rad(deviation))
+	targetDown = Vector2(close, 0).rotated(deg2rad(-deviation))
+	$Aim/AimA.points[0] = targetUp
+	$Aim/AimA.points[1] = targetDown
+	
+	var mid = 450
+	targetUp = Vector2(mid, 0).rotated(deg2rad(deviation))
+	targetDown = Vector2(mid, 0).rotated(deg2rad(-deviation))
+	$Aim/AimB.points[0] = targetUp
+	$Aim/AimB.points[1] = targetDown

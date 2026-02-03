@@ -12,9 +12,9 @@ func _ready():
 	
 func _physics_process(delta):
 	accel += seekVector()
-	accel = accel.limit_length(speed/20)
+	accel = accel.limit_length(maxSpeed/20)
 	velocity += accel
-	velocity = velocity.limit_length(speed)
+	velocity = velocity.limit_length(maxSpeed)
 	position += velocity * delta
 	
 func connectHurtBoxes():
@@ -22,15 +22,15 @@ func connectHurtBoxes():
 	
 func setStats():
 	maxHealth = 1
-	speed = 500
+	maxSpeed = 500
 
 func seekVector(): # moves towards target
-	var vector_to_target = (curTarget.global_position - global_position).normalized() * speed
+	var vector_to_target = (curTarget.global_position - global_position).normalized() * maxSpeed
 	var turn = (vector_to_target - velocity).normalized() * steer_force
 	#print(turn)
 	return turn
 
 func _on_ColNodes_area_entered(area):
 	if not area.owner.isPlayer: return
-	area.owner.addRessources(resValue)
+	area.owner.add_resources(resValue)
 	queue_free()

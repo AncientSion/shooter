@@ -17,11 +17,12 @@ func setQualityMods():
 		1:
 			mods.append({"name": "More Missiles", "prop": "amount", "effect": 1.1, "type": "pct"})
 		2:
-			mods.append({"name": "Way more Missiles", "prop": "amount", "effect": 1.2, "type": "pct"})
-			mods.append({"name": "Way more Damage", "prop": "damage", "effect": 1.1, "type": "pct"})
+			mods.append({"name": "Way More Missiles", "prop": "amount", "effect": 1.2, "type": "pct"})
+			mods.append({"name": "Way More Damage", "prop": "damage", "effect": 1.1, "type": "pct"})
 	
 func effector():
 	var unit = Globals.handler_spawner.fighter.instance()
+	unit.stats = load("res://resources/light_fighter_friendly.tres")
 	Globals.curScene.get_node("Friendly_Units").add_child(unit)
 	
 	var position = Vector2(
@@ -29,16 +30,11 @@ func effector():
 		Globals.rng.randi_range(100, 175) * Globals.getRandomEntry([1, -1])
 	)
 	unit.position = Globals.PLAYER.position + position
-	unit.lifetime = effects[0].lifetime
-	unit.setFriendly()
+	unit.setNeutral()
 	unit.setArmament()
 	unit.setDirection()
+	unit.lifetime = result[0].lifetime
 	unit.doInit()
 	unit.setInactive()
-	unit.doWarpIn()
-	
-	var lifetimer = Timer.new()
-	lifetimer.wait_time = effects[0].lifetime
-	lifetimer.connect("timeout", unit, "_on_lifetime_timeout")
-	unit.get_node("TimerNodes").add_child(lifetimer)
-	
+#	unit.add_health_bar()
+	unit.setupDelayedWarpIn(0.1)

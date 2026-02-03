@@ -1,59 +1,26 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://various/Roboto-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://scenes/GFX_settings.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/Pause.gd" type="Script" id=2]
 [ext_resource path="res://default_theme.tres" type="Theme" id=3]
 [ext_resource path="res://ui/PanelItemStats.tscn" type="PackedScene" id=4]
-[ext_resource path="res://styles/Box.tres" type="StyleBox" id=5]
 
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxFlat" id=6]
-resource_local_to_scene = true
-content_margin_left = 5.0
-content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=2]
-resource_local_to_scene = true
-content_margin_left = 10.0
-content_margin_right = 10.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color( 0.14902, 0.14902, 0.14902, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0, 0, 0, 1 )
-
-[sub_resource type="StyleBoxLine" id=5]
-thickness = 3
-
-[sub_resource type="DynamicFont" id=1]
-size = 24
-font_data = ExtResource( 1 )
-
-[node name="Pause" type="PanelContainer"]
+[node name="Pause_details" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_styles/panel = SubResource( 7 )
+theme_type_variation = "PanelCont_Empty"
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -58.0 ]
+}
 
 [node name="MC" type="MarginContainer" parent="."]
-margin_left = 486.0
-margin_top = 276.0
-margin_right = 1434.0
-margin_bottom = 804.0
+margin_left = 393.0
+margin_top = 248.0
+margin_right = 1527.0
+margin_bottom = 832.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/margin_right = 15
@@ -64,145 +31,100 @@ custom_constants/margin_bottom = 15
 [node name="VBC" type="VBoxContainer" parent="MC"]
 margin_left = 15.0
 margin_top = 15.0
-margin_right = 933.0
-margin_bottom = 513.0
+margin_right = 1119.0
+margin_bottom = 569.0
 
 [node name="HBC" type="HBoxContainer" parent="MC/VBC"]
-margin_right = 918.0
-margin_bottom = 400.0
+margin_right = 1104.0
+margin_bottom = 500.0
 rect_min_size = Vector2( 800, 300 )
+theme = ExtResource( 3 )
 
 [node name="PanelItemStats" parent="MC/VBC/HBC" instance=ExtResource( 4 )]
 margin_right = 200.0
-margin_bottom = 400.0
+margin_bottom = 500.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
-custom_styles/panel = SubResource( 6 )
-
-[node name="VS" type="VSeparator" parent="MC/VBC/HBC"]
-margin_left = 204.0
-margin_right = 214.0
-margin_bottom = 400.0
-custom_constants/separation = 10
 
 [node name="PC" type="PanelContainer" parent="MC/VBC/HBC"]
-margin_left = 218.0
-margin_right = 918.0
-margin_bottom = 400.0
-rect_min_size = Vector2( 700, 400 )
+margin_left = 204.0
+margin_right = 1104.0
+margin_bottom = 500.0
+rect_min_size = Vector2( 900, 500 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 2 )
 
 [node name="VBC" type="VBoxContainer" parent="MC/VBC/HBC/PC"]
 margin_left = 10.0
-margin_top = 10.0
-margin_right = 690.0
-margin_bottom = 390.0
+margin_top = 8.0
+margin_right = 890.0
+margin_bottom = 492.0
 
 [node name="Label" type="Label" parent="MC/VBC/HBC/PC/VBC"]
-margin_right = 680.0
-margin_bottom = 19.0
+margin_right = 880.0
+margin_bottom = 17.0
 theme = ExtResource( 3 )
 text = "Software and Hardware Upgrades"
 align = 1
 
 [node name="HS" type="HSeparator" parent="MC/VBC/HBC/PC/VBC"]
-margin_top = 23.0
-margin_right = 680.0
-margin_bottom = 28.0
+margin_top = 21.0
+margin_right = 880.0
+margin_bottom = 26.0
 size_flags_stretch_ratio = 0.0
 custom_constants/separation = 5
-custom_styles/separator = SubResource( 5 )
 
 [node name="HBC" type="GridContainer" parent="MC/VBC/HBC/PC/VBC"]
-margin_top = 32.0
-margin_right = 680.0
-margin_bottom = 32.0
-custom_constants/vseparation = 40
-custom_constants/hseparation = 20
+margin_top = 30.0
+margin_right = 880.0
+margin_bottom = 484.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 4
 
-[node name="HS" type="HSeparator" parent="MC/VBC"]
-margin_top = 404.0
-margin_right = 918.0
-margin_bottom = 424.0
-custom_constants/separation = 20
-
-[node name="VBC" type="VBoxContainer" parent="MC/VBC"]
-margin_top = 428.0
-margin_right = 918.0
-margin_bottom = 498.0
-custom_constants/separation = 150
-alignment = 1
-__meta__ = {
-"_editor_description_": ""
-}
-
-[node name="PC" type="PanelContainer" parent="MC/VBC/VBC"]
-margin_right = 918.0
-margin_bottom = 70.0
+[node name="PC" type="PanelContainer" parent="MC/VBC"]
+margin_top = 504.0
+margin_right = 1104.0
+margin_bottom = 554.0
 rect_min_size = Vector2( 0, 50 )
-size_flags_horizontal = 3
-custom_styles/panel = ExtResource( 5 )
 
-[node name="CC" type="CenterContainer" parent="MC/VBC/VBC/PC"]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 913.0
-margin_bottom = 65.0
-rect_min_size = Vector2( 0, 60 )
+[node name="HBC2" type="HBoxContainer" parent="MC/VBC/PC"]
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 1094.0
+margin_bottom = 42.0
 size_flags_horizontal = 3
-
-[node name="HBC" type="HBoxContainer" parent="MC/VBC/VBC/PC/CC"]
-margin_left = 134.0
-margin_top = 10.0
-margin_right = 774.0
-margin_bottom = 49.0
 custom_constants/separation = 70
 
-[node name="Unpause" type="Button" parent="MC/VBC/VBC/PC/CC/HBC"]
+[node name="HBC" type="HBoxContainer" parent="MC/VBC/PC/HBC2"]
+margin_left = 115.0
+margin_right = 355.0
+margin_bottom = 34.0
+size_flags_horizontal = 6
+custom_constants/separation = 50
+
+[node name="Unpause" type="Button" parent="MC/VBC/PC/HBC2/HBC"]
 margin_right = 120.0
-margin_bottom = 39.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 120, 0 )
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
-custom_styles/normal = ExtResource( 5 )
 text = "UNPAUSE"
 
-[node name="Resolution" type="OptionButton" parent="MC/VBC/VBC/PC/CC/HBC"]
-margin_left = 190.0
-margin_right = 310.0
-margin_bottom = 39.0
-rect_min_size = Vector2( 120, 0 )
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
-custom_styles/normal = ExtResource( 5 )
-
-[node name="Zoom" type="OptionButton" parent="MC/VBC/VBC/PC/CC/HBC"]
-margin_left = 380.0
-margin_right = 500.0
-margin_bottom = 39.0
-rect_min_size = Vector2( 120, 0 )
-theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
-custom_styles/normal = ExtResource( 5 )
-text = "1"
-items = [ "1.33", null, false, 0, null, "1", null, false, 1, null, "0.67", null, false, 2, null ]
-selected = 1
-
-[node name="Quit" type="Button" parent="MC/VBC/VBC/PC/CC/HBC"]
-margin_left = 570.0
-margin_right = 640.0
-margin_bottom = 39.0
+[node name="Quit" type="Button" parent="MC/VBC/PC/HBC2/HBC"]
+margin_left = 170.0
+margin_right = 240.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 70, 0 )
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 1 )
-custom_styles/normal = ExtResource( 5 )
 text = "QUIT"
 
+[node name="VSeparator" type="VSeparator" parent="MC/VBC/PC/HBC2"]
+margin_left = 540.0
+margin_right = 544.0
+margin_bottom = 34.0
+
+[node name="GFX_settings" parent="MC/VBC/PC/HBC2" instance=ExtResource( 1 )]
+
 [connection signal="visibility_changed" from="." to="." method="_on_PC_visibility_changed"]
-[connection signal="pressed" from="MC/VBC/VBC/PC/CC/HBC/Unpause" to="." method="_on_Unpause_pressed"]
-[connection signal="item_selected" from="MC/VBC/VBC/PC/CC/HBC/Resolution" to="." method="_on_Resolution_item_selected"]
-[connection signal="item_selected" from="MC/VBC/VBC/PC/CC/HBC/Zoom" to="." method="_on_Zoom_item_selected"]
-[connection signal="pressed" from="MC/VBC/VBC/PC/CC/HBC/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="MC/VBC/PC/HBC2/HBC/Unpause" to="." method="_on_Unpause_pressed"]
+[connection signal="pressed" from="MC/VBC/PC/HBC2/HBC/Quit" to="." method="_on_Quit_pressed"]

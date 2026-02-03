@@ -1,0 +1,124 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scripts/Shockwave_Shader.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=12]
+code = "// This is a 2D CanvasItem shader for screen-space effects in Godot 3.x
+shader_type canvas_item;
+const float PI = 3.14159265358979323846;
+// Uniforms for controlling the shockwave effect
+uniform float time = 0.0;                 // Normalized progress of the animation (0.0 = start, 1.0 = end)
+uniform vec2 center = vec2(0.5, 0.5);     // Normalized center of the shockwave (0.0 to 1.0)
+uniform float max_radius = 0.6;           // The final normalized radius the wave will reach
+uniform float wave_thickness = 0.02;      // The thickness of the shockwave ripple
+uniform float base_distortion_strength = 0.01; // The maximum amount the UVs are displaced
+
+// Required for screen-space effects
+//uniform sampler2D SCREEN_TEXTURE : hint_screen_texture;
+
+// Function to smoothly map a value (t) from 0 to 1 within a range [a, b]
+float smoothstep(float a, float b, float t) {
+    t = clamp((t - a) / (b - a), 0.0, 1.0);
+    return t * t * (3.0 - 2.0 * t);
+}
+
+void fragment() {
+    // 1. Calculate the normalized distance from the current fragment to the center
+    float dist = distance(UV, center);
+    
+    // 2. Calculate the current animated radius based on normalized time (progress)
+    // The wave expands linearly from 0 to max_radius over time=0 to 1.
+    float current_radius = max_radius * time; 
+    
+    // 3. Define the inner and outer boundaries of the active wave ring
+    float inner_edge = current_radius - wave_thickness;
+    float outer_edge = current_radius + wave_thickness;
+    
+    // 4. Calculate the falloff (0 to 1) for the ripple profile
+    float wave_falloff = 0.0;
+    
+    // Check if the current fragment is within the active wave ring
+    if (dist >= inner_edge && dist <= outer_edge && dist <= max_radius) {
+        // Map the distance relative to the center of the wave ring (current_radius)
+        float t = abs(dist - current_radius) / wave_thickness;
+        
+        // Use an inverse smoothstep to create a smooth, bell-shaped ripple profile
+        wave_falloff = 1.0 - smoothstep(0.0, 1.0, t);
+    }
+    
+    // 5. Calculate global distortion scaling (fade-in/fade-out)
+    // Use a smooth pulse (sin(pi * time)) that peaks at time=0.5 and is 0 at time=0.0 and time=1.0.
+    float distortion_pulse_scale = sin(time * PI);
+    distortion_pulse_scale = clamp(distortion_pulse_scale, 0.0, 1.0); 
+
+    // 6. Apply the final distortion
+    vec2 offset = vec2(0.0);
+    if (wave_falloff > 0.0) {
+        // Calculate the direction vector from the center to the current fragment
+        vec2 dir = normalize(UV - center);
+        
+        // Total offset = Direction * (Base Strength * Global Fade) * Ripple Profile
+        offset = dir * base_distortion_strength * distortion_pulse_scale * wave_falloff;
+    }
+    
+    // 7. Sample the screen texture at the distorted UV coordinate
+    vec4 final_color = texture(SCREEN_TEXTURE, SCREEN_UV + offset);
+    
+    // 8. Output the final color
+    COLOR = final_color;
+}"
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = SubResource( 12 )
+shader_param/time = 0.0
+shader_param/center = Vector2( 0.5, 0.5 )
+shader_param/max_radius = 0.5
+shader_param/wave_thickness = 0.12
+shader_param/base_distortion_strength = 0.04
+
+[sub_resource type="Animation" id=15]
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/time")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "shockwave"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/time")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[node name="Shockwave" type="Position2D"]
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource( 13 )
+margin_left = -200.0
+margin_top = -200.0
+margin_right = 200.0
+margin_bottom = 200.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+anims/RESET = SubResource( 15 )
+anims/shockwave = SubResource( 14 )
+
+[connection signal="animation_finished" from="ColorRect/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

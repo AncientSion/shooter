@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://ui/GFX_settings.gd" type="Script" id=2]
+
+[node name="GFX_settings" type="HBoxContainer"]
+margin_left = 619.0
+margin_right = 1079.0
+margin_bottom = 34.0
+size_flags_horizontal = 6
+custom_constants/separation = 50
+script = ExtResource( 2 )
+
+[node name="Fullscreen" type="Button" parent="."]
+margin_right = 120.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 120, 0 )
+theme = ExtResource( 1 )
+text = "FullScreen"
+
+[node name="Resolution" type="OptionButton" parent="."]
+margin_left = 170.0
+margin_right = 290.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 120, 0 )
+
+[node name="Zoom" type="OptionButton" parent="."]
+margin_left = 340.0
+margin_right = 460.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 120, 0 )
+
+[connection signal="pressed" from="Fullscreen" to="." method="_on_Fullscreen_pressed"]
+[connection signal="item_selected" from="Resolution" to="." method="_on_Resolution_item_selected"]
+[connection signal="item_selected" from="Zoom" to="." method="_on_Zoom_item_selected"]

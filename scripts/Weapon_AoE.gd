@@ -5,23 +5,28 @@ func _ready():
 	pass
 
 func doFire(_target):
+	#	print("doFire")
 	if burst > 1:
 		if !bursting:
 			#print("can burst, not yet bursting")
 			bursting = burst
-			burstDelay = 0
-
-		if bursting && burstDelay <= 0:
+			burstCooldown = 0.0
+		
+		if bursting && burstCooldown <= 0:
 			bursting -= 1
-			burstDelay = 0.1
+			burstCooldown = burstDelay
 			#print("bursting -1")
 			#print("fire")
 		else: return
 		
 	cooldown = rof
+	
+	if curTarget == null:
+		return
 		
 	for n in projNumber:
 		var proj = getAttackObject(curTarget)
+		proj.get_node("Sprites").hide()
 		Globals.curScene.get_node("Projectiles").add_child(proj)
 		var devi = Vector2(Globals.rng.randi_range(-deviation, deviation), Globals.rng.randi_range(-deviation, deviation))
 		var tPos = curTarget.global_position + devi

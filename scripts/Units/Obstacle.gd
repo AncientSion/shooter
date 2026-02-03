@@ -12,7 +12,7 @@ func _ready():
 func _physics_process(delta):
 	pass
 
-func processMovement(delta):
+func process_movement(delta):
 	pass
 	
 func addPhysCollision():

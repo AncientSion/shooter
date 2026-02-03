@@ -1,0 +1,43 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://scripts/Units/Unit_Drone_Shotgun.gd" type="Script" id=1]
+[ext_resource path="res://textures/units/drone_01.png" type="Texture" id=2]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sm/DroneSM_Shotgun.gd" type="Script" id=4]
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=6]
+[ext_resource path="res://resources/drone_shotgun.tres" type="Resource" id=7]
+[ext_resource path="res://scenes/Thrust_Part_Short.tscn" type="PackedScene" id=8]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 20, 8.5 )
+
+[node name="Drone_Shotgun" instance=ExtResource( 5 )]
+script = ExtResource( 1 )
+stats = ExtResource( 7 )
+
+[node name="SM" parent="." index="0" instance=ExtResource( 3 )]
+script = ExtResource( 4 )
+
+[node name="Aft" parent="ThrusterNodes" index="0" instance=ExtResource( 8 )]
+position = Vector2( -23, 2 )
+
+[node name="Main" parent="Sprites" index="0"]
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="Mounts" parent="." index="5"]
+visible = false
+
+[node name="A" parent="Mounts" index="0" instance=ExtResource( 6 )]
+
+[node name="BehaveTimer" parent="TimerNodes" index="0"]
+wait_time = 2.0
+one_shot = true
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( 0, 0.5 )
+shape = SubResource( 4 )

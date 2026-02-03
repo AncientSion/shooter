@@ -1,35 +1,13 @@
 extends Air_Unit
 class_name Capital
-
-var travelTime:float
-var travelTimeBase:float
-var lerp_accel = 0.02
-
-var behaviors = ["Patrol", "Turnaround", "Hunt", "", "", "Crash"]
-
-func _ready():
-	sightRange = 700
 	
-func doInit():
-	.doInit()
-	#addHealthBar()
-	travelTimeBase = 6.9
-	travelTime = travelTimeBase
+func _ready():
+	for n in $ThrusterNodes.get_children():
+		n.hide()
+	canWarp = true
 	
 func _physics_process(_delta):
 	pass
-	
-func processMovement(_delta):
-	if destroyed or activeBehavior == 5: return
-		
-	travelTime -= _delta
-	if activeBehavior == 0 or activeBehavior == 2:
-		velocity = lerp(velocity, direction.normalized() * self.speed, lerp_accel)
-	else:
-		velocity = lerp(velocity, Vector2.ZERO, lerp_accel)
-		
-	position += extForces * _delta
-	position += velocity * _delta
 
 func getSpawnY(viewFrom, viewTo):
 	var minY = Globals.HEIGHT / 2
@@ -37,44 +15,64 @@ func getSpawnY(viewFrom, viewTo):
 	var y =  Globals.rng.randi_range(minY-add, minY)
 	return y
 	
-func crashIsTriggered(remDmg):
-	return (activeBehavior != 5 and health < float(maxHealth)/5 and rand_range(0, 1) < remDmg / float(health))
+func killByCrash():
+	indestructable = true
+	.killByCrash()
 
-func getBehaviorVector():
-	match activeBehavior:
-		0: return patrolVector()
-
-func patrolVector(): # moves towards target
-	var vector_to_target = (curTarget.global_position - global_position).normalized() * speed
-	var turn = (vector_to_target - velocity).normalized() * 1
-	return turn
+func getCrashSpeed():
+	return maxSpeed / 2
 	
-func seekVector(): # moves towards target
-	var vector_to_target = (curTarget.global_position - global_position).normalized() * speed
+func getCrashAngle():
+	return round(rand_range(13, 18))
+	
+func disableBoosting():
+	return
 
-func canWarp():
+func setUnitFacing():
+	if $SM.state == $SM.states.crash:
+		return
+		
+	if curTarget == null:
+		if moveTarget.x - position.x < 0:
+			if $Sprites/Main.flip_h == false:
+				doTurnaround()
+		else:
+			if $Sprites/Main.flip_h == true:
+				doTurnaround()
+	else: doFaceTarget()
+	
+func setNewWanderTarget():
+	var pos = global_position
+	var rot = rotation_degrees
+	var newTarget = Vector2.ZERO
+	var limit = look_ahead + 1
+	
+	if direction.x == 1:
+		newTarget = pos + Vector2(300, 70 * Globals.getRandomEntry([1, -1]))
+		if newTarget.x > Globals.WIDTH - limit:
+			newTarget.x -= 600
+	else:
+		newTarget = pos + Vector2(-300, 70 * Globals.getRandomEntry([1, -1]))
+		if newTarget.x < 0 + limit:
+			newTarget.x += 600
+#
+	if newTarget.y > Globals.HEIGHT:
+		newTarget.y -= Globals.HEIGHT
+	elif newTarget.y < 0:
+		newTarget.y += Globals.HEIGHT
+		
+	moveTarget = newTarget
+
+func can_warp_in():
 	return true
- 
-func setupCrashing():
-	if activeBehavior == 5: return
-	activeBehavior = 5
-#	armor = 10
-	var direction:int = 1
-	if $Sprite.flip_h == true:
-		direction = -1
 	
-	var rota = round(rand_range(15, 25)) * direction
-	var speed = 70
-	var time = (Globals.HEIGHT - global_position.y) / speed
-	var targetX = 550 * direction
-	
-	$Tween.interpolate_property(self, "position",
-		global_position, global_position + Vector2(targetX, Globals.HEIGHT), ceil(time),
-		Tween.TRANS_QUAD, Tween.EASE_IN)
-		
-	$Tween.interpolate_property(self, "rotation_degrees",
-		rotation_degrees, rotation_degrees + rota, ceil(time* 0.9),
-		Tween.TRANS_QUAD, Tween.EASE_IN)
-		
-	$Tween.start()
-	yield($Tween, "tween_all_completed")
+func withdraw_condition(remDmg):
+	if $SM.state != $SM.states.prepareWarpOut:
+		var rand = rand_range(0, 1)
+		if (health < float(maxHealth * stats.flee_tresh) and rand < remDmg / float(health)):
+			print("flee_tresh: ", stats.flee_tresh)
+			print("hit for: ", remDmg, ", health remaining: ", health ,"/", maxHealth)
+			print("rand 0-1: ", str(rand), " < than: ", (remDmg / float(health)))
+			print("flee triggered")
+			return true
+	return false

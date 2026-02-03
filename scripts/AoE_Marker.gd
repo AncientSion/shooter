@@ -13,23 +13,23 @@ func construct(init_maxLifetime, init_startAoe, init_endAoe):
 
 func _ready():
 	update()
-	pass
+#	pass
 	
 func _physics_process(delta):
-	return
+#	return
 	ticks += 1
 	nowLifetime += delta
-	if ticks == 60:
+	if ticks == 15:
 		ticks = 0
-		rotation += PI/12
+		rotation += PI/8
 		#print("update")
 		update()
 	
 func _draw():
-		draw_arc(Vector2(0, 0), endAoe, 0, 2*PI, 12, Color(1, 0, 0, 0.5), 5)
-		return
-		var fract = nowLifetime / maxLifetime
-		draw_circle(Vector2(0, 0), startAoe - endAoe*fract, Color(1, 0, 0, fract))
+		draw_arc(Vector2(0, 0), endAoe, 0, 2*PI, 8, Color(1, 0, 0, 0.5), 5)
+#		return
+#		var fract = nowLifetime / maxLifetime
+#		draw_circle(Vector2(0, 0), startAoe - endAoe*fract, Color(1, 0, 0, fract))
 		
 
 #● void draw_arc(center: Vector2, radius: float, start_angle: float, end_angle: float, point_count: int, color: Color, width: float = 1.0, antialiased: bool = false)

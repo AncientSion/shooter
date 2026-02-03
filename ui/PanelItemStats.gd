@@ -19,8 +19,8 @@ func addEntry(key, value):
 #	print(key, " - ", value, " - ", typeof(value))
 	if key == "":
 		return
-	elif key == "Shieldbreak cooldown" or key == "Shieldregen timer":
-		newEntry.get_node("value").text = "%.2f" % value
+#	elif key == "Shieldbreak cooldown" or key == "Shieldregen timer":
+#		newEntry.get_node("value").text = "%.2f" % value
 	else:
 		newEntry.get_node("value").text = str(value)
 		
@@ -31,7 +31,6 @@ func showandfadeout():
 
 func _on_Timer_timeout():
 	$Tween.interpolate_property(self, "modulate:a",
-			1, 0, 1,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-			
+		1, 0, 1,
+		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()

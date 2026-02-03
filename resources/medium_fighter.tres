@@ -6,7 +6,7 @@
 script = ExtResource( 1 )
 health = 10
 armor = 0
-speed = 0
+maxSpeed = 0
 minSpeed = 0
 lootValue = 0
 sightRange = 0

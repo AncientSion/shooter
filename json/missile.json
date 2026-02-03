@@ -1,7 +1,7 @@
 [
 	{
 		"id": 0, "type": 1, "display": "Health UP Shield DOWN", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "HealthUp_ShieldDown", 
-		"desc": "Adds Health", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds Health", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "maxShield", "isStat": true, "amount": 20, "modType": "flat"},
 				{"prop": "maxHealth", "isStat": true, "amount": -15, "modType": "flat"}
@@ -9,162 +9,176 @@
 	},
 	{
 		"id": 0, "type": 1, "display": "Health UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "HealthUp", 
-		"desc": "Adds Health", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds Health", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "maxHealth", "isStat": true, "amount": 10, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 1, "display": "Shield UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "ShieldUp", 
-		"desc": "Adds Shield", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds Shield", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "maxShield", "isStat": true, "amount": 10, "modType": "flat"}
 			]
 	},
 	{
-		"id": 0, "type": 1, "display": "MaxSpeed UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "MaxSpeedUp", 
-		"desc": "Adds MaxSpeed", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"id": 0, "type": 1, "display": "Boostpower UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "MaxSpeedUp", 
+		"desc": "Adds Boostpower", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
-				{"prop": "maxSpeed", "isStat": true, "amount": 30, "modType": "flat"}
+				{"prop": "boostPower", "isStat": true, "amount": 0.2, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 1, "display": "Enginepower UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "EnginePowerUp", 
-		"desc": "Adds EnginePower", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds EnginePower", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
-				{"prop": "maxHealth", "isStat": true, "amount": 50, "modType": "flat"}
+				{"prop": "maxSpeed", "isStat": true, "amount": 40, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 1, "display": "BoostCharge UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "BoostChargeUp", 
-		"desc": "Adds BoostCharge", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds BoostCharge", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "boostMaxCharge", "isStat": true, "amount": 10, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 1, "display": "Boostpower UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "BoostPowerUp", 
-		"desc": "Adds Boostpower", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Adds Boostpower", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "boostPower", "isStat": true, "amount": 100, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 1, "display": "ShieldRegenTime DOWN", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "ShieldRegenTime_Down", 
-		"desc": "Shield regens quicker ", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"desc": "Shield regens quicker ", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "shieldRegenTime", "isStat": true, "amount": 0.1, "modType": "flat"}
 			]
 	},
 	{
-		"id": 0, "type": 1, "display": "Agility UP", "weight": 300, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "AgilityUp", 
-		"desc": "Adds angular velocity", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "", "amount": 1,
+		"id": 0, "type": 1, "display": "Agility UP", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "AgilityUp", 
+		"desc": "Adds angular velocity", "charges": 0, "cooldown": 0.0, "script": "", "trigger": "",
 			"result":[
 				{"prop": "agility", "isStat": true, "amount": 0.3, "modType": "flat"}
 			]
 	},
 	{
 		"id": 0, "type": 2, "display": "Reactive Armor", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "ReactiveArmor", 
-		"desc": "Taking damage triggers an explosion.", "charges": 0, "cooldown": 3.0, "script": "ReactiveArmor", "trigger": "on_damage", "amount": 1,
+		"desc": "Taking damage triggers an explosion.", "charges": 0, "cooldown": 3.0, "script": "ReactiveArmor", "trigger": "on_damage",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 7, "maxDmg": 10, "aoe": 150, "lifetime": 0.0, "steerForce": 0, "projNumber": 1,"projSize": 1}
+				{"isStat": false, "stacks": 1, "type": 2, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 7, "maxDmg": 10, "aoe": 150, "lifetime": 0.0, "steerForce": 0, "projNumber": 1,"projSize": 1.0, "displaceForce": 0.0, "displaceTimer": 0.0}
 			]
 	},
 	{
 		"id": 0, "type": 2, "display": "Resonance Dissipator", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "ResonanceDissipator", 
-		"desc": "Shieldbreak triggers an EMP explosion.", "charges": 0, "cooldown": 3.0, "script": "ResonanceDissipator", "trigger": "on_shield_damage", "amount": 1,
+		"desc": "Shieldbreak triggers an EMP explosion.", "charges": 0, "cooldown": 3.0, "script": "ResonanceDissipator", "trigger": "on_shield_damage",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 1, "speed": 0, "minDmg": 5, "maxDmg": 8, "aoe": 150, "lifetime": 0.0, "steerForce": 0, "projNumber": 1,"projSize": 1}
+				{"isStat": false,  "stacks": 1, "type": 2, "faction": 0, "dmgType": 1, "speed": 0, "minDmg": 5, "maxDmg": 8, "aoe": 150, "lifetime": 0.0, "steerForce": 0, "projNumber": 1,"projSize": 1.0, "displaceForce": 0.0, "displaceTimer": 0.0}
 			]
 	},
 	{
 		"id": 0, "type": 2, "display": "Counterbarrage System", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "CounterbarrageSystem", 
-		"desc": "Taking damage triggers a missile volley", "charges": 0, "cooldown": 3.0, "script": "CounterbarrageSystem", "trigger": "on_shield_damage", "amount": 5,
+		"desc": "Taking damage triggers a missile volley", "charges": 0, "cooldown": 3.0, "script": "CounterbarrageSystem", "trigger": "on_shield_damage",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 500, "minDmg": 4, "maxDmg": 6, "aoe": 25, "lifetime": 5.0, "steerForce": 48, "projNumber": 1,"projSize": 1.0}
+				{"isStat": false, "stacks": 5, "type": 2, "faction": 0, "dmgType": 0, "speed": 550, "minDmg": 4, "maxDmg": 6, "aoe": 25, "lifetime": 5.0, "steerForce": 36, "projNumber": 1,"projSize": 0.7, "displaceForce": 0.0, "displaceTimer": 0.0}
 			]
 	},
 	{
-		"id": 0, "type": 0, "display": "Missile Pod", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "MissilePod", 
-		"desc": "Fires a volley of missiles.", "charges": 4, "cooldown": 5.0, "script": "MissilePod", "trigger": "on_use", "amount": 6,
+		"id": 0, "type": 0, "display": "Missile Pod (Active)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "MissilePod_Active", 
+		"desc": "Fires a volley of missiles.", "charges": 4, "cooldown": 5.0, "script": "MissilePod_Active", "trigger": "on_use",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 400, "minDmg": 8, "maxDmg": 11, "aoe": 50, "lifetime": 5.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
+				{"isStat": false, "stacks": 6, "type": 2, "faction": 0, "dmgType": 0, "speed": 400, "minDmg": 8, "maxDmg": 11, "aoe": 30, "lifetime": 5.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0, "displaceForce": 0.0, "displaceTimer": 0.0}
 			]
 	},
 	{
-		"id": 0, "type": 2, "display": "Missile Pod (Passive)", "weight": 30, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "Passive_Missiles", 
-		"desc": "Passively launches a missile every 4 seconds", "charges": 0, "cooldown": 4.0, "script": "Passive_Missiles", "trigger": "on_use", "amount": 1,
+		"id": 0, "type": 2, "display": "Missile Pod (P)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "MissilePod_Passive", 
+		"desc": "Passively launches a missile every 4 seconds", "charges": 0, "cooldown": 4.0, "script": "MissilePod_Passive", "trigger": "on_use",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 500, "minDmg": 8, "maxDmg": 12, "aoe": 30, "lifetime": 3.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
+				{"isStat": false, "stacks": 1, "type": 2, "faction": 0, "dmgType": 0, "speed": 500, "minDmg": 8, "maxDmg": 12, "aoe": 20, "lifetime": 3.0, "steerForce": 0, "projNumber": 1, "projSize": 0.8, "displaceForce": 0.0, "displaceTimer": 0.0}
 			]
 	},
 	{
-		"id": 0, "type": 0, "display": "Conv. Bomb Rack", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "BombRack", 
-		"desc": "Drops a bunch of bombs.", "charges": 3, "cooldown": 5.0, "script": "BombRack", "trigger": "on_use", "amount": 5,
+		"id": 0, "type": 0, "display": "Conv. Bomb Rack (A)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "BombRack_Active", 
+		"desc": "Drops a bunch of bombs.", "charges": 3, "cooldown": 5.0, "script": "BombRack_Active", "trigger": "on_use",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 15, "maxDmg": 25, "aoe": 50, "lifetime": 3.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
+				{"isStat": false, "stacks": 5, "type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 15, "maxDmg": 25, "aoe": 50, "lifetime": 10.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
 			]
 	},
 	{
-		"id": 0, "type": 0, "display": "Nuclear Bomb Rack", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "BombRack", 
-		"desc": "Drops a nuclear bomb.", "charges": 2, "cooldown": 5.0, "script": "BombRack", "trigger": "on_use", "amount": 1,
+		"id": 0, "type": 0, "display": "Nuclear Bomb Rack (A)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "Bombrack_Nuclear_Active", 
+		"desc": "Drops a nuclear bomb.", "charges": 2, "cooldown": 5.0, "script": "BombRack_Active", "trigger": "on_use",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 55, "maxDmg": 70, "aoe": 150, "lifetime": 1.0, "steerForce": 0, "projNumber": 1, "projSize": 1.5}
+				{"isStat": false, "stacks": 1, "type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 55, "maxDmg": 70, "aoe": 150, "lifetime": 10.0, "steerForce": 0, "projNumber": 1, "projSize": 1.5}
 			]
 	},
 	{
-		"id": 0, "type": 2, "display": "Bomb Rack (Passive)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "Passive_Bomb", 
-		"desc": "Passively drops a bomb a every 4 seconds", "charges": 0, "cooldown": 4.0, "script": "Passive_Bomb", "trigger": "on_timeout", "amount": 1,
+		"id": 0, "type": 2, "display": "Conv. Bomb Rack (P)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "BombRack_Passive", 
+		"desc": "Passively drops a bomb a every 4 seconds", "charges": 0, "cooldown": 4.0, "script": "BombRack_Passive", "trigger": "on_timeout",
 			"result":[
-				{"type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 15, "maxDmg": 25, "aoe": 50, "lifetime": 1.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
+				{"isStat": false, "stacks": 1, "type": 2, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 15, "maxDmg": 25, "aoe": 50, "lifetime": 10.0, "steerForce": 0, "projNumber": 1, "projSize": 1.0}
 			]
 	},
 	{
-		"id": 0, "type": 0, "display": "Orbital Strike (Arty)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "OrbitalStrikeArty", 
-		"desc": "Orbital Artillery strikes the combat zone.", "charges": 3, "cooldown": 5.0, "script": "OrbitalStrikeArty", "trigger": "on_use", "amount": 3,
+		"id": 0, "type": 0, "display": "Orbital Strike: Artillery (A)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "OrbitalArtillery_Active", 
+		"desc": "Orbital Artillery strikes the combat zone.", "charges": 3, "cooldown": 5.0, "script": "OrbitalArtillery_Active", "trigger": "on_use",
 			"result":[
-				{"type": 6, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 5, "maxDmg": 7, "aoe": 100, "lifetime": 1.0, "projSize": 1.0, "procAmount": 12, 
+				{"isStat": false, "stacks": 3, "type": 6, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 5, "maxDmg": 7, "aoe": 100, "lifetime": 1.0, "projNumber": 1, "projSize": 1.0, "procAmount": 12, 
 					"proc":
-						{"type": 1, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 2, "maxDmg": 3, "aoe": 20, "lifetime": 1.2, "projSize": 1.0}
+						{"type": 1, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 2, "maxDmg": 3, "aoe": 20, "lifetime": 1.2, "projNumber": 1, "projSize": 1.0}
 					}
 		]
 	},
 	{
-		"id": 0, "type": 2, "display": "Orbital Arty (Passive)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "Passive_OrbiArty", 
-		"desc": "Passively calls in an artillery strike every 4 seconds.", "charges": 0, "cooldown": 5.0, "script": "Passive_OrbiArty", "trigger": "on_use", "amount": 1,
+		"id": 0, "type": 2, "display": "Orbital Strike:  Artillery (P)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "OrbitalArtillery_Passive", 
+		"desc": "Passively calls in an artillery strike every 5 seconds.", "charges": 0, "cooldown": 5.0, "script": "OrbitalArtillery_Passive", "trigger": "on_timeout",
 			"result":[
-				{"type": 6, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 5, "maxDmg": 7, "aoe": 100, "lifetime": 1.0, "projSize": 1.0, "procAmount": 12, 
+				{"isStat": false, "stacks": 1, "type": 6, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 5, "maxDmg": 7, "aoe": 100, "lifetime": 1.0, "projNumber": 1, "projSize": 1.0, "procAmount": 12, 
 					"proc":
-						{"type": 1, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 2, "maxDmg": 3, "aoe": 20, "lifetime": 1.2, "projSize": 1.0}
+						{"type": 1, "faction": 0, "dmgType": 0, "speed": 100, "minDmg": 2, "maxDmg": 3, "aoe": 20, "lifetime": 1.2, "projNumber": 1, "projSize": 1.0}
 					}
 		]
 	},
 	{
-		"id": 0, "type": 0, "display": "Orbital Strike (Beam)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "OrbitalStrikeBeam", 
-		"desc": "Orbital Beams strike the combat zone.", "charges": 3, "cooldown": 5.0, "script": "OrbitalStrikeBeam",
+		"id": 0, "type": 0, "display": "Orbital Strike: Beam (A)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "OrbitalBeam_Active", 
+		"desc": "Orbital Beams strike the combat zone.", "charges": 3, "cooldown": 5.0, "script": "OrbitalBeam_Active", "trigger": "on_use",
 		"result": [
-			{"prop": "on_use", "amount": 3, "minDmg": 7, "maxDmg": 9, "beamWidth": 30}
+			{"isStat": false, "stacks": 1, "type": 4, "faction": 0, "dmgType": 0, "speed": 0, "minDmg": 7, "maxDmg": 9, "aoe": 0, "beamLength": 3000, "beamWidth": 30, "lifetime": 4.0,  "projNumber": 1, "projSize": 1.0}
 		]
 	},
 	{
 		"id": 0, "type": 2, "display": "Nearfield Deflector", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "NearfieldDeflector", 
-		"desc": "Adds  support bits.", "charges": 0, "cooldown": 5.0, "script": "NearfieldDeflector",
+		"desc": "Adds support bits.", "charges": 0, "cooldown": 5.0, "script": "NearfieldDeflector", "trigger": "",
 		"result": [
-			{"prop": "blob", "amount": 1, "orbit_radius": 100, "orbit_speed": 0.5}
+			{"isStat": false, "stacks": 3, "prop": "droneshield", "orbit_radius": 100, "orbit_speed": 0.5}
 		]
 	},
 	{
+		"id": 0, "type": 2, "display": "Minelayer (P)", "weight": 3, "cost": 1, "constructor": "ITEM_PASSIVE", "texture": "Minelayer_Passive", 
+		"desc": "Passively drops a mine every 5 seconds.", "charges": 0, "cooldown": 3.0, "script": "Minelayer_Passive", "trigger": "on_timeout",
+			"result":[
+				{"isStat": false, "interval": 0.5, "stacks": 1, "type": 2, "faction": 0, "dmgType": 0, "speed": 30, "minDmg": 7, "maxDmg": 12, "aoe": 45, "lifetime": 30.0, "steerForce": 30, "projNumber": 1, "projSize": 1.0}
+			]
+	},
+	{
+		"id": 0, "type": 0, "display": "Minelayer (A)", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "Minelayer_Active", 
+		"desc": "Actively drops 3 mines.", "charges": 3, "cooldown": 4.0, "script": "Minelayer_Active", "trigger": "on_use",
+			"result":[
+				{"isStat": false, "interval": 0.8, "stacks": 3, "type": 2, "faction": 0, "dmgType": 0, "speed": 20, "minDmg": 7, "maxDmg": 12, "aoe": 35, "lifetime": 30.0, "steerForce": 30, "projNumber": 1, "projSize": 1.0}
+			]
+	},
+	{
 		"id": 0, "type": 0, "display": "Hail Support: Frigate", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "", 
-		"desc": "Call in a friendly Frigate for support.", "charges": 3, "cooldown": 5.0, "script": "Call_Frigate", "trigger": "on_use", "amount": 1,
+		"desc": "Call in a friendly Frigate for support.", "charges": 3, "cooldown": 5.0, "script": "Call_Frigate", "trigger": "on_use",
 			"result": [
-				{"unit": "Frigate", "lifetime": 5.0}
+				{"isStat": false, "stacks": 1, "prop": "Frigate", "lifetime": 20.0}
 		]
 	},
 	{
 		"id": 0, "type": 0, "display": "Hail Support: Fighter", "weight": 3, "cost": 1, "constructor": "ITEM_BASE", "texture": "", 
-		"desc": "Call in a friendly Fighter for support.", "charges": 3, "cooldown": 5.0, "script": "Call_Fighter","trigger": "on_use", "amount": 1,
+		"desc": "Call in a friendly Fighter for support.", "charges": 3, "cooldown": 5.0, "script": "Call_Fighter","trigger": "on_use",
 			"result": [
-				{"unit": "Frigate", "lifetime": 5.0}
+				{"isStat": false, "stacks": 1, "prop": "Fighter", "lifetime": 30.0}
 		]
 	},
 ]

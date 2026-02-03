@@ -1,23 +1,16 @@
 extends Weapon_Base
 class_name Weapon_Proj
 
-#proj
-#type, display, turnrate, health, texture, projsize, projnumber, burst, rof, minDmg, maxDmg, deviation, speed
-func construct(init_type:int, init_display:String, init_texture, init_projSize:float, init_projNumber:int, init_burst:int, init_rof:float, init_dmg, init_lifetime:float, init_deviation:int, init_speed:int):
-	return
-	type = init_type
-	display = init_display
-	texture = init_texture
-	projSize = init_projSize
-	projNumber = init_projNumber
-	burst = init_burst
-	rof = init_rof
-	minDmg = init_dmg.min
-	maxDmg = init_dmg.max
-	aoe = init_dmg.aoe
-	lifetime = init_lifetime
-	dmgType = init_dmg.dmgType
-	deviation = init_deviation
-	speed = init_speed
+#func _physics_process(delta):
+#	print("ding")
+
 	
-	cooldown = init_rof
+func get_class():
+	return "Weapon_Proj"
+
+func eject_shell_casing():
+	
+	var case_emitter = Globals.EMPTY_SHELL.instance()
+	case_emitter.do_init(global_position, global_rotation)
+	Globals.curScene.get_node("Fluff").add_child(case_emitter)
+	

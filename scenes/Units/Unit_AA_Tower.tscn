@@ -1,23 +1,49 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/Units/Unit_AA_Tower.gd" type="Script" id=1]
-[ext_resource path="res://textures/Flak_Building.png" type="Texture" id=2]
+[ext_resource path="res://textures/Flak_Building2.png" type="Texture" id=2]
 [ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sm/Building_SM.gd" type="Script" id=6]
+[ext_resource path="res://resources/AA_tower.tres" type="Resource" id=7]
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 29.5, 37 )
+extents = Vector2( 55.625, 38.5938 )
 
-[node name="Enemy" instance=ExtResource( 3 )]
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 7.15625, 52.5313 )
+
+[node name="AA_Tower" instance=ExtResource( 3 )]
 script = ExtResource( 1 )
+stats = ExtResource( 7 )
 
-[node name="Sprite" parent="." index="1"]
+[node name="SM" parent="." index="0" instance=ExtResource( 5 )]
+script = ExtResource( 6 )
+
+[node name="Main" parent="Sprites" index="0"]
+position = Vector2( 0, 1 )
+scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 2 )
 
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 4 )]
+position = Vector2( 0, -41 )
+maximum_rotation = 45.0
+startAngle = -90
+
+[node name="B" parent="Mounts" index="1" instance=ExtResource( 4 )]
+position = Vector2( 42, -26 )
 maximum_rotation = 60.0
 startAngle = -90
 
 [node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
-position = Vector2( -0.5, 4 )
+position = Vector2( -0.625, 16.5938 )
 shape = SubResource( 3 )
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgStrong" index="0"]
+position = Vector2( -86.1563, 3.53125 )
+shape = SubResource( 4 )
+
+[node name="B" type="CollisionShape2D" parent="ColNodes/DmgStrong" index="1"]
+position = Vector2( 87, 4 )
+shape = SubResource( 4 )

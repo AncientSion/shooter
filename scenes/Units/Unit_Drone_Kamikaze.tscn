@@ -1,0 +1,100 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://scripts/Units/Unit_Drone_Kamikaze.gd" type="Script" id=1]
+[ext_resource path="res://textures/drone2.png" type="Texture" id=2]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sm/DroneSM_Kamikaze.gd" type="Script" id=4]
+[ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=6]
+[ext_resource path="res://resources/drone_kamikaze.tres" type="Resource" id=7]
+[ext_resource path="res://scenes/Thrust_Part_Short.tscn" type="PackedScene" id=8]
+[ext_resource path="res://textures/Siren_Light.png" type="Texture" id=9]
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0, 0.493506, 1 )
+colors = PoolColorArray( 0.989258, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+resource_local_to_scene = true
+emission_shape = 2
+emission_box_extents = Vector3( 0, 3, 1 )
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 15.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 7 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 5, 5 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 5, 0, 5, 5 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 10, 0, 5, 5 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 12, 8 )
+
+[node name="Drone_Kamikaze" instance=ExtResource( 5 )]
+script = ExtResource( 1 )
+stats = ExtResource( 7 )
+
+[node name="SM" parent="." index="0" instance=ExtResource( 3 )]
+script = ExtResource( 4 )
+
+[node name="Aft" parent="ThrusterNodes" index="0" instance=ExtResource( 8 )]
+position = Vector2( -16, 0 )
+
+[node name="Particle2D" parent="ThrusterNodes/Aft" index="0"]
+process_material = SubResource( 9 )
+
+[node name="Main" parent="Sprites" index="0"]
+scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Sprites" index="1"]
+visible = false
+self_modulate = Color( 2, 1, 1, 1 )
+position = Vector2( 7, 0 )
+frames = SubResource( 11 )
+
+[node name="Mounts" parent="." index="5"]
+visible = false
+
+[node name="A" parent="Mounts" index="0" instance=ExtResource( 6 )]
+
+[node name="BehaveTimer" parent="TimerNodes" index="0"]
+wait_time = 3.0
+one_shot = true
+
+[node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
+position = Vector2( 1, 0 )
+shape = SubResource( 4 )
+
+[editable path="ThrusterNodes/Aft"]

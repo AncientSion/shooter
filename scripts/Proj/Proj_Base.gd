@@ -6,7 +6,9 @@ var accel = Vector2.ZERO
 var gravity_vec = Vector2.ZERO
 var active = true
 var lifetime: float
+var target:Base_Unit = null
 
+var type:int
 var speed:int
 var dmgType:int
 var minDmg:int
@@ -16,16 +18,14 @@ var faction:int
 var projSize:float
 var projNumber:int
 var shooter
-var texDim = Vector2.ZERO
+#var texDim = Vector2.ZEROf
 var impactForce = Vector2.ZERO
-var type
 
 var canExplode = false
 var isExploding = false
+var display = "Proj"
 
 func _ready():
-	if has_node("Sprite"):
-		texDim = Vector2($Sprite.texture.get_width() * $Sprite.scale.x, $Sprite.texture.get_height() * $Sprite.scale.y)
 
 	if aoe != 0:
 		canExplode = true
@@ -42,7 +42,7 @@ func _ready():
 	elif faction == 2:
 		setNeutral()
 
-	gravity_vec = Globals.BASEGRAVITY
+	gravity_vec = Globals.BASEGRAVITY * 1.5
 	set_physics_process(true)
 
 func _physics_process(delta):
@@ -50,11 +50,25 @@ func _physics_process(delta):
 		lifetime -= delta
 		if lifetime <= 0:
 			on_lifetime_timeout()
-		
-		
+
+func constructProj(weapon):
+	type = weapon.type
+	faction = weapon.faction
+	dmgType = weapon.dmgType
+	speed = weapon.speed
+	minDmg = weapon.minDmg
+	maxDmg = weapon.maxDmg
+	aoe = weapon.aoe
+	lifetime = weapon.lifetime
+	projSize = weapon.projSize
+	projNumber =  weapon.projNumber
+	scale = Vector2(weapon.projSize, weapon.projSize)
+	impactForce = weapon.recoilForce
+	
+	lifetime *= rand_range(0.8, 1.2)
 	
 func on_lifetime_timeout():
-	match type:
+	match self.type:
 		1:
 			doFadeOut()
 		2: 
@@ -65,12 +79,11 @@ func on_lifetime_timeout():
 			doFadeOut()
 		
 func doFadeOut():
-	$Tween.interpolate_property(self, "modulate:a",
-			1.0, 0.3, 0.5,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-
-	$Tween.start()
-	yield($Tween, "tween_all_completed")
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "modulate:a", 0.3, 0.5)
+	tween.tween_callback(self, "fadeout_complete")
+	
+func fadeout_complete():
 	explode()
 	queue_free()
 	
@@ -89,7 +102,7 @@ func explode():
 	Globals.curScene.get_node("Various").add_child(explo)
 	doAreaAttack()
 	active = false
-		
+
 func canExplodeOnContact():
 	return canExplode
 	
@@ -111,6 +124,8 @@ func setHostile():
 	if has_node("ColNodes/AoeArea"):
 		get_node("ColNodes/AoeArea").set_collision_layer_bit(3, true)
 		get_node("ColNodes/AoeArea").set_collision_mask_bit(0, true)
+#	if has_node("ColNodes/Seek"):
+#		get_node("ColNodes/Seek").set_collision_mask_bit(4, true)
 	
 func setNeutral():
 	faction = 2
@@ -124,7 +139,7 @@ func setNeutral():
 		get_node("ColNodes/AoeArea").set_collision_mask_bit(0, true)
 		get_node("ColNodes/AoeArea").set_collision_mask_bit(1, true)
 	
-func getPointOfImpact(impactedEntity):
+func getPointOfImpact(_impactedEntity):
 	return global_position
 	
 func getAttackAngle(impactedEntity):
@@ -134,24 +149,50 @@ func getAttackAngle(impactedEntity):
 	else:
 		return (velocity*-1).angle()
 	
-func disableCollisionNodes():
+func disableTriggerCollisionNodes():
 	$ColNodes/DmgNormal.set("monitoring", false)
 	$ColNodes/DmgNormal.set("monitorable", false)
-	for n in $ColNodes/DmgNormal.get_children():
-		n.disabled = true
+	$ColNodes/DmgNormal.get_child(0).disabled = true
 		
 func doAreaAttack():
 #		print("doAreaAttack from ", get_class(), " with AoE: ",$ColNodes/AoeArea/A.shape.radius, ", damage: ", minDmg, "-", maxDmg)
 		var areas = $ColNodes/AoeArea.get_overlapping_areas()
 #		print("targets: ", len(areas))
 		for area in areas:
-			print("hitting: ", area.owner.display)
-			area.owner.takeDamage(self, area.owner.dmgZones[area.name])
+#			print("hitting: ", area.owner.display)
+			if not area.owner.has_active_omni_shield():
+				area.owner.takeDamage(self, Globals.getRawDamage(self.minDmg, self.maxDmg, area.owner.dmgZones[area.name]))
 #			area.owner.checkAggro(shooter)
 		queue_free()
 
 func postImpacting():
 	queue_free()
 
+
+
+#	if has_active_omni_shield() or area.owner.has_active_omni_shield():
+#		dict.legal = false
+#
+#	isRamming = true
+#	rammings.append(dict)
+#
+#func has_active_omni_shield():
+#	if is_in_group("isUnit") and $Mounts.get_children() and $Mounts/A.get_child(0).get_class() == "Weapon_Shield_Omni" and $Mounts/A.get_child(0).shield > 0:
+##		print("active omni, making ram illegal")
+#		return true
+#	return false
+
+	
+
 func getDamageObject():
 	return self
+	
+func enterBoundary():
+	if self.type != 4:
+		if canExplode:
+			explode()
+		else:
+			queue_free()
+
+func exitBoundary():
+	pass

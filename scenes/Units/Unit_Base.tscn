@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Units/Unit_Base.gd" type="Script" id=1]
 [ext_resource path="res://styles/Font24.tres" type="DynamicFont" id=2]
@@ -13,6 +13,32 @@ border_width_bottom = 2
 border_color = Color( 1, 0, 0, 1 )
 corner_detail = 1
 
+[sub_resource type="VisualShader" id=2]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx, async_visible;
+
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Output:0
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+
 [node name="Enemy" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -20,6 +46,7 @@ script = ExtResource( 1 )
 visible = false
 
 [node name="moveTarget" type="Panel" parent="Debug"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -31,16 +58,19 @@ margin_bottom = 10.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 
-[node name="Line2D" type="Line2D" parent="Debug"]
+[node name="MoveTargetVector" type="Line2D" parent="Debug"]
+visible = false
 points = PoolVector2Array( 0, 0, 0, 0 )
 width = 2.0
-default_color = Color( 0.00392157, 0, 0, 1 )
+default_color = Color( 1, 1, 0, 1 )
 
 [node name="C" type="Control" parent="Debug"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="behav" type="Label" parent="Debug/C"]
+visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -30.0
@@ -52,6 +82,7 @@ align = 1
 valign = 1
 
 [node name="stats" type="Label" parent="Debug/C"]
+visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -30.0
@@ -62,14 +93,17 @@ custom_fonts/font = ExtResource( 2 )
 align = 1
 valign = 1
 
-[node name="new" type="Node2D" parent="Debug"]
+[node name="steering_choice" type="Node2D" parent="Debug"]
+visible = false
 
 [node name="ThrusterNodes" type="Position2D" parent="."]
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Sprites" type="Position2D" parent="."]
 
-[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
-visible = false
+[node name="Main" type="Sprite" parent="Sprites"]
+material = SubResource( 3 )
+
+[node name="Items" type="Position2D" parent="."]
 
 [node name="Mounts" type="Position2D" parent="."]
 
@@ -77,6 +111,9 @@ visible = false
 visible = false
 rotation = 1.5708
 texture = ExtResource( 3 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+visible = false
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -112,5 +149,5 @@ collision_mask = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
-[connection signal="timeout" from="TimerNodes/BehaveTimer" to="." method="_on_Timer_timeout"]
 [connection signal="area_entered" from="Sight" to="." method="_on_Sight_area_entered"]
+[connection signal="area_exited" from="Sight" to="." method="_on_Sight_area_exited"]

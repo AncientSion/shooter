@@ -2,7 +2,6 @@ extends Ground_Entity
 class_name Skyscraper
 
 var	display = "Skyscraper"
-var behaviors = ["Guard"]
 
 func _ready():
 	faction = 0

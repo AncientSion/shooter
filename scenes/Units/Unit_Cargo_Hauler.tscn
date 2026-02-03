@@ -1,40 +1,46 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/Units/Unit_Cargo_Hauler.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Units/Unit_Base.tscn" type="PackedScene" id=2]
-[ext_resource path="res://textures/cago_lifter_01.png" type="Texture" id=3]
-[ext_resource path="res://scenes/ThrusterPlume2.tscn" type="PackedScene" id=4]
+[ext_resource path="res://textures/cargohauler.png" type="Texture" id=3]
+[ext_resource path="res://scenes/Thrust_Part_Short.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=5]
+[ext_resource path="res://resources/cargohauler.tres" type="Resource" id=6]
+[ext_resource path="res://sm/SM.tscn" type="PackedScene" id=7]
+[ext_resource path="res://sm/Cargohauler_SM.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 36.0625, 17.125 )
+extents = Vector2( 39, 17.125 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 17.4375, 10.8125 )
 
 [node name="Cargo_Hauler" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+stats = ExtResource( 6 )
+
+[node name="SM" parent="." index="0" instance=ExtResource( 7 )]
+script = ExtResource( 8 )
 
 [node name="A" parent="ThrusterNodes" index="0" instance=ExtResource( 4 )]
-position = Vector2( -61, -6 )
-rotation = 3.14159
+position = Vector2( -60, -6 )
 
 [node name="B" parent="ThrusterNodes" index="1" instance=ExtResource( 4 )]
-position = Vector2( -61, 7 )
-rotation = 3.14159
+position = Vector2( -60, 7 )
 
-[node name="Sprite" parent="." index="1"]
+[node name="Main" parent="Sprites" index="0"]
 texture = ExtResource( 3 )
-
-[node name="VisibilityNotifier2D" parent="." index="2"]
-position = Vector2( 1.5, 2.38419e-07 )
-scale = Vector2( 5.45, 1.7 )
 
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 5 )]
 maximum_rotation = 180.0
+invis = true
+
+[node name="VisibilityNotifier2D" parent="." index="7"]
+position = Vector2( 1.5, 2.38419e-07 )
+scale = Vector2( 5.45, 1.7 )
 
 [node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
-position = Vector2( -17, 0 )
+position = Vector2( -19, 0 )
 shape = SubResource( 1 )
 
 [node name="B" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="1"]
