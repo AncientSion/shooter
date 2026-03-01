@@ -88,7 +88,7 @@ func generate_3path_dag(map_params) -> Dictionary:
 	
 	# Create end node (centered)
 	nodes["end"] = map_node.instance()
-	nodes["end"].name = str("Node_", str(node_id))
+	nodes["end"].name = str("Node_", str(node_id+1))
 	nodes["end"].do_init(
 		"end",
 		Vector2(width * (1.0 - margin_x), height / 2),
@@ -194,7 +194,6 @@ func _connect_path_nodes(nodes: Dictionary) -> void:
 	
 	# Add cross-path connections (only one node forward)
 	_add_cross_path_connections(nodes)
-
 
 func _calculate_path_positions() -> Array:
 #	var margin_y:float = 0.1
@@ -309,6 +308,12 @@ func _on_Button_pressed():
 	link_node_panels()
 	fill_node_panel()
 	draw_map()
+	init_map()
+
+func init_map():
+	map_data.nodes["start"].can_be_selected = true
+	return
+	map_data.nodes["start"].do_select_map_node()
 
 func link_node_panels():
 	for entry in map_data.nodes:
@@ -397,6 +402,19 @@ func _on_Cancel_pressed():
 		var node = selected_node
 		node.do_unselect_map_node()
 		node._on_Node_Sprite_mouse_exited()
+		
+func do_progress():
+	for node in map_data.nodes:
+		if map_data.nodes[node].is_player_position and map_data.nodes[node].is_completed:
+			for target in map_data.nodes[node].connections:
+				for index in map_data.nodes:
+					if index == target:
+						map_data.nodes[index].can_be_selected = true
+						break
+						
+#			print(map_data.nodes[node].connections) #connections_lanes
+	
+	
 
 #func _on_Node_Sprite_mouse_exited():
 #	check_lane_highlight()

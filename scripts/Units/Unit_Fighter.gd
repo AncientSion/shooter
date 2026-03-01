@@ -87,7 +87,7 @@ func process_movement(_delta):
 	# We use 'agility' to reduce the speed-loss penalty during turns.
 	# Higher agility = closer to 1.0 (maintains speed better)
 	var turn_efficiency = lerp(0.8, 1.0, (dot + 1.0) / 2.0) 
-	var speed_modifier = turn_efficiency * (agility / 20.0) ff
+	var speed_modifier = turn_efficiency * (agility / 20.0)
 
 	# 5. Lock speed and apply the "Air Grip"
 	# We ensure the jet stays within its combat flight envelope
@@ -277,7 +277,7 @@ func setupCrashing():
 	elif velocity.x < 0:
 		moveTarget = Vector2(global_position.x - (Globals.HEIGHT-global_position.y)*2, Globals.HEIGHT)
 		
-	maxSpeed *= 1.3
+#	maxSpeed *= 1.3
 	enginePower *= 0.3
 	
 	var timer = Timer.new()

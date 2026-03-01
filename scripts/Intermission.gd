@@ -3,6 +3,7 @@ class_name Intermission
 
 func _ready():
 	Globals.GAMESCREEN.cur_lvl_number = 0
+	level_type = 0
 
 func setupLevel():
 	.setupLevel()
@@ -122,7 +123,7 @@ func createMainRect(baseColor:Color):
 func handleLevelStartZooming():
 	doZoom(0.1, 1, 1)
 	
-func setCameraLimits():
+func set_cam_limit():
 	$CamA.limit_left = -200
 	$CamA.limit_top = -200
 	$CamA.limit_right = Globals.SCREEN.x + 200
@@ -190,7 +191,7 @@ func _on_resolutionChange():
 	var oldRes = Globals.SCREEN
 	
 	._on_resolutionChange()
-	setCameraLimits()
+	set_cam_limit()
 	set_boundary_red()
 	create_background()
 	

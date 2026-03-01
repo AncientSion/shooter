@@ -153,7 +153,7 @@ func _ready():
 	loadProjSprites()
 	loadItemTemplatesJSON()
 	loadItemResources()
-	loadWeaponTemplates()
+	load_weapons_csv()
 	SCREEN = get_viewport().size
 	PLAYER = PLAYERSCENE.instance()
 	instantiate_handlers()
@@ -363,8 +363,12 @@ func constructWeapon(data):
 #	print(weapon.get_node("Sprites/Main").scale)
 	return weapon
 
-func loadWeaponTemplates():
-	print("loadWeaponTemps")
+func load_new():
+	print("load_new")
+	
+func load_weapons_csv():
+#	load_new()
+	print("load_weapons_csv")
 #	var array = ["key", "value"]
 #	var dicti = {}
 #	dicti[array[0]] = array[1]

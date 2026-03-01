@@ -1,40 +1,40 @@
-type,display,dmgType,turnrate,health,texture,desc,projSize,projNumber,deviation,burst,rof,minDmg,maxDmg,aoe,speed,lifetime,beamLength,beamWidth,steerForce,forPlayer,linearDevi,burstDelay,displaceTimer,displaceForce,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Autocannon,0,0.0,0,Autocannon,Just a cannon,0.7,1,4,1,0.15,1,2,0,700,1.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Hvy Autocannon,0,0.0,0,Autocannon,Just a cannon,1.0,1,4,1,0.4,5,7,0,475,2.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Twin Autocannon,0,0.0,0,Twin_Autocannon,Just a cannon,1.0,1,4,2,0.25,2,3,0,525,2.5,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Expl. Autocannon,0,0.0,0,Autocannon,Just a cannon,1.0,1,4,1,0.3,2,3,15,500,2.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Scattergatling,0,0.0,0,Spreadcannon,Rapid fire - try aiming,1.0,1,9,1,0.2,2,3,0,425,2.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Scattergatling+,0,0.0,0,Spreadcannon,Rapid fire - try aiming,1.0,3,9,1,0.5,2,3,0,475,2.0,0,0,0,1,1,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Burstblaster,0,0.0,0,Burstblaster,One burst at a time,1.0,1,5,5,2.0,4,5,0,475,2.0,0,0,0,1,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Spreadcannon,0,0.0,0,Spreadcannon,melee saturation,1.0,7,22,1,1.0,3,4,0,400,2.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Missilelauncher,0,0.0,0,Missilelauncher,One missile at time,0.9,1,2,1,1.0,10,13,40,550,5.0,0,0,0,1,0,0.0,1.0,0.1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Burstlauncher,0,0.0,0,-,Cant evade this,0.8,1,1,3,2.0,5,7,30,600,3.0,0,0,0,1,0,0.2,0.2,0.1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Swarmlauncher,0,0.0,0,Micromissilelauncher,Cant evade this,0.7,6,13,1,1.5,3,4,30,600,3.0,0,0,0,1,0,0.0,0.5,0.3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-7,Torpedolauncher,0,0.0,0,Torpedolauncher,Hurts - if it hits,1.0,1,2,1,1.5,22,28,65,400,7.0,0,0,0,1,0,0.0,1.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-8,Mace,0,0.0,0,Mace,Melee,1.0,1,0,1,2.0,1,1,0,0,0.0,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-4,Laserblaster,0,0.0,0,Laserblaster,Close up zap,1.0,1,0,1,0.3,4,5,0,0,0.2,350,6,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-4,Lasercannon,0,0.0,0,Lasercannon,Your average beam,1.0,1,0,1,1.0,7,9,0,0,1.0,525,5,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-4,Laserlance,0,0.0,0,Laserlance,Lots of power,1.0,1,0,1,3.0,2,4,0,0,2.0,575,6,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-6,Gauss-Accelerator,0,0.0,0,GaussAccelerator,Aim for the eyes,1.2,1,1,1,1.5,13,18,0,800,2.5,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-6,Gauss-Blaster,0,0.0,0,GaussBlaster,Aim for the eyes,1.0,3,3,1,1.7,6,8,0,575,2.5,0,0,0,1,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6,6
-6,Player Rail,0,0.0,10,false,,1.0,1,2,3,2.0,8,11,0,900,2.5,0,0,0,1,0,0.5,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-6,Light Railgun,0,0.0,10,false,Heli_Rail,1.2,1,1,1,4.0,8,11,0,1800,2.5,0,0,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Boss Missile,0,0.0,0,false,Boss_Missile,0.8,1,0,4,6.0,4,6,30,800,6.0,0,0,40,0,0,0.4,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Light Missile,0,0.0,0,false,Fighter_Missile,0.8,1,0,1,6.0,4,6,30,700,6.0,0,0,40,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Light Bomb,0,0.0,0,false,Fighter_Bomb,0.8,1,0,3,3.0,4,6,30,250,6.0,0,0,0,0,0,0.4,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Medium Missile Burst,0,0.0,0,false,Mobile_AA_Missile,1.0,3,6,3,8.0,3,5,45,700,8.0,0,0,100,0,0,1.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Light Machinecannon,0,0.0,0,false,Fighter_Burst_MG,0.8,1,2,3,3.0,2,3,0,525,2.5,0,0,0,0,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Light Machinegun,0,0.0,0,false,Jeep_Burst_MG,1.0,1,2,6,6.0,1,2,0,650,2.5,0,0,0,0,0,0.2,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Heavy Machinecannon,0,0.0,0,false,,0.8,1,2,4,3.0,3,4,0,425,2.5,0,0,0,0,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Light Autocannon,0,0.0,10,false,Frigate_AC,0.6,2,6,3,2.0,2,3,0,525,2.5,0,0,0,0,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Medium Autocannon,0,0.0,10,false,,1.0,1,3,4,2.0,4,6,0,450,4.0,0,0,0,0,0,0.2,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Heavy Autocannon,0,0.0,15,false,Boss_AC,0.8,1,2,3,3.0,8,10,0,475,2.5,0,0,0,0,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Flak,0,0.0,15,false,Boss_Flak,0.6,1,6,3,1.0,1,2,20,525,1.0,0,0,0,0,0,0.1,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-4,Beamlance,0,0.0,10,Beamlance,,1.0,1,0,1,4.0,2,2,0,0,1.0,400,5,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-3,Arty_Gun,0,0.0,10,false,,1.0,1,150,3,4.0,7,9,100,500,2.5,0,0,0,0,0,0.5,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Light Machinecannon,0,0.0,0,false,Jeep_Burst_MG,0.5,1,1,6,6.0,1,2,0,450,2.5,0,0,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Drone Shotgun,0,0.0,0,false,Drone_Shotgun,0.7,5,10,1,4.0,2,2,0,550,0.5,0,0,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Super-Light Missile,0,0.0,0,false,Drone_Missile,0.6,1,0,1,6.0,4,6,20,600,6.0,0,0,40,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-1,Dummy Weapon,0,0.0,0,false,Dummy__Weapon,0.0,0,0,1,999,0,0,0,0,0.0,0,0,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-4,AI_Laser,0,0.0,0,Laserlance,Lots of power,1.0,1,0,1,6,7,9,0,0,3.0,1200,10,0,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-2,Medium Missile,0,0.0,0,false,Mobile_AA_Missile,1.3,1,0,1,8.0,13,18,45,700,8.0,0,0,130,0,0,0.0,0.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+type,display,dmgType,turnrate,health,texture,desc,projSize,projNumber,deviation,burst,rof,minDmg,maxDmg,aoe,speed,lifetime,beamLength,beamWidth,steerForce,forPlayer,linearDevi,burstDelay,displaceTimer,displaceForce
+1,Autocannon,0,0.0,0,Autocannon,Just a cannon,0.7,1,4,1,0.15,1,2,0,700,1.0,0,0,0,1,0,0.0,0.0,0.0
+1,Hvy Autocannon,0,0.0,0,Autocannon,Just a cannon,1.0,1,4,1,0.4,5,7,0,475,2.0,0,0,0,1,0,0.0,0.0,0.0
+1,Twin Autocannon,0,0.0,0,Twin_Autocannon,Just a cannon,1.0,1,4,2,0.25,2,3,0,525,2.5,0,0,0,1,0,0.0,0.0,0.0
+1,Expl. Autocannon,0,0.0,0,Autocannon,Just a cannon,1.0,1,4,1,0.3,2,3,15,500,2.0,0,0,0,1,0,0.0,0.0,0.0
+1,Scattergatling,0,0.0,0,Spreadcannon,Rapid fire - try aiming,1.0,1,9,1,0.2,2,3,0,425,2.0,0,0,0,1,0,0.0,0.0,0.0
+1,Scattergatling+,0,0.0,0,Spreadcannon,Rapid fire - try aiming,1.0,3,9,1,0.5,2,3,0,475,2.0,0,0,0,1,1,0.0,0.0,0.0
+1,Burstblaster,0,0.0,0,Burstblaster,One burst at a time,1.0,1,5,5,2.0,4,5,0,475,2.0,0,0,0,1,0,0.1,0.0,0.0
+1,Spreadcannon,0,0.0,0,Spreadcannon,melee saturation,1.0,7,22,1,1.0,3,4,0,400,2.0,0,0,0,1,0,0.0,0.0,0.0
+2,Missilelauncher,0,0.0,0,Missilelauncher,One missile at time,0.9,1,2,1,1.0,10,13,40,550,5.0,0,0,0,1,0,0.0,1.0,0.1
+2,Burstlauncher,0,0.0,0,-,Cant evade this,0.8,1,1,3,2.0,5,7,30,600,3.0,0,0,0,1,0,0.2,0.2,0.1
+2,Swarmlauncher,0,0.0,0,Micromissilelauncher,Cant evade this,0.7,6,13,1,1.5,3,4,30,600,3.0,0,0,0,1,0,0.0,0.5,0.3
+7,Torpedolauncher,0,0.0,0,Torpedolauncher,Hurts - if it hits,1.0,1,2,1,1.5,22,28,65,400,7.0,0,0,0,1,0,0.0,1.0,0.0
+8,Mace,0,0.0,0,Mace,Melee,1.0,1,0,1,2.0,1,1,0,0,0.0,0,0,0,1,0,0.0,0.0,0.0
+4,Laserblaster,0,0.0,0,Laserblaster,Close up zap,1.0,1,0,1,0.3,4,5,0,0,0.2,350,6,0,1,0,0.0,0.0,0.0
+4,Lasercannon,0,0.0,0,Lasercannon,Your average beam,1.0,1,0,1,1.0,7,9,0,0,1.0,525,5,0,1,0,0.0,0.0,0.0
+4,Laserlance,0,0.0,0,Laserlance,Lots of power,1.0,1,0,1,3.0,2,4,0,0,2.0,575,6,0,1,0,0.0,0.0,0.0
+6,Gauss-Accelerator,0,0.0,0,GaussAccelerator,Aim for the eyes,1.2,1,1,1,1.5,13,18,0,800,2.5,0,0,0,1,0,0.0,0.0,0.0
+6,Gauss-Blaster,0,0.0,0,GaussBlaster,Aim for the eyes,1.0,3,3,1,1.7,6,8,0,575,2.5,0,0,0,1,0,0.0,0.0,0.0
+6,Player Rail,0,0.0,10,false,,1.0,1,2,3,2.0,8,11,0,900,2.5,0,0,0,1,0,0.5,0.0,0.0
+6,Light Railgun,0,0.0,10,false,Heli_Rail,1.2,1,1,1,4.0,8,11,0,1800,2.5,0,0,0,0,0,0.0,0.0,0.0
+2,Boss Missile,0,0.0,0,false,Boss_Missile,0.8,1,0,4,6.0,4,6,30,800,6.0,0,0,40,0,0,0.4,0.0,0.0
+2,Light Missile,0,0.0,0,false,Fighter_Missile,0.8,1,0,1,6.0,4,6,30,700,6.0,0,0,40,0,0,0.0,0.0,0.0
+2,Light Bomb,0,0.0,0,false,Fighter_Bomb,0.8,1,0,3,3.0,4,6,30,250,6.0,0,0,0,0,0,0.4,0.0,0.0
+2,Medium Missile Burst,0,0.0,0,false,Mobile_AA_Missile,1.0,3,6,3,8.0,3,5,45,700,8.0,0,0,100,0,0,1.0,0.0,0.0
+1,Light Machinecannon,0,0.0,0,false,Fighter_Burst_MG,0.8,1,2,3,3.0,2,3,0,525,2.5,0,0,0,0,0,0.1,0.0,0.0
+1,Light Machinegun,0,0.0,0,false,Jeep_Burst_MG,1.0,1,2,6,6.0,1,2,0,650,2.5,0,0,0,0,0,0.2,0.0,0.0
+1,Heavy Machinecannon,0,0.0,0,false,,0.8,1,2,4,3.0,3,4,0,425,2.5,0,0,0,0,0,0.1,0.0,0.0
+1,Light Autocannon,0,0.0,10,false,Frigate_AC,0.6,2,6,3,2.0,2,3,0,525,2.5,0,0,0,0,0,0.1,0.0,0.0
+1,Medium Autocannon,0,0.0,10,false,,1.0,1,3,4,2.0,4,6,0,450,4.0,0,0,0,0,0,0.2,0.0,0.0
+1,Heavy Autocannon,0,0.0,15,false,Boss_AC,0.8,1,2,3,3.0,8,10,0,475,2.5,0,0,0,0,0,0.1,0.0,0.0
+1,Flak,0,0.0,15,false,Boss_Flak,0.6,1,6,3,1.0,1,2,20,525,1.0,0,0,0,0,0,0.1,0.0,0.0
+4,Beamlance,0,0.0,10,Beamlance,,1.0,1,0,1,4.0,2,2,0,0,1.0,400,5,0,0,0,0.0,0.0,0.0
+3,Arty_Gun,0,0.0,10,false,,1.0,1,150,3,4.0,7,9,100,500,2.5,0,0,0,0,0,0.5,0.0,0.0
+1,Light Machinecannon,0,0.0,0,false,Jeep_Burst_MG,0.5,1,1,6,6.0,1,2,0,450,2.5,0,0,0,0,0,0.0,0.0,0.0
+1,Drone Shotgun,0,0.0,0,false,Drone_Shotgun,0.7,5,10,1,4.0,2,2,0,550,0.5,0,0,0,0,0,0.0,0.0,0.0
+2,Super-Light Missile,0,0.0,0,false,Drone_Missile,0.6,1,0,1,6.0,4,6,20,600,6.0,0,0,40,0,0,0.0,0.0,0.0
+1,Dummy Weapon,0,0.0,0,false,Dummy__Weapon,0.0,0,0,1,999,0,0,0,0,0.0,0,0,0,0,0,0.0,0.0,0.0
+4,AI_Laser,0,0.0,0,Laserlance,Lots of power,1.0,1,0,1,6,7,9,0,0,3.0,1200,10,0,0,0,0.0,0.0,0.0
+2,Medium Missile,0,0.0,0,false,Mobile_AA_Missile,1.3,1,0,1,8.0,13,18,45,700,8.0,0,0,130,0,0,0.0,0.0,0.0

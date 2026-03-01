@@ -79,7 +79,6 @@ func selfDestruct():
 	bomb.position = global_position
 	bomb.disableTriggerCollisionNodes()
 	Globals.curScene.get_node("Projectiles").add_child(bomb)
-#	yield(get_tree(), "physics_frame")
 	kill()
 #	bomb.call_deferred("explode")#bomb.explode()
 	

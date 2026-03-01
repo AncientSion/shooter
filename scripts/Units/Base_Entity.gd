@@ -186,6 +186,8 @@ func icon_on_mouse_exited():
 	$Icon.material.set_shader_param("width", 0.0)
 
 func takeDamage(entity, totalDmg:int):
+	
+#	totalDmg *= 2
 	#print("takeDamage scope: ", self.display, " #", self.id)
 #	var minDmg:int = entity.minDmg * dmgMulti
 #	var maxDmg:int = entity.maxDmg * dmgMulti

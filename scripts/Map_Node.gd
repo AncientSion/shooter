@@ -3,10 +3,12 @@ class_name Map_Node
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var is_unlocked:bool = true
+var can_be_selected:bool = false
+var is_completed:bool = false
 var is_visible:bool = false
 var is_focused:bool = false
 var is_selected:bool = false
+var is_player_position:bool = false
 var script_map_node_ref = null
 var tween:SceneTreeTween = null
 
@@ -32,8 +34,16 @@ func _ready():
 	pass
 
 func _process(delta):
-	if is_focused and not is_selected:
+#	if not is_selected and is_focused and can_be_selected:
+#		$MC/VBox/C/Node_Sprite.rect_rotation += 360.0 * delta
+	if not is_selected and can_be_selected:
 		$MC/VBox/C/Node_Sprite.rect_rotation += 360.0 * delta
+		
+func do_complete():
+	is_completed = true
+	can_be_selected = false
+	do_unselect_map_node()
+	toggle_mission_quick_desc(false)
 
 func do_selected_node_tween():
 	tween = get_tree().create_tween()#.set_parallel(true)
@@ -44,22 +54,24 @@ func do_selected_node_tween():
 
 func do_select_map_node():
 	if Globals.MAP_SCENE.selected_node == null:
+#		print(id)
 		is_selected = true
 		Globals.MAP_SCENE.selected_node = self
 		$MC/VBox/C/Node_Sprite.rect_rotation = 0.0
 		do_selected_node_tween()
 		Globals.MAP_SCENE.show_selected_node_mission_details()
-		get_node("MC/VBox/PC").visible = false
+		toggle_mission_quick_desc(false)
 #		show_node_mission_details()
 	
 func do_unselect_map_node():
+#	print(id)
 	is_selected = false
 	Globals.MAP_SCENE.selected_node = null
 	$MC/VBox/C/Node_Sprite.rect_scale = Vector2(1.0, 1.0)
 	tween.stop()
 	tween = null
 	Globals.MAP_SCENE.hide_selected_node_mission_details()
-	get_node("MC/VBox/PC").visible = true
+	toggle_mission_quick_desc(true)
 #	hide_node_mission_details()
 	
 func hide_node_mission_details():
@@ -76,7 +88,6 @@ func check_lane_highlight():
 	is_visible = !is_visible
 	
 	if is_selected or is_focused:
-#		rect_scale = Vector2(1.3, 1.3)
 		for n in connections_lanes:
 			n.self_modulate = Color(0, 1, 0)
 	else:
@@ -84,20 +95,23 @@ func check_lane_highlight():
 #		rect_scale = Vector2(1.0, 1.0)
 		for n in connections_lanes:
 			n.self_modulate = Color(1, 1, 1)
+			
+func toggle_mission_quick_desc(state:bool):
+	get_node("MC/VBox/PC").visible = state
 
 func _on_Node_Sprite_mouse_entered():
 	check_lane_highlight()
 	if is_selected == false:
-		get_node("MC/VBox/PC").visible = true
+		toggle_mission_quick_desc(true)
 
 func _on_Node_Sprite_mouse_exited():
 	check_lane_highlight()
-	get_node("MC/VBox/PC").visible = false
+	toggle_mission_quick_desc(false)
 
 func _on_Node_Sprite_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
-			if is_unlocked:
+			if can_be_selected:
 				if !is_selected:
 					do_select_map_node()
 				else:

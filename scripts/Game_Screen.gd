@@ -15,6 +15,7 @@ func start_new_game():
 	init_handlers()
 	Globals.MAP_SCENE = load("res://scenes/Map.tscn").instance()
 	$Menu_BG.add_child(Globals.MAP_SCENE)
+	
 #	$BG.remove_child($BG/Main_Menu)
 	
 #	load_player_ui()
@@ -37,13 +38,14 @@ func init_handlers():
 func start_new_mission():
 	var mission_node = Globals.MAP_SCENE.selected_node
 	
-	print("__________")
+	print("start_new_mission")
 	mission_node.mission_class.print_props()
 	Globals.handler_spawner.mission_unit_data = mission_node.mission_class.unit_data
 	
 	if mission_node:
 		print("__________")
 		print("do start mission")
+		mission_node.is_player_position = true
 		
 		Globals.curScene = load("res://scenes/Stage_0.tscn").instance()
 		Globals.curScene.name = "Level"
@@ -53,7 +55,7 @@ func start_new_mission():
 		Globals.GAMESCREEN.get_node("Menu_BG").hide()
 		
 		Globals.handler_mission.connect_mission_ui_in_game()
-		Globals.handler_mission.mission = mission_node
+		Globals.handler_mission.mission_node = mission_node
 		Globals.handler_mission.do_enable()
 		Globals.handler_spawner.connect_debug_diffi_ui_in_game()
 		Globals.handler_spawner.do_enable()
@@ -67,7 +69,9 @@ func start_new_mission():
 #		Globals.MAP_SCENE.hide()
 #		Globals.MAIN_MENU.hide()
 
-func doAdvanceLevel():
+
+
+func end_current_level():
 	
 #	for n in Globals.curScene.get_node("Enemy_Units").get_children():
 ##		if n.isTarget:
@@ -78,17 +82,36 @@ func doAdvanceLevel():
 ##		if n.isTarget:
 ##			n.unmarkAsTarget()
 #		n.queue_free()
-	
+	Globals.handler_mission.do_end_mission()
+	Globals.PLAYER.on_exit_level()
 	Globals.PLAYER.unload_gear()
-#	print("b")
-
+	Globals.handler_spawner.do_disable()
+	Globals.handler_mission.do_disable()
 	
-	yield(get_tree().create_timer(0.1), "timeout")
+#	yield(get_tree().create_timer(0.1), "timeout")
 #	print("c")
-
-	call_deferred("actually_change")
+#	call_deferred("actually_change")
+	call_deferred("return_to_map")
 	
 #	print("d")
+
+func return_to_map():
+	Globals.curScene.get_node("Player_Pos").remove_child(Globals.PLAYER)
+	Globals.UI.get_node("Pause_details/MC/VBC/PC/HBC2/GFX_settings").disconnectResolutionChange()
+	
+	Globals.UI.reset_ui_ai_debug_list()
+	Globals.curScene.remove_child(Globals.UI)
+	Globals.curScene.queue_free()
+	
+	for n in Globals.UI.get_node("LootNodes").get_children():
+		n.queue_free()
+	for n in Globals.UI.get_node("POI/actives").get_children():
+		n.queue_free()
+		
+	Globals.GAMESCREEN.get_node("Menu_BG").show()
+	
+	Globals.MAP_SCENE.do_progress()
+	
 
 func actually_change():
 	Globals.PLAYER.on_exit_level()
@@ -103,7 +126,6 @@ func actually_change():
 		n.queue_free()
 	for n in Globals.UI.get_node("POI/actives").get_children():
 		n.queue_free()
-		
 		
 	match cur_lvl_number:
 		0:
@@ -121,8 +143,6 @@ func actually_change():
 #	get_tree().get_root().add_child(Globals.curScene)
 #	print("set current scene")
 #	get_tree().set_current_scene(Globals.curScene)
-	
-
 
 func actuallyChange():
 		

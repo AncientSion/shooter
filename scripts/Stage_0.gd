@@ -9,10 +9,13 @@ var spawner
 var obj
 var enemies = Array()
 
+var level_type:int
+
 func _ready():
 	print("ready world")
 	Globals.GAMESCREEN.cur_lvl_number = 1
-	Globals.GAMESCREEN.get_node("Menu_BG").hide()
+	level_type = 1
+#	Globals.GAMESCREEN.get_node("Menu_BG").hide()
 	setupLevel()
 #	Engine.time_scale = 0.25
 #	$Player.position = Vector2(Globals.WIDTH/2, Globals.HEIGHT/2)
@@ -21,7 +24,7 @@ func setupLevel():
 	set_stage_dimensions()
 	set_boundary_red()
 	create_background()
-	setCameraLimits()
+	set_cam_limit()
 	load_ui()
 	set_various_settings()
 	readyPlayer()
@@ -63,8 +66,6 @@ func createTestBG(): #forest bg
 				element.position.y = 775
 #				element.position.y = 500
 				n.motion_offset.x = (Globals.WIDTH/2 * n.motion_scale.x) - Globals.WIDTH/2
-					
-			
 		
 	$BG/Para_Test_Forest.scroll_limit_begin = Vector2(-600, -600)
 	$BG/Para_Test_Forest.scroll_limit_end = Vector2(Globals.WIDTH+600, Globals.HEIGHT+600)
@@ -538,11 +539,13 @@ func setZoom(zoom):
 	Globals.ZOOM = zoom
 	$CamA.zoom = zoom
 
-func setCameraLimits():
+func set_cam_limit():
 	$CamA.limit_left = -200 -1000
 	$CamA.limit_top = -200 -1000
+	$CamA.limit_top = 0
 	$CamA.limit_right = Globals.WIDTH + 200 +1000
-	$CamA.limit_bottom = Globals.HEIGHT + 200 +1000
+#	$CamA.limit_bottom = Globals.HEIGHT + 200 +1000
+	$CamA.limit_bottom = Globals.HEIGHT# + 200 +1000
 	
 func readyPlayer():
 	print("readyPlayer")
@@ -552,10 +555,10 @@ func readyPlayer():
 		player.new = false
 		player.addStartingWeapons()
 		player.addStartingItems()
-		var trans = RemoteTransform2D.new()
-		trans.name = "RemoteTransform"
-		player.add_child(trans)
-		trans.remote_path = "../../../CamA"
+#		var trans = RemoteTransform2D.new()
+#		trans.name = "RemoteTransform"
+#		player.add_child(trans)
+#		trans.remote_path = "../../../CamA"
 	player.position = Vector2(Globals.WIDTH/2, Globals.HEIGHT/2)
 	player.position = Vector2(Globals.WIDTH/2, Globals.HEIGHT-400)
 #	player.position = Vector2(Globals.WIDTH - 400, Globals.HEIGHT-400)
@@ -773,6 +776,4 @@ func onPlayerWarpIn():
 func _on_resolutionChange():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D, SceneTree.STRETCH_ASPECT_EXPAND, Globals.SCREEN)
 	Globals.UI.get_node("Place/TopleftRighter/Difficulty/Vbox/Res/b").text = str(Globals.SCREEN)
-#	Globals.curScene.get_node("UI/Place/TopleftRighter/Difficulty/Vbox/Zoom/b").text = str("%.2f" % Globals.ZOOM.x)
-#	Globals.curScene.get_node("UI/Place/TopleftRighter/Difficulty/Vbox/Zoom/b").text = str("%.0f" % Globals.ZOOM.x)
-	Globals.UI.get_node("Place/TopleftRighter/Difficulty/Vbox/Zoom/b").text = str("%.0f" % Globals.ZOOM.x)
+	Globals.UI.get_node("Place/TopleftRighter/Difficulty/Vbox/Zoom/b").text = str("%.2f" % Globals.ZOOM.x)

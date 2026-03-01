@@ -210,18 +210,6 @@ func doBeamFadeOut():
 	var tween = get_tree().create_tween()
 	tween.tween_property($BeamLinePos, "modulate:a", 0.0, dur)
 	tween.tween_property($BeamLinePos, "scale:y", 0.0, dur)
-#	tween.tween_callback(self, "queue_free")
-#
-#
-#	$Tween.interpolate_property($BeamLinePos, "modulate:a",
-#		1.0, 0.0, dur,
-#		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.interpolate_property($BeamLinePos, "scale:y",
-#		1.0, 0.0, dur,
-#		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.start()
-#	yield($Tween, "tween_all_completed")
-#	queue_free() 
 	
 func on_lifetime_timeout():
 	doBeamFadeOut()

@@ -24,13 +24,6 @@ func setQualityMods():
 	
 func doTrigger():
 	print("trigger armor")
-#	var missile = Globals.MISSILE.instance()
-#	missile.constructProj(result[0])
-#	missile.position = global_position
-#	missile.disableTriggerCollisionNodes()
-#	Globals.curScene.get_node("Projectiles").add_child(missile)
-#	yield(get_tree(), "physics_frame")
-#	missile.explode()
 
 	var missile = Globals.MISSILE.instance()
 	missile.constructProj(result[0])

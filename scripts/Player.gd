@@ -49,6 +49,7 @@ var mouseDown = false
 var time_since_ground_dmg:float = 0.0
 var time_since_ground_smoke:float = 0.0
 
+#var boost_on:float = 0.0
 
 func _ready():
 	print("ready ship")
@@ -78,14 +79,14 @@ func setBaseStats():
 	var stats = {
 		"maxHealth": 30,
 		"healthRegenTime": 0.0,
-		"enginePower": 1200, #500
-		"friction": 0.995, # 0.014
-		"agility": 4.5,
-		"boostCharge": 45,
-		"boostMaxCharge": 45,
+		"enginePower": 1600, #500dd
+		"friction": 0.998, # 0.014
+		"agility": 8.0,
+		"boostCharge": 60,
+		"boostMaxCharge": 60,
 		"maxSideThrustDuration": 0.20,
-		"boostRegenTime": 30.0,
-		"boostPower": 12.0,
+		"boostRegenTime": 3.0,
+		"boostPower": 1.5,
 		"shiftDuration": 2.0,
 		"shiftCooldown": 1.0,
 		"shieldStats": {"maxShield": 30, "shieldRegenTime": 1.0, "shieldBreakTime": 4.0, "shieldFastCharge": 0.6, "shieldRadius": 30},
@@ -98,13 +99,76 @@ func setBaseStats():
 			self[stat] = stats[stat]
 		
 	coreRange = 60
+		
+func process_movement(delta: float):
+	var thrust_vector:Vector2 = Vector2.ZERO
+	
+	var back_weight: float = 0.5   # Counter-thrust is 30% power
+	var side_weight: float = 0.5   # Side-thrust is 60% power
+	var forward_weight: float = 1.0 # Forward is 100% power
+	
+	var drag_co:float = 1.5 # Higher = more "viscous" / snappy stops
+	var boost_drag_co: float = 1.5 # Lower drag during boost = more sliding!
+	var cur_max = enginePower / 2.0 # Baseline max speed
+	
+	# 1. Get raw input (-1 to 1)
+	# W/S mapped to Y (negative is up/forward), A/D mapped to X
+	var input_vec = get_input(delta)
+	handleAngularRotation(input_vec, delta)
+
+	# 2. Identify Local Directions
+	var facing_dir = Vector2.RIGHT.rotated(rotation) # The "Forward" of your sprite
+	var side_dir = facing_dir.rotated(PI/2)          # The "Right" of your sprite
+
+	# 3. Calculate Thrust Force
+	var thrust_force = Vector2.ZERO
+
+	# W Key (Forward) - The "Aft Thruster"
+	if input_vec.x > 0: 
+		thrust_force += facing_dir * (enginePower * forward_weight)
+	# S Key (Backward) - Retro Thrusters
+	elif input_vec.x < 0:
+		thrust_force -= facing_dir * (enginePower * back_weight)
+
+	# A/D Keys (Strafing)
+	if input_vec.y != 0:
+		thrust_force += side_dir * (input_vec.y * enginePower * side_weight)
+
+	# 4. Boost Logic (Modifies the Aft Thruster)
+	var cur_drag = drag_co
+
+	if aft_boosting:
+		# Boost only applies if we are actually pushing Forward (W)
+		if input_vec.x > 0:
+			thrust_force *= boostPower
+			cur_drag = boost_drag_co
+			cur_max *= boostPower
+			boostCharge = max(0, boostCharge - 60.0 * delta)
+			
+	# 5. Linear Drag & Physics
+	# This is where the drift happens! Old velocity fights new thrust.
+	var drag_vector = velocity * cur_drag
+	var net_accel = thrust_force - drag_vector
+	
+
+	velocity += net_accel * delta
+	# 6. Safety Clamp
+	if velocity.length() > cur_max:
+		velocity = velocity.limit_length(cur_max)
+		
+	if input_vec.x == 1:
+		gravity_vec = Vector2.ZERO
+	else:
+		gravity_vec = Globals.BASEGRAVITY * 2.25
+		
+	mainUI.updateBoostChargeBar()
 
 func doInit():
 	visible = false
 	updateStats()
 	
-	if not is_connected("hasWarpedOut", Globals.GAMESCREEN, "doAdvanceLevel"):
-		connect("hasWarpedOut", Globals.GAMESCREEN, "doAdvanceLevel")
+	if not is_connected("hasWarpedOut", Globals.GAMESCREEN, "end_current_level"):
+		connect("hasWarpedOut", Globals.GAMESCREEN, "end_current_level")
 		
 	$Label.set_as_toplevel(true)
 
@@ -325,7 +389,6 @@ func get_input(_delta):
 		if can_warp_out():
 #			print("can_warp_out")
 			warpOutStepOne()
-			Globals.handler_mission.do_end_mission()
 			
 	if Input.is_action_just_pressed("alt_use_item"):
 		if aItem >= 0: getActiveItem().doUse()
@@ -346,11 +409,10 @@ func get_input(_delta):
 		
 	var input = Vector2.ZERO
 	
-	if Input.is_action_pressed("hold_shift"):
+	if Input.is_action_pressed("stop_move"):
 		accel = Vector2.ZERO
 		velocity = Vector2.ZERO
 		extForces = Vector2.ZERO
-		
 		return Vector2.ZERO 
 	
 	if not isShifting:
@@ -373,12 +435,17 @@ func get_input(_delta):
 				disable_aft_boosting()
 		else:
 			disableThruster($ThrusterNodes/Aft)
-			
-			
+
+#		if not is_aft_boosting():
+#			if Input.is_action_just_pressed("0") and boostCharge > 0:
+#				enable_aft_boosting()
+#		elif Input.is_action_just_released("0"):
+#			disable_aft_boosting()
+		
 		if not is_aft_boosting():
-			if Input.is_action_just_pressed("0") and boostCharge > 0:
+			if boostCharge > 0 and Input.is_action_pressed("0") and Input.is_action_just_pressed("hold_shift"):
 				enable_aft_boosting()
-		elif Input.is_action_just_released("0"):
+		elif Input.is_action_just_released("hold_shift"):
 			disable_aft_boosting()
 			
 		if not is_front_boosting():
@@ -547,15 +614,26 @@ func xxhandleAngularRotation(_delta):
 #
 #	var change = sign(omega) * _delta
 #	rotation += change
-func handleAngularRotation(_delta):
-	var forwardV = Vector2(cos(rotation), sin(rotation))	
+func handleAngularRotation(input_vec, delta):
+	# 1. Calculate the angle we WANT to face (toward the mouse)
+	var target_dir = global_position.direction_to(get_global_mouse_position())
+	var target_angle = target_dir.angle()
+
+	# 2. Smoothly rotate toward that angle
+	# 'agility' acts as your rotation speed. 
+	# Values between 5.0 and 15.0 usually match that arcade feel.
+	
+	if input_vec.x > 0:
+		rotation = lerp_angle(rotation, target_angle, agility/4 * delta)
+	else:
+		rotation = lerp_angle(rotation, target_angle, agility * delta)
+	
+func xxxhandleAngularRotation(_delta):
+	var forwardV = Vector2(cos(rotation), sin(rotation))
 	rotation = forwardV.move_toward((Globals.MOUSE - global_position), _delta * agility).angle()
 
-func process_movement(delta):
-	var acceleration: int = 1200
-#	var max_speed: int = 600.0
-	var friction: float = 0.998
-	var thrust:Vector2 = Vector2.ZERO
+func xprocess_movement(delta):
+	var thrust_vector:Vector2 = Vector2.ZERO
 	
 	var max_speed:int = enginePower/2
 	
@@ -565,41 +643,60 @@ func process_movement(delta):
 
 	var direction = get_input(delta)
 	
-	handleAngularRotation(delta)
+	var drag_co:float = 2.0 # Higher = more "viscous" / snappy stops
+	var boost_drag_co: float = 1.5 # Lower drag during boost = more sliding!
+	var cur_max = enginePower / 2.0 # Baseline max speed
+	
+	handleAngularRotation(direction, delta)
 
 	if direction != Vector2.ZERO:
 		var dot = direction.dot(Vector2.RIGHT)
 		var power_multiplier = forward_weight
-#		print(dot)
 		
 		if dot < 0: 
 			power_multiplier = lerp(side_weight, back_weight, abs(dot))
 		else:
 			power_multiplier = lerp(side_weight, forward_weight, dot)
-#		print(power_multiplier)
 
-		thrust = direction.rotated(rotation)
-		accel = thrust * (enginePower * power_multiplier)
-		velocity += accel * delta
+		thrust_vector = direction.rotated(rotation)
+		
+		if aft_boosting:
+			thrust_vector *= boostPower
+			boostCharge = max(0, boostCharge - 60.0 * delta)
+			max_speed *= boostPower/2
+#			boost_on += delta
+#			print(boost_on)
+			
+		accel = thrust_vector * (enginePower * power_multiplier)
+		#velocity += accel * delta
 	else:
 		accel = Vector2.ZERO
 		
 	if direction.x == 1:
 		gravity_vec = Vector2.ZERO
 	else:
-		gravity_vec = Globals.BASEGRAVITY
-#	print(gravity_vec)
+		gravity_vec = Globals.BASEGRAVITY * 3
 		
-	velocity *= friction
+	var cur_drag = drag_co
 	
-	if velocity.length() > max_speed:
-		velocity = velocity.normalized() * max_speed
+	if aft_boosting:
+		cur_drag = boost_drag_co
+		cur_max *= 1.8
+		
+	var drag_force = velocity * cur_drag
+	
+	var net_accel = accel - drag_force
+	
+	velocity += net_accel * delta
+	
+	
+	mainUI.updateBoostChargeBar()
 
-func xprocess_movement(_delta):
+func xxprocess_movement(_delta):
 		
 	var direction = get_input(_delta)
 #	print(direction)
-	handleAngularRotation(_delta)
+	handleAngularRotation(direction, _delta)
 	
 	if isShifting:
 		shiftDuration = max(0.0, shiftDuration - _delta)

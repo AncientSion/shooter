@@ -29,13 +29,6 @@ func doConnect():
 
 func on_hasFired():
 	doPowerDown()
-
-func onWarpInDone():
-	.onWarpInDone()
-#	yield(get_tree().create_timer(2.0), "timeout")
-#	doPowerDown()
-#	$Mounts/A.get_node("Weapon").active = false
-#	$TimerNodes/BehaveTimer.stop()
 	
 func doPowerDown():
 	maxSpeed = 0

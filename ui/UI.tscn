@@ -182,7 +182,7 @@ margin_bottom = 59.0
 margin_right = 53.0
 margin_bottom = 17.0
 size_flags_horizontal = 3
-text = "Reso"
+text = "Res"
 
 [node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Res"]
 margin_left = 57.0

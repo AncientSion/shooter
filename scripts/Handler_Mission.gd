@@ -1,6 +1,7 @@
 extends Node2D
 
 enum missions {CONTROL, SURVIVE, RAID_CONVOY_LIGHT, RAID_CONVOY_HEAVY, RAID_FLAK, PROTECT_CITY, PROTECT_CARGOHAULER, SALVAGE_CARGOHAULER, BOSS_A, BLANK}
+var mission_node:Map_Node = null
 var mission
 var timerPct = 100
 var main 
@@ -47,15 +48,15 @@ var missions_new_x = [
 
 func _physics_process(delta):
 
-	if mission == null or not is_instance_valid(self):
-		return
+#	if mission == null or not is_instance_valid(self):
+#		return
 		
 	if missionState == 1:
-		mission.mission_class.do_process(delta)
+		mission_node.mission_class.do_process(delta)
 	return
 	
-	if mission == null or not is_instance_valid(self):
-		return
+#	if mission == null or not is_instance_valid(self):
+#		return
 	if missionState != 1 or isMissionCompleted():
 		return
 	
@@ -75,6 +76,10 @@ func do_bare_setup():
 func do_enable():
 	print("do_enable ", name)
 	set_physics_process(true)
+	
+func do_disable():
+	print("do_disable ", name)
+	set_physics_process(false)	
 	
 func connect_mission_ui_in_game():
 	missionUI = Globals.curScene.get_node("UI/Place/TopCenter/Mission_PC")
@@ -672,11 +677,11 @@ func warpMissionTargets():
 
 func do_end_mission():
 	print("do_end_mission")
-	if mission != null:
-		Globals.remove_poi_marker(mission)
-		if "targets" in mission:
-			for n in mission.targets:
-				Globals.remove_poi_marker(n)
-		mission.queue_free()
-		mission = null
+	if mission_node != null:
+		Globals.remove_poi_marker(mission_node)
+#		if "targets" in mission:
+#			for n in mission.targets:
+#				Globals.remove_poi_marker(n)
+		mission_node.do_complete()
+		mission_node = null
 	missionState = -1

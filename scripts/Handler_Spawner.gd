@@ -73,7 +73,8 @@ func do_enable():
 func do_disable():
 	enabled = false
 	set_physics_process(false)
-	diffi_add_timer.stop()
+	if is_instance_valid(diffi_add_timer) == true:
+		diffi_add_timer.stop()
 	
 func getSpawnOutsideView(enemy):
 	var cam = Globals.curScene.get_node("CamA")

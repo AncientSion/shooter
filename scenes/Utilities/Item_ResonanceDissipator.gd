@@ -14,5 +14,3 @@ func doTrigger():
 	missile.lifetime = 0.01
 	missile.disableTriggerCollisionNodes()
 	Globals.curScene.get_node("Projectiles").add_child(missile)
-#	yield(get_tree(), "physics_frame")
-#	missile.explode()
