@@ -20,14 +20,21 @@ var maxTime:float = 0.0
 var amount:int = 0
 var remaining:int = 0
 
+var handler_m:Node = null
+var handler_s:Node = null
+
 func _ready():
 	pass
 	
 func _physics_process(delta):
 	pass
 	
-func do_init(time):
+func do_init(thandime):
 	pass
+	
+func do_init_mission(handler_mi, handler_sp):
+	handler_m = handler_mi
+	handler_s = handler_sp
 	
 func do_process(_delta):
 	pass

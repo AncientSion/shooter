@@ -10,6 +10,8 @@ onready var text_tween = $Text_Tween
 onready var pause = $Pause_details
 onready var fps = $Place/TopleftRighter/Difficulty/Vbox/Fps/b
 
+var counter:int = 0
+
 func _ready():
 	print("ui rdy")
 	$ItemsPassive/VB.queue_free()
@@ -17,6 +19,7 @@ func _ready():
 	$Place/Topright/AI_PC.connect("gui_input", self, "_on_AI_PC_input_event")
 	text_tween.connect("tween_all_completed", self, "empty_main_text")
 	
+	connect_difficulty_ui()
 	add_child(Globals.POI.instance())
 	add_player_debug_panel()
 	addKeyForItem()
@@ -45,23 +48,52 @@ func reset_ui_ai_debug_list():
 		
 func init_pause_menu():
 	$Pause_details.do_init()
+
+func connect_difficulty_ui():
+#signal diffi_updated
+#signal wave_updated
+#
+#		player.connect("update_player_health", get_node("UI"), "_on_update_player_health")
+#		player.connect("update_player_materials", get_node("UI"), "_on_update_player_materials")
+	empty_main_text()
+	Globals.handler_spawner.connect("wave_updated", self, "_on_wave_updated")
+	Globals.handler_spawner.connect("diffi_updated", self, "_on_diffi_updated")
+	
+#	$Center/Difficulty_Text/Label
+#	$Place/TopleftRighter/Difficulty/Vbox/Diff/b
+#	$Place/TopleftRighter/Difficulty/Vbox/Wave/b
+
+func _on_wave_updated(cur, max_str):
+	$Place/TopleftRighter/Difficulty/Vbox/Wave/b.text = str(cur," / ",max_str)
+	
+func _on_diffi_updated(diffi):
+	$Place/TopleftRighter/Difficulty/Vbox/Diff/b.text = str(diffi)
+	set_main_text("Threat up")
+	
 	
 func set_main_text(text):
 	if text == "":
 		empty_main_text()
 		return
 	
+	counter +=1
+	
+#	print("set_main_text #", counter)
+	$Center/Difficulty_Text.show()
+	$Center/Difficulty_Text/Label.text = text
 	text_tween.interpolate_property($Center/Difficulty_Text, "modulate:a",
 			0, 1, 1,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	
 	text_tween.interpolate_property($Center/Difficulty_Text, "rect_scale",
-			Vector2(1, 1), Vector2(4, 4), 2,
+			Vector2(1, 1), Vector2(4, 4), 1.25,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	text_tween.start()
 	
 func empty_main_text():
+#	return
 	main_text.text = ""
+	$Center/Difficulty_Text.hide()
 	$Center/Difficulty_Text.modulate.a = 0.0
 	$Center/Difficulty_Text.rect_scale = Vector2(1, 1)
 	
@@ -155,7 +187,8 @@ func _unhandled_input(event):
 			Globals.toggle_pause_and_menu()
 			
 func addKeyForItem():
-	InputMap.add_action("selectItem")
+	if not InputMap.has_action("selectItem"):
+		InputMap.add_action("selectItem")
 	
 	var event = InputEventKey.new()
 	event.scancode = 49
@@ -212,9 +245,3 @@ func _on_B_value_changed(value):
 	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
 		if n is AnimatedSprite:
 			n.self_modulate.b = val
-
-func set_wave_info():
-	$Place/TopleftRighter/Difficulty/Vbox/Diff/b.text = str(Globals.handler_spawner.enemy_str_cur, " / ", Globals.handler_spawner.enemy_str_max)
-	
-func set_diffi_info(cur):
-	$Place/TopleftRighter/Difficulty/Vbox/Wave/b.text = str(cur)

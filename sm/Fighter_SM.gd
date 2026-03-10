@@ -19,19 +19,19 @@ func _state_logic(delta):
 			if parent.global_position.distance_to(parent.moveTarget) <= 100:
 				parent.setNewWanderTarget()
 		states.close:
+			parent.process_movement(delta)
 			parent.moveTarget = parent.curTarget.global_position
 			var d = parent.global_position.distance_to(parent.curTarget.global_position)
 #			parent.moveTarget = parent.curTarget.getFuturePosition(d/parent.velocity.length())
-			parent.process_movement(delta)
 #			print(rad2deg(parent.global_position.angle_to(parent.curTarget.global_position)))
-			if d <= 350:
+			if d <= 300:
 				set_state(states.disengage)
 			elif d >= parent.sightRange * 2:
 				parent.remove_cur_target_set_new_target()
 		states.disengage:
 			parent.process_movement(delta)
-			var d = parent.global_position.distance_to(parent.moveTarget)
-			if d <= 200:
+			var d = parent.global_position.distance_to(parent.curTarget.global_position)
+			if d >= 600: 
 				set_state(states.close)
 		states.withdraw:
 			parent.process_movement(delta)

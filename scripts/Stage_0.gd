@@ -25,7 +25,7 @@ func setupLevel():
 	set_boundary_red()
 	create_background()
 	set_cam_limit()
-	load_ui()
+	#load_ui()
 	set_various_settings()
 	readyPlayer()
 	positionCamera()
@@ -36,7 +36,6 @@ func setupLevel():
 	handleLevelStartZooming()
 	
 func set_various_settings():
-	Globals.increase_difficulty(10)
 	Globals.BASEGRAVITY = Vector2(0, 300)
 	
 func set_stage_dimensions():
@@ -578,12 +577,13 @@ func setPlayerUIConnections():
 func load_ui():
 	if has_node("UI"):
 		$UI.resetMissionUI()
-		return
-	
-	var ui = preload("res://ui/UI.tscn").instance()
-	add_child(ui)
-	Globals.UI = $UI
-	$UI.init_pause_menu()
+		$UI.init_pause_menu()
+#		return
+#
+#	var ui = preload("res://ui/UI.tscn").instance()
+#	add_child(ui)
+#	Globals.UI = $UI
+#	$UI.init_pause_menu()
 
 func placeClouds(amount):
 	$BG/Para_Front/Clouds_Back.modulate.a = 0.7

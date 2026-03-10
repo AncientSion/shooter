@@ -138,36 +138,36 @@ margin_top = 8.0
 margin_right = 120.0
 margin_bottom = 109.0
 
-[node name="Diff" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+[node name="Wave" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
 margin_right = 110.0
 margin_bottom = 17.0
 
-[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
-margin_right = 54.0
+[node name="A" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
+margin_right = 53.0
 margin_bottom = 17.0
 size_flags_horizontal = 3
-text = "strength"
+text = "wave"
 
-[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
-margin_left = 58.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
+margin_left = 57.0
 margin_right = 110.0
 margin_bottom = 17.0
 size_flags_horizontal = 3
 align = 1
 
-[node name="Wave" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
+[node name="Diff" type="HBoxContainer" parent="Place/TopleftRighter/Difficulty/Vbox"]
 margin_top = 21.0
 margin_right = 110.0
 margin_bottom = 38.0
 
-[node name="A" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
-margin_right = 57.0
+[node name="a" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
+margin_right = 53.0
 margin_bottom = 17.0
 size_flags_horizontal = 3
-text = "difficulty"
+text = "diffi"
 
-[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Wave"]
-margin_left = 61.0
+[node name="b" type="Label" parent="Place/TopleftRighter/Difficulty/Vbox/Diff"]
+margin_left = 57.0
 margin_right = 110.0
 margin_bottom = 17.0
 size_flags_horizontal = 3

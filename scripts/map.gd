@@ -14,14 +14,19 @@ const map_node = preload("res://scenes/Map_Node.tscn")
 var selected_node = null
 var all_shown:bool = false
 var map_data:Dictionary
-	
+onready var player_node = $MC/PC/VBox/HBox/Player
+var tween:Tween
+
 func _ready():
 	$MC/PC/VBox/HBox/Menu/VBox/Min/Val.text = str($MC/PC/VBox/HBox/Menu/VBox/Min/Min_Slider.value)
 	$MC/PC/VBox/HBox/Menu/VBox/Max/Val.text = str($MC/PC/VBox/HBox/Menu/VBox/Max/Max_Slider.value)
 	$MC/PC/VBox/HBox/Menu/VBox/Branch/Val.text = str($MC/PC/VBox/HBox/Menu/VBox/Branch/Branch_Slider.value)
 	$MC/PC/VBox/HBox/Menu/VBox/Cross_prob/Val.text = str($MC/PC/VBox/HBox/Menu/VBox/Cross_prob/Cross_Slider.value)
 	
+	$MC/PC/VBox/HBox/Player.hide()
+	$MC/PC/VBox/HBox/Line2D.hide()
 	$MC/PC/VBox/HBox/Location_Node.hide()
+	
 	$MC/PC/VBox/HBox/Location_Node/MC/VBox/PC.hide()
 	
 	$MC/PC/VBox/HBox/MAP/CC.hide()
@@ -148,7 +153,8 @@ func _add_cross_path_connections(nodes: Dictionary) -> void:
 				# Random chance to connect (only from current -> target)
 				if randf() < cross_path_probability:
 					if not current_node.connections.has(target_node.id):
-						current_node.connections.append(target_node.id)
+#						current_node.connections.append(target_node.id)
+						current_node.connections[target_node.id] = null
 #						print("Added cross-path connection: ", current_node.id, " -> ", target_node.id)
 
 func _connect_path_nodes(nodes: Dictionary) -> void:
@@ -177,20 +183,23 @@ func _connect_path_nodes(nodes: Dictionary) -> void:
 			
 			# Ensure we're only connecting to the immediate next node
 			if next_node.node_index == current_node.node_index + 1:
-				current_node.connections.append(next_node.id)
+#				current_node.connections.append(next_node.id)
+				current_node.connections[next_node.id] = null
 	
 	# Connect start node to first nodes of each path (level 0 nodes)
 	var start_node = nodes["start"]
 	for path_idx in path_nodes:
 		var first_node_in_path = path_nodes[path_idx].front()
 		if first_node_in_path.node_index == 0:  # Only connect to level 0 nodes
-			start_node.connections.append(first_node_in_path.id)
+#			start_node.connections.append(first_node_in_path.id)
+			start_node.connections[first_node_in_path.id] = null
 	
 	# Connect last nodes of each path to end node
 	var end_node = nodes["end"]
 	for path_idx in path_nodes:
 		var last_node_in_path = path_nodes[path_idx].back()
-		last_node_in_path.connections.append(end_node.id)
+#		last_node_in_path.connections.append(end_node.id)
+		last_node_in_path.connections[end_node.id] = null
 	
 	# Add cross-path connections (only one node forward)
 	_add_cross_path_connections(nodes)
@@ -299,8 +308,12 @@ func _on_Button_pressed():
 		"cross_prob": cross_prob
 	}
 	
-	for n in $MC/PC/VBox/HBox/MAP/P.get_children():
-		n.queue_free()
+	
+	if $MC/PC/VBox/HBox/MAP/P.has_node("Player"):
+		reset_player_sprite()
+		for n in $MC/PC/VBox/HBox/MAP/P.get_children():
+			n.queue_free()
+			
 	map_data = generate_3path_dag(map_params)
 	
 	create_lanes()
@@ -308,12 +321,25 @@ func _on_Button_pressed():
 	link_node_panels()
 	fill_node_panel()
 	draw_map()
-	init_map()
+	reset_player_sprite()
+	set_player_position_on_map("start")
 
-func init_map():
-	map_data.nodes["start"].can_be_selected = true
-	return
-	map_data.nodes["start"].do_select_map_node()
+func reset_player_sprite():
+	if $MC/PC/VBox/HBox.has_node("Player"):
+		$MC/PC/VBox/HBox.remove_child(player_node)
+		$MC/PC/VBox/HBox/MAP/P.add_child(player_node)
+	else:
+		$MC/PC/VBox/HBox/MAP/P.remove_child(player_node)
+		$MC/PC/VBox/HBox.add_child(player_node)
+
+func set_player_position_on_map(map_node:String):
+	map_data.nodes[map_node].make_selectable()
+	map_data.nodes[map_node].is_player_position = true
+	player_node.show()
+	player_node.rect_position = map_data.nodes[map_node].position + Vector2(-0, -50) 
+	
+#	print(map_data.nodes[map_node].position)
+#	print(player_node.rect_position)
 
 func link_node_panels():
 	for entry in map_data.nodes:
@@ -331,7 +357,7 @@ func create_lanes():
 		
 		for connect in node.connections:
 			var line = $MC/PC/VBox/HBox/Line2D.duplicate()
-			node.connections_lanes.append(line)
+			node.connections[connect] = line
 			line.position = Vector2.ZERO
 			
 			var shorten:float = 0.13
@@ -363,13 +389,13 @@ func draw_map():
 	for entry in map_data.nodes:
 		var node = map_data.nodes[entry]
 		node.show()
-#		var sprite_node_tree = node.ui_node
 #		sprite_node_tree.show()
 		node.rect_position = node.position
 #		sprite_node_tree.rect_position = node.position
 		
-		for lanes in node.connections_lanes:
-			lanes.show()
+		for lane in node.connections:
+			node.connections[lane].show()
+#			lane.show()
 			
 func fill_mission_overview_details():
 	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/mission_desc/A.text = selected_node.mission_class.title
@@ -380,7 +406,6 @@ func fill_mission_overview_details():
 	
 func show_selected_node_mission_details():
 	var path = selected_node.path_index
-#	print(selected_node.script_map_node_ref.connections)
 #	if path == 1:
 #		$MC/PC/VBox/HBox/MAP/CC.size_flags_vertical = 0
 #	elif path == 2:
@@ -392,27 +417,104 @@ func show_selected_node_mission_details():
 func hide_selected_node_mission_details():
 #	$MC/PC/VBox/HBox/MAP/Mission_Details_Confirm_Panel.size_flags_vertical = 4
 	$MC/PC/VBox/Mission_Details_Confirm_Panel.hide()
+	
+func handle_player_map_node_transition():
+	print("handle_player_map_node_transition")
+	var old = null
+	var new = null
+	
+	for node in map_data.nodes:
+		if map_data.nodes[node].is_player_position:
+#			old = map_data.nodes[node]
+			old = node
+		if map_data.nodes[node].is_selected:
+#			new = map_data.nodes[node]
+			new = node
+		if old != null and new != null:
+			break
+			
+	if old == new: return
+	
+	map_data.nodes[old].is_player_position = false
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(player_node, "rect_position", map_data.nodes[new].position + Vector2(-0, -50), 1.0)
+#	tween.tween_callback(self, "onWarpInDone")
+	
+	map_data.nodes[new].is_player_position = true
+	
+	lock_not_chosen_nodes(old, new)
+	color_lanes_after_movement(old, new)
+	
+	return
+	for node in map_data.nodes:
+		if map_data.nodes[node].is_player_position:
+			print("player now in: ", node)
+			break
+
+func color_lanes_after_movement(from_node_id, to_node_id):
+	var node = map_data.nodes.get(from_node_id)
+	for lane in map_data.nodes[from_node_id].connections:
+		map_data.nodes[from_node_id].set_lane_color(map_data.nodes[from_node_id].connections[lane], Globals.WHITE)
+
+	if node.connections.has(to_node_id):
+		map_data.nodes[from_node_id].set_lane_color(map_data.nodes[from_node_id].connections[to_node_id], Globals.GREEN)
+			
+func lock_not_chosen_nodes(node, new_node):
+	#print("lock_not_chosen_nodes")
+	for target_node in map_data.nodes[node].connections:
+		if not map_data.nodes[target_node].is_completed and not map_data.nodes[target_node].is_selected:
+			map_data.nodes[target_node].set_as_behind()
+	
+	var player_pos = map_data.nodes[new_node].position.x
+	
+	for any_node in map_data.nodes:
+		if map_data.nodes[any_node].position.x <= player_pos:
+			if not map_data.nodes[any_node].is_completed and not map_data.nodes[any_node].is_selected:
+				map_data.nodes[any_node].set_as_behind()
 
 func _on_Accept_pressed():
+	print("_on_Accept_pressed")
+	
+#	lock_not_chosen_nodes()
+	handle_player_map_node_transition()
+	
+	selected_node.is_selected = false
+	selected_node.can_be_selected = false
+	selected_node.is_player_position = true
+	
+	for node in map_data.nodes:
+		map_data.nodes[node].reset_animation_state()
+
+	var timer := Timer.new()
+	add_child(timer)
+	timer.wait_time = 1.0
+	timer.one_shot = true
+	timer.start()
+	
+	timer.connect("timeout", self, "_on_timer_timeout")
+
+func _on_timer_timeout():
 	Globals.GAMESCREEN.start_new_mission()
 	
 func _on_Cancel_pressed():
-	print("cancel mission")
+	print("_on_Cancel_pressed")
 	if selected_node:
 		var node = selected_node
 		node.do_unselect_map_node()
 		node._on_Node_Sprite_mouse_exited()
 		
 func do_progress():
+	print("do_progress")
 	for node in map_data.nodes:
 		if map_data.nodes[node].is_player_position and map_data.nodes[node].is_completed:
-			for target in map_data.nodes[node].connections:
+			for target_node in map_data.nodes[node].connections:
 				for index in map_data.nodes:
-					if index == target:
-						map_data.nodes[index].can_be_selected = true
+					if index == target_node:
+						print("making ", index, " can_be_selected")
+						map_data.nodes[index].make_selectable()
 						break
 						
-#			print(map_data.nodes[node].connections) #connections_lanes
 	
 	
 

@@ -85,22 +85,6 @@ func getCrashSpeed():
 	
 func getCrashAngle():
 	return round(rand_range(8, 12))
-
-func doInitx():
-	return
-	
-#	yield(get_tree().create_timer(1), "timeout")
-	
-	var amount = 3
-	for n in amount:
-		var drone = Globals.handler_spawner.doInstanceEnemy("drone")
-		Globals.curScene.get_node("Enemy_Units").add_child(drone)
-		drone.setHostile()
-		drone.setArmament()
-		drone.global_position = global_position + Vector2(200, 0).rotated(Globals.rng.randi_range(0, 359))
-		drone.setEscortTarget(self)
-		drone.doInit()
-#		blob.setOrbitTarget(self)
 	
 func doTurnaround():
 	pass

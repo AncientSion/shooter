@@ -743,7 +743,7 @@ func endRamming(area):
 	for n in rammings:
 		if n.rammingArea == area:
 			rammings.erase(n)
-			print("erasing ", n.rammedByDisplay, " #", n.rammedById, " on frame ", Engine.get_idle_frames())
+			print("endRamming-erasing ", n.rammedByDisplay, " #", n.rammedById, " on frame ", Engine.get_idle_frames())
 			break
 	if not len(rammings):
 #		print("isRamming = false")

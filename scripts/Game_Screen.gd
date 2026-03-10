@@ -15,6 +15,7 @@ func start_new_game():
 	init_handlers()
 	Globals.MAP_SCENE = load("res://scenes/Map.tscn").instance()
 	$Menu_BG.add_child(Globals.MAP_SCENE)
+	Globals.UI = load("res://ui/UI.tscn").instance()
 	
 #	$BG.remove_child($BG/Main_Menu)
 	
@@ -45,11 +46,12 @@ func start_new_mission():
 	if mission_node:
 		print("__________")
 		print("do start mission")
-		mission_node.is_player_position = true
+#		mission_node.is_player_position = true
 		
 		Globals.curScene = load("res://scenes/Stage_0.tscn").instance()
 		Globals.curScene.name = "Level"
 		Globals.curScene.get_node("Objective_Scene").add_child(mission_node.mission_class)
+		Globals.curScene.add_child(Globals.UI)
 		
 		Globals.GAMESCREEN.add_child(Globals.curScene)
 		Globals.GAMESCREEN.get_node("Menu_BG").hide()
@@ -57,6 +59,9 @@ func start_new_mission():
 		Globals.handler_mission.connect_mission_ui_in_game()
 		Globals.handler_mission.mission_node = mission_node
 		Globals.handler_mission.do_enable()
+		
+		Globals.handler_spawner.increase_difficulty(15)
+		
 		Globals.handler_spawner.connect_debug_diffi_ui_in_game()
 		Globals.handler_spawner.do_enable()
 		
@@ -68,8 +73,6 @@ func start_new_mission():
 #			missionUI.get_node("VBox/mission_state_label/label").hide()
 #		Globals.MAP_SCENE.hide()
 #		Globals.MAIN_MENU.hide()
-
-
 
 func end_current_level():
 	
@@ -88,9 +91,6 @@ func end_current_level():
 	Globals.handler_spawner.do_disable()
 	Globals.handler_mission.do_disable()
 	
-#	yield(get_tree().create_timer(0.1), "timeout")
-#	print("c")
-#	call_deferred("actually_change")
 	call_deferred("return_to_map")
 	
 #	print("d")
@@ -113,7 +113,7 @@ func return_to_map():
 	Globals.MAP_SCENE.do_progress()
 	
 
-func actually_change():
+func actually_change(): #dead
 	Globals.PLAYER.on_exit_level()
 	Globals.curScene.get_node("Player_Pos").remove_child(Globals.PLAYER)
 	Globals.UI.get_node("Pause_details/MC/VBC/PC/HBC2/GFX_settings").disconnectResolutionChange()
@@ -144,7 +144,7 @@ func actually_change():
 #	print("set current scene")
 #	get_tree().set_current_scene(Globals.curScene)
 
-func actuallyChange():
+func actuallyChange(): #dead
 		
 	Globals.PLAYER.on_exit_level()
 	Globals.curScene.get_node("Player_Pos").remove_child(Globals.PLAYER)

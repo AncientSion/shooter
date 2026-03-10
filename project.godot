@@ -164,6 +164,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Ground_Vehicle.gd"
 }, {
+"base": "Node2D",
+"class": "Handler_Mission",
+"language": "GDScript",
+"path": "res://scripts/Handler_Mission.gd"
+}, {
+"base": "Node2D",
+"class": "Handler_Spawn",
+"language": "GDScript",
+"path": "res://scripts/Handler_Spawner.gd"
+}, {
 "base": "SM",
 "class": "Heli_SM",
 "language": "GDScript",
@@ -546,6 +556,8 @@ _global_script_class_icons={
 "Frigate_SM": "",
 "Ground_Entity": "",
 "Ground_Vehicle": "",
+"Handler_Mission": "",
+"Handler_Spawn": "",
 "Heli_SM": "",
 "Helicopter_Heavy": "",
 "Helicopter_Light": "",

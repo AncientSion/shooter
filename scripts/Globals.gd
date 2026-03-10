@@ -4,6 +4,25 @@ extends Node
 # var a = 2
 # var b = "textvar"
 
+const WHITE:Color = Color(1, 1, 1, 1)
+const RED:Color = Color(1, 0, 0, 1)
+const GREEN:Color = Color(0, 1, 0, 1)
+const BLUE:Color = Color(0, 0, 1, 1)
+const GRAY:Color = Color(0.5, 0.5, 0.5, 1)
+
+const LIGHTGREEN:Color = Color(0.73, 0.91, 0, 1.0)
+const YELLOW:Color = Color(1.0, 0.63, 0.0, 1.0)
+const ORANGE:Color = Color(0.91, 0.17, 0.0, 1.0)
+const MAGENTA:Color = Color(0.7, 0, 1.0, 1.0)
+
+#var LIME = Color(0.04, 0.88, 0.53, 1.0)
+#var MAGENTA = Color(0.7, 0, 1.0, 1.0)
+#var ORANGE = Color(0.91, 0.17, 0.0, 1.0)
+#var YELLOW = Color(1.0, 0.63, 0.0, 1.0)
+#var WHITE = Color(1.0, 1.0, 1.0, 1.0)
+#var LIGHTGREEN = Color(0.73, 0.91, 0, 1.0)
+#var GREEN = Color(0.17, 1.0, 0.0, 1.0)
+
 const AIMDEBUG:bool = false
 const SIGHTDEBUG:bool = false
 
@@ -93,13 +112,6 @@ var UI = null
 var ENVI = null
 var PAUSE = null
 
-var LIME = Color(0.04, 0.88, 0.53, 1.0)
-var MAGENTA = Color(0.7, 0, 1.0, 1.0)
-var ORANGE = Color(0.91, 0.17, 0.0, 1.0)
-var YELLOW = Color(1.0, 0.63, 0.0, 1.0)
-var WHITE = Color(1.0, 1.0, 1.0, 1.0)
-var LIGHTGREEN = Color(0.73, 0.91, 0, 1.0)
-var GREEN = Color(0.17, 1.0, 0.0, 1.0)
 
 var reso_options = [Vector2(2560, 1440), Vector2(1920, 1080), Vector2(1600, 900), Vector2(1366, 768)]
 var zoom_options =  [1.33, 1.0, 0.66, 2.0]
@@ -615,12 +627,3 @@ func getRawDamage(minDmg, maxDmg, multi):
 #	UI.pause._on_Resolution_item_selected(UI.pause.res.selected)
 #	UI.pause._on_Zoom_item_selected(UI.pause.zoom.selected)
 #	curScene._on_resolutionChange()
-	
-func increase_difficulty(value:int):
-	DIFFICULTY += value
-	handler_spawner.enemy_str_max += value
-	UI.set_diffi_info(DIFFICULTY)
-	UI.set_main_text("Diff up")
-	
-	print("adding difficulty: ", value, ", now: ", DIFFICULTY)
-	

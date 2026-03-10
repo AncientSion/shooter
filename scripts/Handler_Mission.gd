@@ -1,4 +1,5 @@
 extends Node2D
+class_name Handler_Mission
 
 enum missions {CONTROL, SURVIVE, RAID_CONVOY_LIGHT, RAID_CONVOY_HEAVY, RAID_FLAK, PROTECT_CITY, PROTECT_CARGOHAULER, SALVAGE_CARGOHAULER, BOSS_A, BLANK}
 var mission_node:Map_Node = null
@@ -103,6 +104,7 @@ func get_random_mission():
 	index = 0
 	var mission = missions_new[index].instance()
 #	print(mission.get_class())
+	mission.do_init_mission(Globals.handler_mission, Globals.handler_spawner)
 	mission.set_base_props()
 #	var dict = missions_new[index]
 #	var mission = Mission.new(dict)

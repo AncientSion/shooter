@@ -1,4 +1,5 @@
 extends Node2D
+class_name Handler_Spawn
 
 # Load enemy scenes on game startup
 const TRUCK_LIGHT = preload("res://scenes/Units/Unit_Truck_Light.tscn")
@@ -34,9 +35,12 @@ var timeSinceLastReinforceCheck:float = 0.0
 
 var enabled = false
 
+signal wave_updated
+signal diffi_updated
+var diffi_add_timer:Timer
+
 #var diffiUI
 #var waveUI
-var diffi_add_timer
 
 func _init():
 	pass
@@ -63,7 +67,7 @@ func do_enable():
 	print("do_enable ", name)
 	enabled = true
 	set_physics_process(true)
-	diffi_add_timer.wait_time = 10.0
+	diffi_add_timer.wait_time = 5.0
 	diffi_add_timer.start()
 	
 	use_mission_spawn_data()
@@ -188,9 +192,8 @@ func spawn_all_from_pool():
 			enemy_str_cur += unit.wave_strength
 			spawn_and_init_unit(unit)
 	
-#	enemy_str_max = Globals.DIFFICULTY
-	Globals.UI.set_wave_info()
-	Globals.UI.set_diffi_info(Globals.DIFFICULTY)
+	emit_signal("diffi_updated", Globals.DIFFICULTY)
+	emit_signal("wave_updated", enemy_str_cur, enemy_str_max)
 	print("post reinforce: ", enemy_str_cur, "/", enemy_str_max)
 
 func doInstanceEnemy(name):
@@ -249,7 +252,8 @@ func spawnSpecial():
 func _on_enemy_from_wave_destroyed(enemy):
 	print("_on_enemy_from_wave_destroyed: ", enemy.display)
 	enemy_str_cur -= enemy.wave_strength
-	Globals.UI.set_wave_info()
+#	Globals.UI.set_wave_info()
+	emit_signal("wave_updated", enemy_str_cur, enemy_str_max)
 
 #	for n in mission_unit_data:
 #		if enemy.display.to_upper() == n.display:
@@ -260,5 +264,17 @@ func _on_enemy_from_wave_destroyed(enemy):
 #	print("enemy strength: ", enemy_str_cur, "/", enemy_str_max)
 
 func _on_diffi_add_timer_timeout():
-	Globals.increase_difficulty(1)
+	increase_difficulty(1)
 	diffi_add_timer.start()
+	
+func increase_difficulty(value:int):
+	Globals.DIFFICULTY += value
+	enemy_str_max += value
+	emit_signal("diffi_updated", Globals.DIFFICULTY)
+	emit_signal("wave_updated", enemy_str_cur, enemy_str_max)
+#	UI.set_diffi_info(DIFFICULTY)
+#	UI.set_main_text("Diff up")
+	
+#	print("adding difficulty: ", value, ", now: ", Globals.DIFFICULTY)
+	
+
