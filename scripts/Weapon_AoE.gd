@@ -27,7 +27,7 @@ func doFire(_target):
 	for n in projNumber:
 		var proj = getAttackObject(curTarget)
 		proj.get_node("Sprites").hide()
-		Globals.curScene.get_node("Projectiles").add_child(proj)
+		Globals.PROJCONT.add_child(proj)
 		var devi = Vector2(Globals.rng.randi_range(-deviation, deviation), Globals.rng.randi_range(-deviation, deviation))
 		var tPos = curTarget.global_position + devi
 		

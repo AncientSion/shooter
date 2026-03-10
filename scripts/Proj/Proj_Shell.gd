@@ -75,7 +75,7 @@ func on_lifetime_timeout():
 		var proj = getAttackObject()
 		proj.rotation_degrees = angle * (number+1) + rot_rng
 		proj.position = position + Vector2(round(aoe)-5, 0).rotated(proj.rotation)
-		Globals.curScene.get_node("Projectiles").add_child(proj)
+		Globals.PROJCONT.add_child(proj)
 	queue_free()
 
 func get_class():

@@ -17,7 +17,7 @@ func _physics_process(_delta):
 func is_in_range(pos):
 	return false
 	
-func weaponHasValidTarget():
+func wpn_has_valid_target():
 	return false
 	
 func get_shield_end_scale():

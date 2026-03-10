@@ -281,8 +281,8 @@ func handle_weapons(_delta): # context: unit with several weapon mounts
 		var weapon = n.get_node("Weapon")
 		if not is_instance_valid(weapon) or weapon.destroyed or not weapon.active:
 			continue
-		if not weapon.weaponHasValidTarget(): # does it NOT have a target ?
-			weapon.setWeaponTarget(targetsArr) # if so, assign a valid target to this weapon
+		if not weapon.wpn_has_valid_target(): # does it NOT have a target ?
+			weapon.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
 		if weapon.curTarget == null: # if it still has no target, next
 			continue
 		weapon.do_track_target() # it has a target, rotate the weapon towards it

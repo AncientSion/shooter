@@ -30,6 +30,6 @@ func doTrigger():
 	missile.position = global_position
 	missile.lifetime = 0.01
 	missile.disableTriggerCollisionNodes()
-	Globals.curScene.get_node("Projectiles").add_child(missile)
+	Globals.PROJCONT.add_child(missile)
 	
 	Globals.add_shockwave_at(global_position)

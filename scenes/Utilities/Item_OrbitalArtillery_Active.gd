@@ -51,7 +51,7 @@ func effector():
 			deviY = 500
 		else:
 			targetPos = target.getFuturePosition(result[0].lifetime)
-		Globals.curScene.get_node("Projectiles").add_child(shell)
+		Globals.PROJCONT.add_child(shell)
 		var devi = Vector2(Globals.rng.randi_range(-deviX, deviX), Globals.rng.randi_range(-deviY, deviY))
 		
 		shell.global_position = targetPos + devi

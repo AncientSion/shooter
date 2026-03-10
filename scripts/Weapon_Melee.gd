@@ -59,7 +59,7 @@ func doFire(_target):
 		setProjRotation(projNumber, i, projs[i])
 		setProjPosition(projNumber, i, projs[i])
 #
-		Globals.curScene.get_node("Projectiles").add_child(projs[i])
+		Globals.PROJCONT.add_child(projs[i])
 		
 	if burst == 1 or (burst > 1 and bursting == 0):
 		setPostFireCooldown()

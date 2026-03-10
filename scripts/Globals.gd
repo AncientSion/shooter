@@ -91,6 +91,8 @@ var MAIN_MENU:Node = null
 var INTERMISSION = load("res://scenes/Intermission.tscn")
 var STAGEZERO = load("res://scenes/Stage_0.tscn")
 
+var PROJCONT:Node
+
 var handler_spawner
 var handler_mission
 var handler_map
@@ -595,7 +597,7 @@ func getRecoilForce(minDmg, maxDmg, speed):
 func add_shockwave_at(pos):
 	var shader = Globals.shock_shader.instance()
 	shader.position = pos
-	Globals.curScene.get_node("Projectiles").add_child(shader)
+	Globals.PROJCONT.add_child(shader)
 
 func add_poi_marker(target):
 	curScene.get_node("UI/POI").add_indicator(target, PLAYER)

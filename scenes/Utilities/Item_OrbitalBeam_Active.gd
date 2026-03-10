@@ -56,7 +56,7 @@ func effector():
 	
 	var proj = Globals.BEAM.instance()
 	proj.constructProj(result[0])
-	Globals.curScene.get_node("Projectiles").add_child(proj)
+	Globals.PROJCONT.add_child(proj)
 	proj.isStatic = true
 	proj.isPiercing = true
 	proj.sweeptime = proj.lifetime

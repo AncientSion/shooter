@@ -32,6 +32,7 @@ func setupLevel():
 	$UI.showAIUI()
 	$UI/Pause_details/MC/VBC/PC/HBC2/GFX_settings.connectResolutionChange()
 #	Globals.init_resolution()
+	Globals.PROJCONT = get_node("Projectiles")
 	
 	handleLevelStartZooming()
 	

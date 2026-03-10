@@ -13,7 +13,7 @@ func effector():
 		var proj = Globals.BOMB.instance()
 		proj.constructProj(n)
 		
-		Globals.curScene.get_node("Projectiles").add_child(proj)
+		Globals.PROJCONT.add_child(proj)
 		
 		proj.rotation_degrees = global_rotation_degrees + 0 + Globals.rng.randi_range(-devi, devi)
 		proj.global_position = global_position

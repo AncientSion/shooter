@@ -55,4 +55,4 @@ func doTrigger():
 			missile.position = global_position
 			missile.rotation_degrees = Globals.rng.randi_range(0, 359)
 			missile.accel = Vector2(500, 0).rotated(missile.rotation)
-			Globals.curScene.get_node("Projectiles").add_child(missile)
+			Globals.PROJCONT.add_child(missile)

@@ -39,7 +39,7 @@ func mission_final_setup_self():
 
 func do_init(time):
 	type = "Control Area"
-	Globals.handler_mission.missiontext.text = "Control Area"
+	handler_m.missiontext.text = "Control Area"
 	Globals.add_poi_marker(self)
 	flicker()
 	time = 3.0
@@ -74,15 +74,15 @@ func do_process(_delta):
 	timeRemain = max(0, timeRemain)
 	timerPct = timeRemain / maxTime * 100 / 100
 	
-	Globals.handler_mission.timerLabel.text = "%.2f" % timeRemain
-	Globals.handler_mission.bar.value = (1-timerPct)*100
+	handler_m.timerLabel.text = "%.2f" % timeRemain
+	handler_m.bar.value = (1-timerPct)*100
 	
 	if timeRemain <= 0.0:
 		do_complete_mission()
 
 func flicker():
 #	return
-	if Globals.handler_mission.missionState != 2:
+	if handler_m.missionState != 2:
 		var tree = get_tree()
 		var tween = get_tree().create_tween()
 		tween.tween_property($Area, "color:a", 0.3, 1.0)
@@ -94,10 +94,10 @@ func flicker():
 #		tween.tween_callback(self, "flicker")
 	
 func do_complete_mission():
-	Globals.handler_mission.missionState = 2
-	Globals.handler_mission.missionUI.get_node("VBox/Time").hide()
-	Globals.handler_mission.missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
-	Globals.handler_mission.missionUI.get_node("VBox/mission_state_label/label").show()
+	handler_m.missionState = 2
+	handler_m.missionUI.get_node("VBox/Time").hide()
+	handler_m.missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
+	handler_m.missionUI.get_node("VBox/mission_state_label/label").show()
 	$Area.hide()
 	Globals.remove_poi_marker(self)
 	

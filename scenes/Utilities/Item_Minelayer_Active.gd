@@ -25,7 +25,7 @@ func effector():
 		var proj = Globals.MINE.instance()
 		proj.constructProj(n)
 		
-		Globals.curScene.get_node("Projectiles").add_child(proj)
+		Globals.PROJCONT.add_child(proj)
 		
 		proj.global_position = global_position
 		proj.get_node("Origin").global_position = global_position

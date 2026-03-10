@@ -19,6 +19,8 @@ var turnrate:float
 var minFireDist:int = 0
 var isFiring = false
 
+var max_range:int = 0
+
 var canRotate = true
 
 var baseProps:Dictionary
@@ -105,6 +107,7 @@ func constructWpn(props):
 	baseProps = props
 	cooldown = props.rof
 	burstCooldown = props.burstDelay
+	max_range = speed * lifetime
 	setRecoilForce()
 	
 func setRecoilForce():
@@ -200,7 +203,7 @@ func doFire(_target):
 		setProjRotation(projNumber, i, projs[i])
 		setProjPosition(projNumber, i, projs[i])
 		
-		Globals.curScene.get_node("Projectiles").add_child(projs[i])
+		Globals.PROJCONT.add_child(projs[i])
 		
 	if burst == 1 or (burst > 1 and bursting == 0):
 		setPostFireCooldown()
@@ -217,7 +220,7 @@ func setProjRotation(all, current, proj):
 	var rota
 	
 	if linearDevi:
-		rota = - deviation + ((deviation*2) / (all+-1) * current)
+		rota = - deviation + ((deviation*2) / (all + -1) * current)
 	else:
 		rota = rand_range(-deviation, deviation)
 	
@@ -278,10 +281,14 @@ func getRail():
 func is_in_range(pos):
 	if speed == 0:
 		return true
-	return global_position.distance_to(pos) < (speed * lifetime * 1.1)
+#	return global_position.distance_to(pos) < (max_range * 1.1)
+	var dist = speed * lifetime * 1.1
+	var range_sq = dist * dist
 
-func weaponHasValidTarget():
-#	print("weaponHasValidTarget on ", display, " #", id)
+	return global_position.distance_squared_to(pos) < range_sq
+
+func wpn_has_valid_target():
+#	print("wpn_has_valid_target on ", display, " #", id)
 	if not is_instance_valid(curTarget) or curTarget.destroyed == true or curTarget.ready == false: return false
 	if forcedLock and curTarget != null:
 		return !curTarget.destroyed
@@ -291,9 +298,31 @@ func weaponHasValidTarget():
 	if not isInArc(global_position.direction_to(curTarget.global_position)): 
 		return false
 	return true
+	
+func set_wpn_target(allTargets):
+	var bestPrio:int = 10
+	var bestTarget = null
+	var targets = Array()
+	for n in allTargets:
+		if not n.target.isLegalTarget():
+			continue
+		if not is_in_range(n.target.global_position):
+			continue
+		var vec = global_position.direction_to(n.target.global_position)
+		if not isInArc(vec):
+			continue
+			
+		if n.prio < bestPrio:
+			bestPrio = n.prio
+			bestTarget = n.target
+	
+	if bestTarget != null:
+		curTarget = bestTarget
+	else:
+		curTarget = null 
+	return
 
-func setWeaponTarget(allTargets):
-		
+func xset_wpn_target(allTargets):
 	var targets = Array()
 	for n in allTargets:
 		if n.target.isLegalTarget():
@@ -339,6 +368,25 @@ func do_track_target():
 		current_rot = candidate
 		rotation = current_rot.angle()
 #		print(Engine.get_idle_frames(), "_do_track_target: ", global_rotation_degrees)
+
+#func do_track_target(delta):
+#	if !canRotate:
+#		return
+#	if !is_instance_valid(curTarget):
+#		return
+#
+#	var target_angle = (curTarget.global_position - global_position).angle()
+#	var diff = wrapf(target_angle - rotation, -PI, PI)
+#
+#	var max_turn = turnrate * delta
+#	diff = clamp(diff, -max_turn, max_turn)
+#
+#	var candidate = rotation + diff
+#
+#	var base = anchor.angle()
+#	var min_angle = base - maximum_rotation
+#	var max_angle = base + maximum_rotation#
+#	rotation = clamp(candidate, min_angle, max_angle)
 
 func looking_at(trans, pos):
 	var x : Vector2 = (pos - trans.origin)
@@ -565,12 +613,12 @@ func getIconContainer():
 	
 func getMaxRange():
 	match type:
-		1: return speed * lifetime
-		2: return speed * lifetime
+		1: return max_range
+		2: return max_range
 		3: return speed
 		4: return self.beamLength
 		5: return 2000
-		6: return speed * lifetime
+		6: return max_range
 
 func doMuzzleEffect():
 	$Muzzle/AnimatedSprite.show()

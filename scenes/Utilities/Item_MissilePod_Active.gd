@@ -32,7 +32,7 @@ func effector():
 		var devi = Globals.rng.randi_range(-deviation, deviation)
 		proj.constructProj(n)
 		
-		Globals.curScene.get_node("Projectiles").add_child(proj)
+		Globals.PROJCONT.add_child(proj)
 		proj.rotation_degrees = global_rotation_degrees + Globals.rng.randi_range(-devi, devi)
 		proj.position = global_position + (Vector2(20, 0).rotated(global_rotation))
 		proj.displaceTimer = 0.0
