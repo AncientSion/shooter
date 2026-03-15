@@ -62,6 +62,55 @@ func xxprocess_movement(_delta):
 	
 	rotation = velocity.angle()
 	
+func drift_process_movement(delta):
+
+	# --- Tuning Parameters ---
+	var agility = 20.0
+	var turn_speed = 3.5
+	var side_drag = 4.0
+
+	# --- 1. Reset AI Intent ---
+	accel = Vector2.ZERO
+	set_interest()
+	set_danger()
+	choose_direction()
+	
+
+	# --- 2. Determine Desired Facing Direction ---
+	var desired_world_dir = chosen_dir.rotated(rotation).normalized()
+	var desired_angle = desired_world_dir.angle()
+
+	# Rotate toward desired direction instead of snapping
+	rotation = lerp_angle(rotation, desired_angle, turn_speed * delta)
+
+	# --- 3. Apply Engine Thrust In Nose Direction ---
+	var forward = Vector2.RIGHT.rotated(rotation)
+	accel = forward * enginePower
+
+	velocity += accel * delta
+
+	# --- 4. Energy Maneuverability Model ---
+	var travel_dir = velocity.normalized()
+	var target_dir = forward.normalized()
+
+	var dot = travel_dir.dot(target_dir)
+
+	var turn_efficiency = lerp(0.8, 1.0, (dot + 1.0) / 2.0)
+	var speed_modifier = turn_efficiency * (agility / 20.0)
+
+	# --- 5. Apply Lateral Drag (Kills Sideways Sliding Slowly) ---
+	var forward_velocity = velocity.project(forward)
+	var lateral_velocity = velocity - forward_velocity
+
+	velocity -= lateral_velocity * side_drag * delta
+
+	# --- 6. Clamp Speed Instead of Normalizing ---
+	var max_allowed_speed = maxSpeed * clamp(speed_modifier, 0.7, 1.2)
+	velocity = velocity.clamped(max_allowed_speed)
+		
+		
+		
+		
 func process_movement(_delta):
 	# 1. Reset and calculate AI intention
 	var agility = 20.0
@@ -190,6 +239,7 @@ func enableBoosting():
 	return false
 		
 func setUnitFacing():
+	return
 	if velocity.x < 0 and sprite.flip_v == false:
 		sprite.flip_v = true
 		mirrorTurrets()
