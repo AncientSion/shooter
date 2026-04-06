@@ -36,11 +36,11 @@ func _ready():
 		$ColNodes/AoeArea.add_child(aoe_shape)
 
 	if faction == 0:
-		setFriendly()
+		set_friendly()
 	elif faction == 1:
-		setHostile()
+		set_hostile()
 	elif faction == 2:
-		setNeutral()
+		set_neutral()
 
 	gravity_vec = Globals.BASEGRAVITY * 1.5
 	set_physics_process(true)
@@ -106,7 +106,7 @@ func explode():
 func canExplodeOnContact():
 	return canExplode
 	
-func setFriendly():
+func set_friendly():
 	faction = 0
 	$ColNodes/DmgNormal.set_collision_layer_bit(2, true)
 	$ColNodes/DmgNormal.set_collision_mask_bit(1, true)
@@ -115,9 +115,9 @@ func setFriendly():
 		get_node("ColNodes/AoeArea").set_collision_layer_bit(2, true)
 		get_node("ColNodes/AoeArea").set_collision_mask_bit(1, true)
 	
-func setHostile():
+func set_hostile():
 	faction = 1
-	#print("setHostile")
+	#print("set_hostile")
 	$ColNodes/DmgNormal.set_collision_layer_bit(3, true)
 	$ColNodes/DmgNormal.set_collision_mask_bit(0, true)
 	
@@ -127,7 +127,7 @@ func setHostile():
 #	if has_node("ColNodes/Seek"):
 #		get_node("ColNodes/Seek").set_collision_mask_bit(4, true)
 	
-func setNeutral():
+func set_neutral():
 	faction = 2
 #	$ColNodes/DmgNormal.set_collision_layer_bit(0, true)
 #	$ColNodes/DmgNormal.set_collision_layer_bit(1, true)

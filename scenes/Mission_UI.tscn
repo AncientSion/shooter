@@ -17,7 +17,7 @@ size_flags_vertical = 3
 margin_left = 10.0
 margin_top = 8.0
 margin_right = 240.0
-margin_bottom = 102.0
+margin_bottom = 146.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -70,7 +70,7 @@ margin_bottom = 19.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 1 )
-text = "success"
+text = "mission_state"
 align = 1
 valign = 1
 
@@ -85,32 +85,30 @@ theme_type_variation = "progress_mission"
 step = 1.0
 value = 50.0
 
-[node name="HBox" type="HBoxContainer" parent="VBox"]
-visible = false
-margin_top = 75.0
-margin_right = 220.0
-margin_bottom = 75.0
+[node name="Targets_HP" type="HBoxContainer" parent="VBox"]
+margin_top = 98.0
+margin_right = 230.0
+margin_bottom = 138.0
 custom_constants/separation = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBox/HBox"]
-visible = false
-margin_right = 220.0
-margin_bottom = 44.0
+[node name="Template" type="VBoxContainer" parent="VBox/Targets_HP"]
+margin_right = 230.0
+margin_bottom = 40.0
 size_flags_horizontal = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="VBox/HBox/VBoxContainer"]
-margin_right = 220.0
+[node name="PanelContainer" type="PanelContainer" parent="VBox/Targets_HP/Template"]
+margin_right = 230.0
 margin_bottom = 17.0
 size_flags_horizontal = 3
 theme_type_variation = "panel_noBorder"
 
-[node name="Label" type="Label" parent="VBox/HBox/VBoxContainer/PanelContainer"]
-margin_right = 220.0
+[node name="Label" type="Label" parent="VBox/Targets_HP/Template/PanelContainer"]
+margin_right = 230.0
 margin_bottom = 17.0
 text = "xxxx"
 align = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="VBox/HBox/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="VBox/Targets_HP/Template"]
 margin_top = 21.0
-margin_right = 220.0
-margin_bottom = 44.0
+margin_right = 230.0
+margin_bottom = 40.0

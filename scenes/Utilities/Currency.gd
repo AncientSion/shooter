@@ -1,5 +1,5 @@
 extends Base_Entity
-class_name Reward
+class_name Currency
 
 var moveTarget = Vector2.ZERO
 var velocity = Vector2.ZERO

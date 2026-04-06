@@ -1,6 +1,9 @@
 extends Air_Unit
 class_name Fighter
 
+var crash_velocity:Vector2
+var crash_rotation_speed:float
+
 var display = "Fighter"
 	
 func doInit():
@@ -37,7 +40,7 @@ func _physics_process(_delta):
 #	print("# ", self.id, ", rota: ", rotation_degrees)
 	pass
 	
-func setDirection(_dirVector = false):
+func set_direction(_dirVector = false):
 	pass
 
 func xxprocess_movement(_delta):
@@ -106,10 +109,7 @@ func drift_process_movement(delta):
 
 	# --- 6. Clamp Speed Instead of Normalizing ---
 	var max_allowed_speed = maxSpeed * clamp(speed_modifier, 0.7, 1.2)
-	velocity = velocity.clamped(max_allowed_speed)
-		
-		
-		
+	velocity = velocity.clamped(max_allowed_speed)		
 		
 func process_movement(_delta):
 	# 1. Reset and calculate AI intention
@@ -146,6 +146,15 @@ func process_movement(_delta):
 	# The jet nose always follows the velocity vector
 	if velocity.length() > 0.1:
 		rotation = velocity.angle()
+		
+func process_crash_movement(delta):
+	var gravity = Vector2(0, 200)
+	
+	crash_velocity += gravity * delta
+	crash_velocity *= 0.995   # air drag
+
+	global_position += crash_velocity * delta
+	rotation += crash_rotation_speed * delta
 
 func shortest_angle_dist(from: float, to: float) -> float:
 	var twoPi = TAU
@@ -162,7 +171,7 @@ func bound_process(_delta):
 		print("bound_process #", self.id, ", on screen")
 	else:
 		print("bound_process #", self.id, ", NOT on screen")
-		setInactive()
+		set_inactive()
 		$Debug.show()
 		showDebug()
 #		hideSelf()
@@ -239,7 +248,6 @@ func enableBoosting():
 	return false
 		
 func setUnitFacing():
-	return
 	if velocity.x < 0 and sprite.flip_v == false:
 		sprite.flip_v = true
 		mirrorTurrets()
@@ -315,13 +323,18 @@ func getPossibleWeapons(index):
 	
 func initAvoidValues():
 	avoidValues = {"Player": 1.0, "Fighter": 1.0, "Helicopter_Light": 1.0, "Boundary": 5.0, "Obstacle": 5.0, "Cargohauler": 3.5, "City": 3.5}
-		
+
+func crashCondition(remDmg):
+	if $SM.state != $SM.states.crash:
+		return true
+	return false
+	
 func setupCrashing():
 	.setupCrashing()
 	disableWeapons()
 	
 	if rotation_degrees > 55 and rotation_degrees < 125:
-		moveTarget = global_position + (Vector2.RIGHT.rotated(rotation + rand_range(-0.3, 0.3)) * Globals.rng.randi_range(600, 900))
+		moveTarget = global_position + (Vector2.RIGHT.rotated(rotation +  Globals.rng.randf_range(-0.3, 0.3)) * Globals.rng.randi_range(600, 900))
 	elif velocity.x > 0:
 		moveTarget = Vector2(global_position.x + (Globals.HEIGHT-global_position.y)*2, Globals.HEIGHT)
 	elif velocity.x < 0:
@@ -330,10 +343,15 @@ func setupCrashing():
 #	maxSpeed *= 1.3
 	enginePower *= 0.3
 	
+#	crash_velocity = velocity
+#	velocity = Vector2.ZERO
+#	crash_rotation_speed = Globals.rng.randf_range(-0.5, 0.5)
+	
 	var timer = Timer.new()
 	$TimerNodes.add_child(timer)
 	timer.name = "CrashExploTimer"
-	var time:float = float(Globals.rng.randi_range(700, 1000))/100
+#	var time:float = float(Globals.rng.randi_range(700, 1000))/100
+	var time:float = Globals.rng.randf_range(7.0, 10.0)
 	timer.wait_time = time
 	timer.one_shot = true # don't loop, run once
 	timer.autostart = true # start timer when added to a scene
@@ -369,7 +387,7 @@ func setMixUpWanderTarget():
 	checkMoveTargetWithinBoundary()
 
 func setNewWanderTarget():
-	if rand_range(0, 1) < 0.08:
+	if  Globals.rng.randf_range(0, 1) < 0.08:
 		return setMixUpWanderTarget()
 		
 	var pos = global_position
@@ -421,7 +439,7 @@ func get_dmg_gfx_scale():
 	
 func withdraw_condition(remDmg):
 	if $SM.state != $SM.states.withdraw:
-		var rand = rand_range(0, 1)
+		var rand =  Globals.rng.randf_range(0, 1)
 		if (health < float(maxHealth * stats.flee_tresh) and rand < remDmg / float(health)):
 			print("flee_tresh: ", stats.flee_tresh)
 			print("hit for: ", remDmg, ", health remaining: ", health ,"/", maxHealth)

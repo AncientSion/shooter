@@ -25,7 +25,6 @@ func setupLevel():
 	set_boundary_red()
 	create_background()
 	set_cam_limit()
-	#load_ui()
 	set_various_settings()
 	readyPlayer()
 	positionCamera()
@@ -431,7 +430,7 @@ func draw_boundary():
 	for n in $Various/Boundary/DmgNormal.get_children():
 		draw_line(n.shape.a, n.shape.b, Color(1, 0, 0, 1), 10.0, false)
 	
-func addUnit(nodePath, unit):
+func add_unit_to_scene(nodePath, unit):
 	get_node(nodePath).add_child(unit)
 	
 func createMainRect(baseColor:Color):
@@ -563,9 +562,9 @@ func readyPlayer():
 	player.position = Vector2(Globals.WIDTH/2, Globals.HEIGHT-400)
 #	player.position = Vector2(Globals.WIDTH - 400, Globals.HEIGHT-400)
 #	player.hide()
-#	player.setInactive()
+#	player.set_inactive()
 	player.doInit()
-	player.setupDelayedWarpIn(1.0)
+	player.setup_delayed_warp_in(1.0)
 	
 func positionCamera():
 	$CamA.position = player.position
@@ -575,10 +574,11 @@ func setPlayerUIConnections():
 		player.connect("update_player_health", get_node("UI"), "_on_update_player_health")
 		player.connect("update_player_materials", get_node("UI"), "_on_update_player_materials")
 	
-func load_ui():
-	if has_node("UI"):
-		$UI.resetMissionUI()
-		$UI.init_pause_menu()
+#func load_ui():
+#	return
+#	if has_node("UI"):
+#		$UI.resetMissionUI()
+#		$UI.init_pause_menu()
 #		return
 #
 #	var ui = preload("res://ui/UI.tscn").instance()
@@ -712,7 +712,7 @@ func placeMountains(amount, scaleMulti, layer):
 func placeObstacles():
 	var rock = Globals.ROCK.instance()
 	Globals.curScene.get_node("Neutral_Units").add_child(rock)
-	rock.setNeutral()
+	rock.set_neutral()
 	rock.doInit()
 	rock.position = Vector2(1000, 800)
 	

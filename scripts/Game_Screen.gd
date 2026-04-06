@@ -13,19 +13,28 @@ func _ready():
 
 func start_new_game():
 	init_handlers()
-	Globals.MAP_SCENE = load("res://scenes/Map.tscn").instance()
-	$Menu_BG.add_child(Globals.MAP_SCENE)
-	Globals.UI = load("res://ui/UI.tscn").instance()
+	init_ui()
+	init_map_scene()
 	
-#	$BG.remove_child($BG/Main_Menu)
+func start_new_game_without_map():
+	init_handlers()
+	init_ui()
 	
-#	load_player_ui()
+	var node = Globals.MAP_NODE.instance()
+	node.do_init(
+		"test",
+		"test",
+		Vector2(0, 0),
+		-1,
+		0,
+#		Globals.handler_mission.get_mission_by_name("mission_protect_cargo_hauler")
+#		Globals.handler_mission.get_mission_by_name("mission_survive_time")
+		Globals.handler_mission.get_mission_by_name("mission_raid_convoy_light")
+	)
+	
+	start_new_mission(node)
 	
 func load_player_ui():
-#	if has_node("UI"):
-#		$UI.resetMissionUI()
-#		return
-	
 	Globals.UI = load("res://ui/UI.tscn").instance()
 	$Menu_BG.add_child(Globals.UI)
 
@@ -36,27 +45,33 @@ func init_handlers():
 #	Globals.handler_spawner.do_disable()
 #	Globals.handler_mission.set_obj()
 
-func start_new_mission():
-	var mission_node = Globals.MAP_SCENE.selected_node
+func init_ui():
+	print("init_ui")
+	Globals.UI = load("res://ui/UI.tscn").instance()
 	
+func init_map_scene():
+	print("init_map_scene")
+	Globals.MAP_SCENE = load("res://scenes/Map.tscn").instance()
+	$Menu_BG.add_child(Globals.MAP_SCENE)
+
+func start_new_mission(mission_node:Map_Node):
 	print("start_new_mission")
-	mission_node.mission_class.print_props()
-	Globals.handler_spawner.mission_unit_data = mission_node.mission_class.unit_data
 	
-	if mission_node:
+	if  mission_node:
+		mission_node.mission_class.logic.print_props()
+		Globals.handler_spawner.mission_unit_data =  mission_node.mission_class.logic.unit_data
 		print("__________")
 		print("do start mission")
-#		mission_node.is_player_position = true
 		
 		Globals.curScene = load("res://scenes/Stage_0.tscn").instance()
 		Globals.curScene.name = "Level"
-		Globals.curScene.get_node("Objective_Scene").add_child(mission_node.mission_class)
+		Globals.curScene.get_node("Objective_Scene").add_child( mission_node.mission_class)
 		Globals.curScene.add_child(Globals.UI)
 		
 		Globals.GAMESCREEN.add_child(Globals.curScene)
 		Globals.GAMESCREEN.get_node("Menu_BG").hide()
 		
-		Globals.handler_mission.connect_mission_ui_in_game()
+		#Globals.handler_mission.connect_mission_ui_in_game()
 		Globals.handler_mission.mission_node = mission_node
 		Globals.handler_mission.do_enable()
 		
@@ -65,27 +80,23 @@ func start_new_mission():
 		Globals.handler_spawner.connect_debug_diffi_ui_in_game()
 		Globals.handler_spawner.do_enable()
 		
-		mission_node.mission_class.mission_final_setup_self()
+		mission_node.mission_class.logic.mission_final_setup_self()
 		
-		Globals.handler_mission.missionStart()
-#			missionState = 1
-#			missionUI.get_node("VBox/mission_state_label/label").text = "ongoing"
-#			missionUI.get_node("VBox/mission_state_label/label").hide()
-#		Globals.MAP_SCENE.hide()
-#		Globals.MAIN_MENU.hide()
+#		Globals.handler_mission.do_start_mission()
 
-func end_current_level():
+func on_warp_out_end_level():
+	print("on_warp_out_end_level")
 	
 #	for n in Globals.curScene.get_node("Enemy_Units").get_children():
 ##		if n.isTarget:
-##			n.unmarkAsTarget()
+##			n.unmark_as_target()
 #		n.queue_free()
 #
 #	for n in Globals.curScene.get_node("Neutral_Units").get_children():
 ##		if n.isTarget:
-##			n.unmarkAsTarget()
+##			n.unmark_as_target()
 #		n.queue_free()
-	Globals.handler_mission.do_end_mission()
+	Globals.handler_mission.terminate_remains_on_mission_scene_end()
 	Globals.PLAYER.on_exit_level()
 	Globals.PLAYER.unload_gear()
 	Globals.handler_spawner.do_disable()
@@ -96,6 +107,7 @@ func end_current_level():
 #	print("d")
 
 func return_to_map():
+	print("return to map")
 	Globals.curScene.get_node("Player_Pos").remove_child(Globals.PLAYER)
 	Globals.UI.get_node("Pause_details/MC/VBC/PC/HBC2/GFX_settings").disconnectResolutionChange()
 	

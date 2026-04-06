@@ -17,7 +17,7 @@ const AA_TOWER = preload("res://scenes/Units/Unit_AA_Tower.tscn")
 const MOBILE_AA_LIGHT = preload("res://scenes/Units/Unit_Mobile_AA_Light.tscn")
 const MOBILE_AA_HEAVY = preload("res://scenes/Units/Unit_Mobile_AA_Heavy.tscn")
 const CITY = preload("res://scenes/Units/Unit_City.tscn")
-const CARGOHAULER = preload("res://scenes/Units/Unit_Cargo_Hauler.tscn")
+const CARGO_HAULER = preload("res://scenes/Units/Unit_Cargo_Hauler.tscn")
 const BOSS = preload("res://scenes/Units/Unit_Boss.tscn")
 const DRONE_SHIELD = preload("res://scenes/Units/Unit_DroneShield.tscn")
 const DRONE_SHOTGUN = preload("res://scenes/Units/Unit_Drone_Shotgun.tscn")
@@ -174,7 +174,7 @@ func check_for_reinforce():
 	if enemy_str_cur < enemy_str_max * 0.7:
 		var reinforceStrength:int = floor(enemy_str_max/5)
 		print("enemies under 0.7 of max", enemy_str_cur, "/", enemy_str_max)
-		print("w: ", reinforceStrength)
+		print("add: ", reinforceStrength)
 		Globals.UI.set_main_text(str("Reinforce by ", reinforceStrength))
 		
 		pick_units_into_pool(reinforceStrength)
@@ -203,17 +203,17 @@ func spawn_and_init_unit(enemy):
 #	return
 #	enemy.queue_free()
 #	return
-	Globals.curScene.addUnit("Enemy_Units", enemy)
+	Globals.curScene.add_unit_to_scene("Enemy_Units", enemy)
 	enemy.position = getSpawnOutsideView(enemy)
 #	print("deploying enemy: ", enemy.display, " at ", pos)
 #	enemy.position = Vector2(player.position.x + 100, player.position.y - 700 + Globals.curScene.get_node("Enemy_Units").get_children().size() * 125)
 #	enemy.position = player.position + Vector2(0, - 300)
 #	enemy.rotation = PI/3
 #	enemy.kill()
-	enemy.setHostile()
-	enemy.setArmament()
+	enemy.set_hostile()
+	enemy.set_armaments()
 #	print(enemy.get_node("Mounts").get_child(0).get_child(0).get_node("Sprites/Main").scale)
-	enemy.setDirection()
+	enemy.set_direction()
 	enemy.doInit()
 #	enemy.setActive()
 #	enemy.speed = 0
@@ -226,16 +226,16 @@ func spawnSpecial():
 #	timer.queue_free()
 			
 	var enemy = DRONE_KAMIKAZE.instance()
-	Globals.curScene.addUnit("Enemy_Units", enemy)
+	Globals.curScene.add_unit_to_scene("Enemy_Units", enemy)
 	var pos = getSpawnOutsideView(enemy)
 	enemy.position = pos
 #	enemy.kill()
-	enemy.setHostile()
-	enemy.setArmament()
-	enemy.setDirection()
+	enemy.set_hostile()
+	enemy.set_armaments()
+	enemy.set_direction()
 	enemy.doInit()
 	enemy.visible = false
-	enemy.setInactive()
+	enemy.set_inactive()
 	
 	enemy.connect("isDestroyed", self, "_on_enemy_from_wave_destroyed", [enemy])
 	

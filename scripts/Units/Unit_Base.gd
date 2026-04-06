@@ -384,8 +384,8 @@ func setActive():
 		
 	$SM.do_init()
 		
-func setInactive():
-#	print("set setInactive: ", self.display)
+func set_inactive():
+#	print("set set_inactive: ", self.display)
 	ready = false
 	set_physics_process(false)
 	disableItems()
@@ -429,10 +429,10 @@ func hideSelf():
 		mount.get_node("ControlNodes").hide()
 		mount.get_node("Weapon/ControlNodes").hide()
 		
-func setupDelayedWarpIn(time):
-	print("setupDelayedWarpIn for ", self.display, ": ", time, " seconds.")
+func setup_delayed_warp_in(time):
+	print("setup_delayed_warp_in for ", self.display, ": ", time, " seconds.")
 	hideSelf()
-	setInactive()
+	set_inactive()
 	var timer = Timer.new()
 	timer.name = "WarpInTimer"
 	$TimerNodes.add_child(timer)
@@ -491,11 +491,11 @@ func warpInStepTwo():
 	tween.tween_property($Mounts, "scale", Vector2(1, 1), durOut/2)
 	tween.tween_property($Mounts, "modulate:a", 1.0, durOut)
 	tween.set_parallel(false)
-	tween.tween_callback(self, "onWarpInDone")
+	tween.tween_callback(self, "on_warp_in_done")
 	
-func onWarpInDone():
-#	print(self.display, ": onWarpInDone")
-	emit_signal("hasWarpedIn")
+func on_warp_in_done():
+	print(self.display, ": on_warp_in_done")
+	emit_signal("_has_warped_in")
 	isWarping = false
 	$Jump.scale = Vector2(1, 1)
 	$Jump.visible = false
@@ -558,16 +558,15 @@ func warpOutStepThree():
 	var tween = get_tree().create_tween()
 	
 	tween.tween_property($Jump, "scale", Vector2(0, 0), durIn)
-	tween.tween_callback(self, "onWarpOutDone")
+	tween.tween_callback(self, "warp_out_done")
 	
-func onWarpOutDone():
-	print(self.display, ": onWarpOutDone")
-	emit_signal("hasWarpedOut")
+func warp_out_done():
+	print(self.display, ": warp_out_done")
 	isWarping = false
 #	return
-	setInactive()
+	set_inactive()
 	unload_gear()
-	hideAllControlNodes()
+	hide_all_controlnodes()
 	hideDebug()
 	velocity = Vector2.ZERO
 	extForces = Vector2.ZERO
@@ -577,12 +576,17 @@ func onWarpOutDone():
 	$Mounts.scale = Vector2(1, 1)
 	
 	if isTarget:
-		unmarkAsTarget()
+		unmark_as_target()
 	elif isProtect:
-		unmarkAsProtect()
+		unmark_as_protect()
+		
+	if isPlayer:
+		Globals.MAP_SCENE.selected_node.mission_class.logic.set_mission_condition_fullfilled()
 	
 	if has_node("Debug") and get_node("Debug").visible:
 		get_node("Debug").hide()
+		
+	emit_signal("_has_warped_out")
 	
 func showAllControlNodes():
 	if not isPlayer:
@@ -593,7 +597,7 @@ func showAllControlNodes():
 			mount.get_node("ControlNodes").show()
 			mount.get_node("Weapon/ControlNodes").show()
 
-func hideAllControlNodes():
+func hide_all_controlnodes():
 	if not isPlayer:
 		if has_node("ControlNodes"):
 			has_ControlNodes = false
@@ -649,7 +653,7 @@ func setTargetx():
 	
 	print("setting target for ", self.display, " to ", curTarget.display)
 
-func setDirection(dirVector:Vector2 = Vector2.ZERO):
+func set_direction(dirVector:Vector2 = Vector2.ZERO):
 	if dirVector:
 		direction = dirVector
 	else:
@@ -700,11 +704,11 @@ func mirrorColNodes():
 		$ColNodes.rotation = -(2*rotation)
 	else: $ColNodes.rotation = 0
 
-func setArmament():
-#	print("setArmament")
+func set_armaments():
+#	print("set_armaments")
 	var index = 0
 	for mount in $Mounts.get_children():
-		mount.setFaction(faction)
+		mount.set_faction(faction)
 		mount.do_init()
 		var weapon = getPossibleWeapons(index)
 		index += 1
@@ -718,7 +722,7 @@ func addWeapon(weapon, mount):
 	if not weapon:
 		return
 	mount.add_child(weapon)
-	weapon.setFaction(faction)
+	weapon.set_faction(faction)
 	weapon.anchor = Vector2.RIGHT.rotated(deg2rad(mount.startAngle))
 	weapon.current_rot = weapon.anchor
 	weapon.rotation = weapon.current_rot.angle()
@@ -779,11 +783,11 @@ func checkAggro(shooterObj):
 		#print("aggroed")
 		curTarget = shooterObj
 
-func createResources():
+func create_currency():
 	var perInstance = 1
 	var total = self.lootValue / perInstance
 	for n in total:
-		var reward = Globals.REWARD.instance()
+		var reward = Globals.CURRENCY.instance()
 		Globals.curScene.get_node("Various").add_child(reward)
 		reward.position = global_position + Vector2(Globals.rng.randi_range(-texDim.x/2, texDim.x/2), Globals.rng.randi_range(-texDim.y/2, texDim.y/2))
 		reward.rotation_degrees = Globals.rng.randi_range(0, 359)
@@ -792,20 +796,20 @@ func createResources():
 		reward.curTarget = player
 	#queue_free()
 	
-func setFriendly():
-	.setFriendly()
+func set_friendly():
+	.set_friendly()
 	if is_in_group("hostile"):
 		remove_from_group("hostile")
 	add_to_group("friendly")
 	
-func setHostile():
-	.setHostile()
+func set_hostile():
+	.set_hostile()
 	if is_in_group("friendly"):
 		remove_from_group("friendly")
 	add_to_group("hostile")
 	
-func setNeutral():
-	.setNeutral()
+func set_neutral():
+	.set_neutral()
 	if is_in_group("hostile"):
 		remove_from_group("hostile")
 	if is_in_group("friendly"):
@@ -1055,7 +1059,7 @@ func hasNoTargetSet():
 		return true
 	return false
 
-func _on_target_hasWarpedOut(target):
+func _on_target__has_warped_out(target):
 	print(self.display, ": my target has warped out")
 	for n in targetsArr:
 		if n.target == target:
@@ -1065,7 +1069,7 @@ func _on_target_hasWarpedOut(target):
 	if rand_range(0, 1) > 5:
 		setupDelayedWarpOut(2.0)
 
-func initAsAttacker():
+func init_as_attacker():
 	$SM.set_state($SM.states.close)
 
 func get_item(string):
@@ -1073,7 +1077,7 @@ func get_item(string):
 		if n.display == string:
 			return n	
 	
-func updateStats():
+func update_stats():
 	return
 	
 func addItem(item):
@@ -1087,7 +1091,7 @@ func addItem(item):
 	item.doInit()
 	item.makeUntargetable()
 	item.makeInvisible()
-	updateStats()
+	update_stats()
 	
 	if isPlayer:
 		item.doInitUI()

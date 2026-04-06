@@ -1,5 +1,5 @@
 extends Node
-
+class_name Map
 # Configuration properties
 export var width:int = 1000.0
 export var height:int = 600.0
@@ -8,8 +8,6 @@ export var min_nodes_per_path:int = 2
 export var max_nodes_per_path:int = 4
 #export var vertical_spacing:int = 150.0  # Space between paths
 export var cross_path_probability := 0.15  # 15% chance for cross-path connections
-
-const map_node = preload("res://scenes/Map_Node.tscn")
 
 var selected_node = null
 var all_shown:bool = false
@@ -32,7 +30,8 @@ func _ready():
 	$MC/PC/VBox/HBox/MAP/CC.hide()
 		
 func get_start_mission_type_dict():
-	return Globals.handler_mission.get_start_mission()
+	return Globals.handler_mission.get_mission_by_name("mission_raid_convoy_light")
+	#return Globals.handler_mission.get_start_mission()
 	
 func get_end_mission_type_dict():
 	return Globals.handler_mission.get_end_mission()
@@ -56,15 +55,16 @@ func generate_3path_dag(map_params) -> Dictionary:
 	var nodes := {}
 	var node_id := 0
 
-	nodes["start"] = map_node.instance()
-	nodes["start"].name = str("Node_", str(node_id))
+	nodes["start"] = Globals.MAP_NODE.instance()
 	nodes["start"].do_init(
+		 str("Node_", str(node_id)),
 		"start",
 		Vector2(width * margin_x, height / 2),
 		-1,  # Not part of any pathF
 		0,
 		get_start_mission_type_dict()
 	)
+	
 	
 	# Create pathways
 	var path_positions = _calculate_path_positions()
@@ -81,9 +81,9 @@ func generate_3path_dag(map_params) -> Dictionary:
 			var x_pos = width * 0.1 + (width * 0.8) * (node_idx + 1) / (nodes_in_path + 1)
 			var y_pos = path_positions[path_idx]
 			
-			nodes[id] = map_node.instance()
-			nodes[id].name = str("Node_", str(node_id))
+			nodes[id] = Globals.MAP_NODE.instance()
 			nodes[id].do_init(
+				str("Node_", str(node_id)),
 				id,
 				Vector2(x_pos, y_pos),
 				path_idx,
@@ -92,9 +92,9 @@ func generate_3path_dag(map_params) -> Dictionary:
 			)
 	
 	# Create end node (centered)
-	nodes["end"] = map_node.instance()
-	nodes["end"].name = str("Node_", str(node_id+1))
+	nodes["end"] = Globals.MAP_NODE.instance()
 	nodes["end"].do_init(
+		str("Node_", str(node_id+1)),
 		"end",
 		Vector2(width * (1.0 - margin_x), height / 2),
 		-1,  # Not part of any path
@@ -316,6 +316,9 @@ func _on_Button_pressed():
 			
 	map_data = generate_3path_dag(map_params)
 	
+#	for n in map_data.nodes:
+#		n.map = self
+		
 	create_lanes()
 	create_locations()
 	link_node_panels()
@@ -344,9 +347,9 @@ func set_player_position_on_map(map_node:String):
 func link_node_panels():
 	for entry in map_data.nodes:
 		var node = map_data.nodes[entry]
-		node.get_node("MC/VBox/PC/VBox/Type/B").text = node.mission_class.title
-		node.get_node("MC/VBox/PC/VBox/Diffi/B").text = str(node.mission_class.difficulty)
-		node.get_node("MC/VBox/PC/VBox/Reward/B").text = str(node.mission_class.reward)
+		node.get_node("MC/VBox/PC/VBox/Type/B").text = node.mission_class.logic.title
+		node.get_node("MC/VBox/PC/VBox/Diffi/B").text = str(node.mission_class.logic.difficulty)
+		node.get_node("MC/VBox/PC/VBox/Reward/B").text = str(node.mission_class.logic.reward)
 
 func fill_node_panel():
 	pass
@@ -398,10 +401,10 @@ func draw_map():
 #			lane.show()
 			
 func fill_mission_overview_details():
-	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/mission_desc/A.text = selected_node.mission_class.title
-	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/mission_desc/B.text = selected_node.mission_class.desc
-	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/Diffi/B.text = str(selected_node.mission_class.difficulty)
-	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/Reward/B.text = str(selected_node.mission_class.reward)
+	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/mission_desc/A.text = selected_node.mission_class.logic.title
+	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/mission_desc/B.text = selected_node.mission_class.logic.desc
+	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/Diffi/B.text = str(selected_node.mission_class.logic.difficulty)
+	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/Reward/B.text = str(selected_node.mission_class.logic.reward)
 	$MC/PC/VBox/Mission_Details_Confirm_Panel/Mission_Details/VBox/Hints/B.text = ""
 	
 func show_selected_node_mission_details():
@@ -439,7 +442,7 @@ func handle_player_map_node_transition():
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(player_node, "rect_position", map_data.nodes[new].position + Vector2(-0, -50), 1.0)
-#	tween.tween_callback(self, "onWarpInDone")
+#	tween.tween_callback(self, "on_warp_in_done")
 	
 	map_data.nodes[new].is_player_position = true
 	
@@ -495,7 +498,7 @@ func _on_Accept_pressed():
 	timer.connect("timeout", self, "_on_timer_timeout")
 
 func _on_timer_timeout():
-	Globals.GAMESCREEN.start_new_mission()
+	Globals.GAMESCREEN.start_new_mission(selected_node)
 	
 func _on_Cancel_pressed():
 	print("_on_Cancel_pressed")

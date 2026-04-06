@@ -40,6 +40,7 @@ func _state_logic(delta):
 				set_state(states.close)
 		states.crash:
 			parent.process_movement(delta)
+#			parent.process_crash_movement(delta)
 	
 func _get_transition(delta):
 	pass

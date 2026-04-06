@@ -46,7 +46,7 @@ func doPowerUp():
 func _physics_process(_delta):
 	pass
 	
-func setDirection(_dirVector = false):
+func set_direction(_dirVector = false):
 	pass
 	
 func process_movement(_delta):

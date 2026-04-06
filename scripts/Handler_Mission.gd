@@ -14,9 +14,10 @@ var timeSinceLast:float = 0.0
 var missionState:int = 0 #0:inactve, 1:active, 2:success, 3:fail
 
 onready var mission_base = preload("res://scenes/Missions/Mission_Base.tscn")
-onready var mission_control_area = preload("res://scenes/Missions/Mission_Control_Area.tscn")
-onready var mission_survive_time = preload("res://scenes/Missions/Mission_Survive_Time.tscn")
-onready var mission_raid_convoy_light = preload("res://scenes/Missions/Mission_Raid.tscn")
+onready var mission_control_area = preload("res://scenes/Missions/Mission_Base.tscn")
+onready var mission_raid_cargo_hauler = preload("res://scripts/Missions/Mission_Base.gd")
+onready var mission_raid_convoy_light = preload("res://scripts/Missions/Mission_Base.gd")
+onready var mission_survive_time = preload("res://scripts/Missions/Mission_Base.gd")
 
 var missionUI
 var missiontext
@@ -26,46 +27,95 @@ var player
 var handler_spawn
 var missions_new:Array
 
+var mission_dict:Dictionary
+
+func mission_loader():
+	mission_dict = {
+		"mission_control_area":
+		{
+			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
+			"script_url": "res://scripts/Missions/Mission_Control_Area.gd",
+			"scene": null,
+			"switch_script": false,
+		},
+		"mission_survive_time":
+		{
+			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
+			"script_url": "res://scripts/Missions/Mission_Survive_Time.gd",
+			"scene": null,
+		},
+		"mission_raid_convoy_light":
+		{
+			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
+			"script_url": "res://scripts/Missions/Mission_Raid_Light_Convoy.gd",
+			"scene": null,
+		},
+		"mission_protect_cargo_hauler":
+			{
+			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
+			"script_url": "res://scripts/Missions/Mission_Protect_Cargo_Hauler.gd",
+			"scene": null,
+		},
+	}
+
+	for n in mission_dict:
+		mission_dict[n]["scene"] = load(mission_dict[n]["scene_url"])
+		
+#	print(mission_dict.keys())
+#	print(mission_dict.keys().size())
+
+func get_mission_by_name(mission_name:String = ""):
+	if mission_name != "":
+		return setup_mission(mission_dict[mission_name])
+	else:
+		print("fallback")
+		return get_random_mission()
+	
+func get_random_mission():
+	return get_mission_by_name("mission_survive_time")
+	var pick:String = mission_dict.keys().pick_random()
+	return setup_mission(mission_dict[pick])	
+
+func setup_mission(mission_dict):
+	var logic;
+	var mission = mission_dict["scene"].instance()
+
+	logic = load(mission_dict["script_url"]).new()
+	logic.set_base_props()
+	logic.print_props()
+	mission.set_mission_logic(logic)
+	
+	mission.logic.do_init_mission(Globals.handler_mission, Globals.handler_spawner)
+	mission.logic.set_base_props()
+	mission.logic.do_setup_mission()
+	return mission
+
 func load_missions():
-	missions_new = [
-#		mission_base, 
-		mission_control_area,
-		mission_survive_time,
-		mission_raid_convoy_light
+#	missions_new = [
+##		mission_base, 
+#		mission_control_area,
+#		mission_survive_time,
+#		mission_raid_convoy_light,
+#		mission_raid_cargo_hauler
+#	]
+
+	var missions_new_x = [
+		{"code": "CONTROL_AREA", "title": "Control Designated Area", "difficulty": 0, "reward": 0, "desc": "Secure the fortified zone and eliminate all hostiles.\nHold position until reinforcements arrive."},
+		{"code": "SURVIVE", "title": "Survive Interception Attempt", "difficulty": 0, "reward": 0, "desc": "Enemy forces are hunting you—defend your position until extraction.\n Stay alive at all costs."},
+		{"code": "RAID_CONVOY_LIGHT", "title": "Strike Light Ground Convoy", "difficulty": 0, "reward": 0, "desc": "Ambush the lightly armored supply convoy before it reaches enemy lines.\nEliminate all escorts and destroy the cargo trucks with minimal collateral damage"},
+	#	{"code": "RAID_CONVOY_HEAVY", "title": "Strike Heavy Ground Convoy", "desc": "Assault the heavily defended armored convoy carrying high-value munitions.\nNeutralize tank escorts and disable the lead vehicle to halt the column."},
+	#	{"code": "RAID_FLAK", "title": "Raid Flak Emplacements", "desc": "Obliterate anti-aircraft batteries threatening allied air operations.\nPrioritize radar units to blind their tracking systems before demolishing the guns"},
+	#	{"code": "PROTECT_CITY", "title": "Protect Civilian Areas", "desc": "Defend the civilian cities from attacks.\nCivilian casualties will reduce your payout."},
+	#	{"code": "PROTECT_CARGOHAULER", "title": "Protect the Cargo Hauler", "desc": "Escort the slow-moving hauler to its destination.\nRepel boarding attempts and ambushes."},
+	#	{"code": "SALVAGE_CARGOHAULER", "title": "Salvage Cargo from Crashed Dropship", "desc": "Recover supplies from the wreckage under enemy fire.\nMove quickly before reinforcements arrive."},
+	##	{"code": "BOSS_A", "title": "Boss A", "desc": "long_text_boss"},
+	##	{"code": "BLANK", "title": "Blank", "desc": "long_text_blank"},
 	]
 
-var missions_new_x = [
-	{"code": "CONTROL_AREA", "title": "Control Designated Area", "difficulty": 0, "reward": 0, "desc": "Secure the fortified zone and eliminate all hostiles.\nHold position until reinforcements arrive."},
-	{"code": "SURVIVE", "title": "Survive Interception Attempt", "difficulty": 0, "reward": 0, "desc": "Enemy forces are hunting you—defend your position until extraction.\n Stay alive at all costs."},
-	{"code": "RAID_CONVOY_LIGHT", "title": "Strike Light Ground Convoy", "difficulty": 0, "reward": 0, "desc": "Ambush the lightly armored supply convoy before it reaches enemy lines.\nEliminate all escorts and destroy the cargo trucks with minimal collateral damage"},
-#	{"code": "RAID_CONVOY_HEAVY", "title": "Strike Heavy Ground Convoy", "desc": "Assault the heavily defended armored convoy carrying high-value munitions.\nNeutralize tank escorts and disable the lead vehicle to halt the column."},
-#	{"code": "RAID_FLAK", "title": "Raid Flak Emplacements", "desc": "Obliterate anti-aircraft batteries threatening allied air operations.\nPrioritize radar units to blind their tracking systems before demolishing the guns"},
-#	{"code": "PROTECT_CITY", "title": "Protect Civilian Areas", "desc": "Defend the civilian cities from attacks.\nCivilian casualties will reduce your payout."},
-#	{"code": "PROTECT_CARGOHAULER", "title": "Protect the Cargo Hauler", "desc": "Escort the slow-moving hauler to its destination.\nRepel boarding attempts and ambushes."},
-#	{"code": "SALVAGE_CARGOHAULER", "title": "Salvage Cargo from Crashed Dropship", "desc": "Recover supplies from the wreckage under enemy fire.\nMove quickly before reinforcements arrive."},
-##	{"code": "BOSS_A", "title": "Boss A", "desc": "long_text_boss"},
-##	{"code": "BLANK", "title": "Blank", "desc": "long_text_blank"},
-]
-
 func _physics_process(delta):
-
-#	if mission == null or not is_instance_valid(self):
-#		return
-		
-	if missionState == 1:
-		mission_node.mission_class.do_process(delta)
-	return
-	
-#	if mission == null or not is_instance_valid(self):
-#		return
-	if missionState != 1 or isMissionCompleted():
-		return
-	
-	timeSinceLast += delta
-	deltaSumSinceLast += delta
-	if timeSinceLast <= 0.1: return
-	timeSinceLast = 0.0
-#	updateMissionTimeState(delta)
+	pass
+#	if missionState == 1:
+#		mission_node.mission_class.logic.do_process(delta)
 	
 func do_bare_setup():
 	print("do_bare_setup ", name)
@@ -73,6 +123,7 @@ func do_bare_setup():
 	player = Globals.PLAYER
 	handler_spawn = Globals.handler_spawner
 	load_missions()
+	mission_loader()
 	
 func do_enable():
 	print("do_enable ", name)
@@ -82,7 +133,7 @@ func do_disable():
 	print("do_disable ", name)
 	set_physics_process(false)	
 	
-func connect_mission_ui_in_game():
+func x_connect_mission_ui_in_game():
 	missionUI = Globals.curScene.get_node("UI/Place/TopCenter/Mission_PC")
 	bar = missionUI.get_node("VBox/Progress")
 	missiontext =  missionUI.get_node("VBox/Type")
@@ -98,18 +149,6 @@ func get_end_mission():
 #	var dict =  {"code": "END", "title": "END", "difficulty": 0, "reward": 0, "desc": "END"}
 #	return Mission.new(dict)
 	
-func get_random_mission():
-#	print("get_random_mission")
-	var index = randi() % missions_new.size()
-	index = 0
-	var mission = missions_new[index].instance()
-#	print(mission.get_class())
-	mission.do_init_mission(Globals.handler_mission, Globals.handler_spawner)
-	mission.set_base_props()
-#	var dict = missions_new[index]
-#	var mission = Mission.new(dict)
-	mission.do_setup_mission()
-	return mission
 
 func set_obj():
 	Globals.UI.set_main_text("")
@@ -153,7 +192,7 @@ func set_obj():
 #			var attacker = [{"name": "heli_light", "amount": Globals.rng.randi_range(1, 1), "target": false}]
 			setupAttacker(attacker)
 		6:
-			group.append({"name": "CARGOHAULER", "amount": Globals.rng.randi_range(1, 1), "target": true})
+			group.append({"name": "CARGO_HAULER", "amount": Globals.rng.randi_range(1, 1), "target": true})
 #			group.append({"name": "frigate", "amount": Globals.rng.randi_range(1, 1), "target": true})
 			setupProtectObj(group, 10)
 #			return
@@ -161,7 +200,7 @@ func set_obj():
 #			var attacker = [{"name": "fighter", "amount": Globals.rng.randi_range(1, 1), "target": false}]
 			setupAttacker(attacker)
 		7:
-			group.append({"name": "CARGOHAULER", "amount": Globals.rng.randi_range(1, 1), "target": true})
+			group.append({"name": "CARGO_HAULER", "amount": Globals.rng.randi_range(1, 1), "target": true})
 			setupSalvageObj(group, 5)
 		8:
 			var boss = [{"name": "BOSS", "amount": Globals.rng.randi_range(1, 1), "target": true}]
@@ -176,6 +215,9 @@ func set_obj():
 			
 	if pick != 19:
 		Globals.handler_spawner.do_enable()
+		
+func do_start_mission():
+	pass
 			
 func setup_control_area_mission(time):
 	mission = mission_control_area.instance()
@@ -187,7 +229,7 @@ func setup_control_area_mission(time):
 #	mission.doInit(Globals.WIDTH/2 - w/2, Globals.HEIGHT/2 - h/2, w, h)
 	mission.do_setup(Globals.WIDTH/2, Globals.HEIGHT/2, w, h)
 #	setupObjectiveTimer(time)
-	missionStart()
+	do_start_mission()
 	#Globals.curScene.get_node("MissionTimer").paused = false
 	
 func setup_survive_time_mission(time):
@@ -195,7 +237,7 @@ func setup_survive_time_mission(time):
 	Globals.curScene.get_node("Various").add_child(mission)
 	mission.do_init(time)
 	mission.do_setup()
-	missionStart()
+	do_start_mission()
 	
 func setup_raid_objective(unitArray, time):
 	mission = mission_base.instance()
@@ -203,7 +245,7 @@ func setup_raid_objective(unitArray, time):
 	Globals.curScene.get_node("Various").add_child(mission)
 	mission.do_init(time)
 	mission.do_setup(unitArray)
-	missionStart()
+	do_start_mission()
 	
 func setup_raid_building_objective(unitArray, time):
 	mission = mission_base.instance()
@@ -211,7 +253,7 @@ func setup_raid_building_objective(unitArray, time):
 	Globals.curScene.get_node("Various").add_child(mission)
 	mission.do_init(time)
 	mission.do_setup(unitArray)
-	missionStart()
+	do_start_mission()
 
 func setupRaidObj(unitArray, time):
 	mission = load("res://scripts/Mission_ObjWithUnit.gd").new()
@@ -231,10 +273,10 @@ func setupRaidObj(unitArray, time):
 		for i in unit.amount:
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
-			Globals.curScene.addUnit("Enemy_Units", object)
-			object.setHostile()
-			object.setArmament()
-			object.setDirection(Vector2(dir, 0))
+			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.set_hostile()
+			object.set_armaments()
+			object.set_direction(Vector2(dir, 0))
 			object.look_ahead = 0
 			object.doInit()
 			lowestSpeed = min(lowestSpeed, object.maxSpeed)
@@ -254,7 +296,7 @@ func setupRaidObj(unitArray, time):
 			single.get_node("SM").canChangeState = false
 			single.setActive()
 			if single.display == "Heavy Truck" or single.display == "Light Truck":
-				single.markAsTarget()
+				single.mark_as_target()
 				single.add_health_bar()
 				single.addHealthLabel()
 				timerLabel.text = str(targets, "x ", single.display)
@@ -273,8 +315,10 @@ func setupRaidObj(unitArray, time):
 		setupMissionObjectiveHealthBar(n)
 	
 	setupObjectiveTimer(time)
-	missionStart()
+	do_start_mission()
 	
+func setupMissionObjectiveHealthBar(target):
+	pass
 
 func setupRaidBuildingObjective(unitArray, time):
 	mission = load("res://scripts/Mission_ObjWithUnit.gd").new()
@@ -288,9 +332,9 @@ func setupRaidBuildingObjective(unitArray, time):
 		for i in unit.amount:
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
-			Globals.curScene.addUnit("Enemy_Units", object)
-			object.setHostile()
-			object.setArmament()
+			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.set_hostile()
+			object.set_armaments()
 			object.doInit()
 			if unit.target:
 				targets += 1
@@ -311,7 +355,7 @@ func setupRaidBuildingObjective(unitArray, time):
 		var y:int
 		if single.display == "AA Tower":
 			single.setActive()
-			single.markAsTarget()
+			single.mark_as_target()
 			single.add_health_bar()
 			single.addHealthLabel()
 			timerLabel.text = str(targets, "x ", single.display)
@@ -328,9 +372,10 @@ func setupRaidBuildingObjective(unitArray, time):
 		setupMissionObjectiveHealthBar(n)
 	
 	setupObjectiveTimer(time)
-	missionStart()
+	do_start_mission()
 	
 
+#	var attacker = [{"name": "FRIGATE", "amount": Globals.rng.randi_range(1, 1), "target": false}]
 
 func setupAttacker(unitArray):
 	var targets = mission.targets
@@ -339,15 +384,15 @@ func setupAttacker(unitArray):
 		for i in unit.amount:
 			var attacker = handler_spawn.get(unit.name).instance()
 			var target = Globals.getRandomEntry(targets)
-			Globals.curScene.addUnit("Enemy_Units", attacker)
-			attacker.setHostile()
-			attacker.setArmament()
+			Globals.curScene.add_unit_to_scene("Enemy_Units", attacker)
+			attacker.set_hostile()
+			attacker.set_armaments()
 			attacker.add_primary_target(target)
 			attacker.stats.flee_tresh = 0.25
-			attacker.connect("hasWarpedIn", target, "add_primary_target", [attacker])
-			target.connect("hasWarpedOut", attacker, "_on_target_hasWarpedOut", [target])
+			attacker.connect("_has_warped_in", target, "add_primary_target", [attacker])
+			target.connect("_has_warped_out", attacker, "_on_target__has_warped_out", [target])
 #			attacker.speed = target.speed
-			attacker.setDirection(target.direction)
+			attacker.set_direction(target.direction)
 #			print(attacker.direction.x)
 			var x:int = 0
 			var y:int = 0
@@ -377,15 +422,16 @@ func setupAttacker(unitArray):
 			attacker.add_health_bar()
 			attacker.doInit()
 			attacker.avoidValues["Player"] = 0.0
-			attacker.initAsAttacker()
+			attacker.init_as_attacker()
 			
 			if attacker.can_warp_in():
-				attacker.setupDelayedWarpIn(3 + i*3)
+				attacker.setup_delayed_warp_in(3 + i*3)
 			else:
 				attacker.setActive()
 
 
 func setupProtectObj(unitArray, time):
+#	group.append({"name": "CARGO_HAULER", "amount": Globals.rng.randi_range(1, 1), "target": true})
 	mission = load("res://scripts/Mission_ObjWithUnit.gd").new()
 	Globals.curScene.add_child(mission)
 	
@@ -399,12 +445,12 @@ func setupProtectObj(unitArray, time):
 		for i in unit.amount:
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
-			Globals.curScene.addUnit("Neutral_Units", object)
-			object.setFriendly()
-			object.setArmament()
-			object.setDirection(Vector2(dir, 0))
+			Globals.curScene.add_unit_to_scene("Neutral_Units", object)
+			object.set_friendly()
+			object.set_armaments()
+			object.set_direction(Vector2(dir, 0))
 			object.add_health_bar()
-			object.markAsProtect()
+			object.mark_as_protect()
 			object.doInit()
 			if unit.target:
 				targets += 1
@@ -436,12 +482,12 @@ func setupProtectObj(unitArray, time):
 #			single.get_node("ControlNodes/HealthBar/ProgressBar").rect_min_size += Vector2(50, 0)
 #	shield.add_shield_bar()
 #	shield.scaleBar("shieldbar", 0.5)
-#			single.setupDelayedWarpIn(3 + i*3) 
+#			single.setup_delayed_warp_in(3 + i*3) 
 		elif single.display == "Cargohauler":
 			x = (initialX + ((Globals.rng.randi_range(200, 300) + 100) * i)) * dir
 			y = initialY + (i*-Globals.getRandomEntry([-225, -150, 150, 225]))
-			single.connect("hasWarpedIn", self, "missionStart")
-			single.setupDelayedWarpIn(1 + i*3) 
+			single.connect("_has_warped_in", self, "do_start_mission")
+			single.setup_delayed_warp_in(1 + i*3) 
 			
 		single.position = Vector2((Globals.WIDTH / 2) + x, y)
 		
@@ -453,7 +499,7 @@ func setupProtectObj(unitArray, time):
 	for n in mission.targets:
 		setupMissionObjectiveHealthBar(n)
 	
-	missionStart()
+	do_start_mission()
 
 func setupSalvageObj(unitArray, time):
 	mission = mission_control_area.instance()
@@ -472,10 +518,10 @@ func setupSalvageObj(unitArray, time):
 		for i in unit.amount:
 			var object = handler_spawn.get(unit.name).instance()
 			var dir = Globals.getRandomEntry([-1, 1])
-			Globals.curScene.addUnit("Neutral_Units", object)
-			object.setFriendly()
-			object.setArmament()
-			object.setDirection(Vector2(dir, 0))
+			Globals.curScene.add_unit_to_scene("Neutral_Units", object)
+			object.set_friendly()
+			object.set_armaments()
+			object.set_direction(Vector2(dir, 0))
 			object.setWrecked()
 			object.rotation_degrees = Globals.rng.randi_range(8, 20) * dir
 			object.toggleThrusters()
@@ -501,7 +547,7 @@ func setupSalvageObj(unitArray, time):
 #					print(smoke_node.get_node("Particles2D").process_material.emission_box_extents.x)
 					Globals.curScene.get_node("Various").add_child(smoke_node)
 					smoke_node.position = object.global_position + Vector2((-smokeTrailLength * dir), 15)
-	missionStart()
+	do_start_mission()
 	
 func setupBossObj(unitArray, escortArray, time):
 #	Globals.curScene.get_node("UI").hideMissionUI()
@@ -510,13 +556,13 @@ func setupBossObj(unitArray, escortArray, time):
 		for i in entry.amount:
 			var unit = handler_spawn.get(entry.name).instance()
 			mainTarget = unit
-			Globals.curScene.addUnit("Enemy_Units", unit)
-			unit.setHostile()
-			unit.setArmament()
+			Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+			unit.set_hostile()
+			unit.set_armaments()
 			unit.add_health_bar()
 			unit.doInit()
 			unit.position = Vector2(Globals.WIDTH/2, Globals.HEIGHT) + Vector2(0, -700)
-			unit.setupDelayedWarpIn(1)
+			unit.setup_delayed_warp_in(1)
 	
 	if escortArray.size():
 		var interval = 360 / escortArray[0].amount
@@ -524,11 +570,11 @@ func setupBossObj(unitArray, escortArray, time):
 		for entry in escortArray:
 			for i in entry.amount:
 				var unit = handler_spawn.get(entry.name).instance()
-				Globals.curScene.addUnit("Enemy_Units", unit)
-				unit.setHostile()
-				unit.setArmament()
+				Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+				unit.set_hostile()
+				unit.set_armaments()
 				unit.doInit()
-				unit.setupDelayedWarpIn(3)
+				unit.setup_delayed_warp_in(3)
 				unit.global_position = mainTarget.global_position + Vector2(1, 0).rotated(deg2rad(current)) * 300
 				current += interval
 				
@@ -538,7 +584,7 @@ func setupBossObj(unitArray, escortArray, time):
 	setupObjectiveTimer(time)
 	setupMissionObjectiveHealthBar(mainTarget)
 	
-	missionStart()
+	do_start_mission()
 			
 func setupBlank(unitArray):
 	Globals.curScene.get_node("UI").hideMissionUI()
@@ -546,9 +592,9 @@ func setupBlank(unitArray):
 		for entry in unitArray:
 			for i in entry.amount:
 				var unit = handler_spawn.get(entry.name).instance()
-				Globals.curScene.addUnit("Enemy_Units", unit)
-				unit.setHostile()
-				unit.setArmament()
+				Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+				unit.set_hostile()
+				unit.set_armaments()
 				unit.add_health_bar()
 				unit.doInit()
 				unit.setActive()
@@ -559,30 +605,6 @@ func setupBlank(unitArray):
 #				randi() % 100     # Returns random integer between 0 and 99
 #randi() % 100 + 1 # Returns random integer between 1 and 100
 
-
-func setupMissionObjectiveHealthBar(target):
-	missionUI.get_node("VBox/HBox").show()
-	
-	var vbox = VBoxContainer.new()
-	vbox.set_h_size_flags(3)
-	vbox.name = str("Progress_Mission_Unit_", missionUI.get_node("VBox/HBox").get_children().size())
-	var panel = PanelContainer.new()
-	panel.theme_type_variation = "panel_noBorder"
-	var label = Label.new()
-	label.text = target.display
-	label.align = VALIGN_CENTER
-	var hpbar = ProgressBar.new()
-	hpbar.theme_type_variation = "progress_health"
-	hpbar.min_value = 0
-	hpbar.max_value = round(target.maxHealth)
-	hpbar.value = round(target.health)
-	target.missionhealthbar = hpbar
-	
-	vbox.add_child(panel)
-	panel.add_child(label)
-	vbox.add_child(hpbar)
-	
-	missionUI.get_node("VBox/HBox").add_child(vbox)
 	
 func on_mission_protect_destroyed():
 	print("on_mission_protect_destroyed")
@@ -610,7 +632,7 @@ func hasFailedMission():
 	timerLabel.set("custom_colors/font_color", Color(1, 0, 0, 1))
 	Globals.UI.set_main_text(text)
 
-func isMissionCompleted():
+func is_mission_completed():
 	if mission == null: return true
 	if (pick == missions.RAID_CONVOY_LIGHT or pick == missions.RAID_CONVOY_HEAVY) and mission.amount and mission.remaining == 0:
 		missionState = 2
@@ -618,11 +640,6 @@ func isMissionCompleted():
 		missionState = 2
 		return true
 	return false
-
-func missionStart():
-	missionState = 1
-	missionUI.get_node("VBox/mission_state_label/label").text = "ongoing"
-	missionUI.get_node("VBox/mission_state_label/label").hide()
 
 func setupObjectiveTimer(duration):
 #	return
@@ -647,7 +664,7 @@ func updateMissionTimeState(delta):
 		#elif pick == missions.SURVIVE or pick == missions.PROTECT_CARGOHAULER or pick == missions.PROTECT_CITY:
 		else:
 			virtTimeLeft -= deltaSumSinceLast
-			if isMissionCompleted():
+			if is_mission_completed():
 				warpMissionTargets()
 		
 		virtTimeLeft = max(0, virtTimeLeft)
@@ -677,13 +694,9 @@ func warpMissionTargets():
 		if n.canWarp:
 			n.warpOutStepOne()
 
-func do_end_mission():
-	print("do_end_mission")
+func terminate_remains_on_mission_scene_end():
+	print("terminate_remains_on_mission_scene_end")
 	if mission_node != null:
 		Globals.remove_poi_marker(mission_node)
-#		if "targets" in mission:
-#			for n in mission.targets:
-#				Globals.remove_poi_marker(n)
-		mission_node.do_complete()
 		mission_node = null
-	missionState = -1
+		Globals.UI.reset_mission_sub_ui()

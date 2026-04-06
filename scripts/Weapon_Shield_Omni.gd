@@ -9,7 +9,7 @@ func _ready():
 func _subready():
 	$ColNodes/Shield/A.shape.radius = shieldRadius
 	spriteScale = shieldRadius / float(100) * 2
-	$Shield.scale = Vector2(spriteScale, spriteScale)
+	$Shield.scale = get_shield_end_scale()
 	
 func _physics_process(_delta):
 	pass

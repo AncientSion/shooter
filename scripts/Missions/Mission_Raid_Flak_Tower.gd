@@ -1,5 +1,5 @@
 extends Mission_Base
-class_name Mission_Raid_Building
+class_name Mission_Raid_Cargo_Hauler
 
 func _ready():
 	pass
@@ -8,11 +8,11 @@ func _physics_process(delta):
 	pass
 	
 func set_base_props():
-	code = "RAID_BUILDING"
-	title = "Strike Buiding"
+	code = "RAID_CARGO_HAULER"
+	title = "Raid cargo"
 	difficulty = 0
 	reward = 0
-	desc = "Ambush the building"
+	desc = "Ambush the cargo"
 
 func mission_final_setup_self():
 	do_init(60)

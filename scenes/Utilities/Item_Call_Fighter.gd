@@ -30,11 +30,11 @@ func effector():
 		Globals.rng.randi_range(100, 175) * Globals.getRandomEntry([1, -1])
 	)
 	unit.position = Globals.PLAYER.position + position
-	unit.setNeutral()
-	unit.setArmament()
-	unit.setDirection()
+	unit.set_neutral()
+	unit.set_armaments()
+	unit.set_direction()
 	unit.lifetime = result[0].lifetime
 	unit.doInit()
-	unit.setInactive()
+	unit.set_inactive()
 #	unit.add_health_bar()
-	unit.setupDelayedWarpIn(0.1)
+	unit.setup_delayed_warp_in(0.1)

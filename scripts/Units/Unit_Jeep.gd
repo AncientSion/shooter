@@ -13,7 +13,7 @@ func doInit():
 	.doInit()
 	$Mounts/A.get_node("Weapon").scale.x = 0.7
 	
-func setDirection(_dirVector = false):
+func set_direction(_dirVector = false):
 	pass
 
 func getPossibleWeapons(index):

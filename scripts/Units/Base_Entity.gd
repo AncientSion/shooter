@@ -13,8 +13,8 @@ var id = Globals.getId()
 signal damageTaken
 signal isDestroyed
 signal objectiveDestroyed
-signal hasWarpedIn
-signal hasWarpedOut
+signal _has_warped_in
+signal _has_warped_out
 
 var smoke:int
 var maxSmoke:int
@@ -317,7 +317,7 @@ func kill():
 	destroyed = true
 	emit_signal("isDestroyed")
 	emit_signal("objectiveDestroyed")
-	call_deferred("createResources")
+	call_deferred("create_currency")
 	set_physics_process(false)
 	$SM.enabled = false
 	
@@ -344,9 +344,9 @@ func kill():
 		mark_debug_menu_entry_as_killed()
 	
 	if isTarget:
-		unmarkAsTarget()
+		unmark_as_target()
 	elif isProtect:
-		unmarkAsProtect()
+		unmark_as_protect()
 		
 	handle_kill_explos()
 
@@ -372,27 +372,27 @@ func mark_debug_menu_entry_as_killed():
 func cancelWarpOut():
 	return 
 	
-func markAsTarget():
+func mark_as_target():
 	isTarget = true
 	update()
 	Globals.add_poi_marker(self)
 	
-func unmarkAsTarget():
+func unmark_as_target():
 	isTarget = false
 	update()
 	Globals.remove_poi_marker(self)
 	
-func markAsProtect():
+func mark_as_protect():
 	isProtect = true
 	update()
 	Globals.add_poi_marker(self)
 	
-func unmarkAsProtect():
+func unmark_as_protect():
 	isProtect = false
 	update()
 	Globals.remove_poi_marker(self)
 
-func createResources():
+func create_currency():
 	return
 	
 func add_shield_bar():
@@ -552,17 +552,19 @@ func _on_LOOTNODE_mouse_exited(node):
 #	return
 	node.add_stylebox_override("panel", null)
 	
-func setFaction(factionID):
+func set_faction(factionID):
 	faction = factionID
 		
 	if faction == 0:
-		setFriendly()
+		set_friendly()
 	elif faction == 1:
-		setHostile()
+		set_hostile()
 	elif faction == 2:
-		setNeutral()
+		set_neutral()
+	elif faction == 3:
+		set_as_dummy()
 	
-func setFriendly():
+func set_friendly():
 	faction = 0
 	if has_node("ColNodes"):
 		for i in $ColNodes.get_children():
@@ -580,7 +582,7 @@ func setFriendly():
 #	$Phys.set_collision_layer_bit(4, false)
 #	$Phys.set_collision_layer_bit(6, false)
 	
-func setHostile():
+func set_hostile():
 	faction = 1
 	if has_node("ColNodes"):
 		for i in $ColNodes.get_children():
@@ -593,7 +595,7 @@ func setHostile():
 	if has_node("Sight"):
 		$Sight.set_collision_mask_bit(4, true)
 	
-func setNeutral():
+func set_neutral():
 	faction = 2
 	if has_node("ColNodes"):
 		for i in $ColNodes.get_children():
@@ -606,6 +608,13 @@ func setNeutral():
 		$Phys.set_collision_layer_bit(4, true)
 #	if has_node("Sight"):
 #		$Sight.set_collision_mask_bit(4, true)
+
+func set_as_dummy():
+	faction = 3
+	if has_node("ColNodes"):
+		for i in $ColNodes.get_children():
+			i.set_collision_layer_bit(0, false)
+			i.set_collision_mask_bit(0, false)
 	
 func createFloatingLabel(string, pos, vector, crit = false, color = null):
 	var dmg_label = Globals.DMG_LABEL.instance()

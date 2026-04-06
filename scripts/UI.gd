@@ -24,8 +24,27 @@ func _ready():
 	add_player_debug_panel()
 	addKeyForItem()
 	
+	reset_mission_sub_ui()
+	
 func _process(delta):
 	fps.text = String(Engine.get_frames_per_second())
+	
+func reset_mission_sub_ui():
+	missionUI.get_node("VBox/Type").hide()
+	missionUI.get_node("VBox/Time").hide()
+	missionUI.get_node("VBox/Progress").value = 0
+	missionUI.get_node("VBox/Progress").hide()
+	missionUI.get_node("VBox/mission_state_label/label").hide()
+	missionUI.get_node("VBox/mission_state_label/label").text = ""
+	missionUI.get_node("VBox/Targets_HP").hide()
+	missionUI.get_node("VBox/Targets_HP/Template").hide()
+	
+	var targets_hp_nodes = $Place/TopCenter/Mission_PC/VBox/Targets_HP.get_children()
+	if targets_hp_nodes.size() > 1:
+		for n in range(1, targets_hp_nodes.size()):
+			targets_hp_nodes[n].queue_free()
+#	print("len: ", targets_hp_nodes.size())
+		
 	
 func _on_Toggle_input_event(event):
 	if  event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
@@ -99,7 +118,6 @@ func empty_main_text():
 	
 func resetMissionUI():
 	$Place/TopCenter/Mission_PC/VBox/Type.text = ""
-#	$Place/TopCenter/Mission_PC/VBox/Time/timeStr.set("custom_colors/font_color", Color(1, 1, 1, 1))
 	$Place/TopCenter/Mission_PC/VBox/Time/timeStr.text = ""
 	$Place/TopCenter/Mission_PC/VBox/Progress.value = 0
 	$Place/TopCenter/Mission_PC.show()
@@ -245,3 +263,44 @@ func _on_B_value_changed(value):
 	for n in Globals.curScene.get_node("Enemy_Units").get_child(0).get_node("Sprites").get_children():
 		if n is AnimatedSprite:
 			n.self_modulate.b = val
+	
+func update_on_start_mission(mission_class):sss
+	print("update_on_start_mission")
+	missionUI.get_node("VBox/mission_state_label/label").text = "ongoing"
+	missionUI.get_node("VBox/mission_state_label/label").hide()
+	missionUI.get_node("VBox/Type").text = mission_class.title
+	missionUI.get_node("VBox/Type").show()
+	missionUI.get_node("VBox/Time").show()
+	missionUI.get_node("VBox/Progress").show()
+	
+	if missionUI.get_node("VBox/Targets_HP").get_children().size() > 1:
+		missionUI.get_node("VBox/Targets_HP").show()
+	
+func update_on_complete_mission(mission_class):
+	print("update_on_complete_mission")
+	missionUI.get_node("VBox/Time").hide()
+	missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
+	missionUI.get_node("VBox/mission_state_label/label").show()
+		
+func add_target_healthbar_to_mission_bar(target):
+	var vbox = VBoxContainer.new()
+	vbox.set_h_size_flags(3)
+	vbox.name = str("Progress_Mission_Unit_", missionUI.get_node("VBox/Targets_HP").get_children().size())
+	var panel = PanelContainer.new()
+	panel.theme_type_variation = "panel_noBorder"
+	var label = Label.new()
+	label.text = target.display
+	label.align = VALIGN_CENTER
+	var hpbar = ProgressBar.new()
+	hpbar.theme_type_variation = "progress_health"
+	hpbar.min_value = 0
+	hpbar.max_value = round(target.maxHealth)
+	hpbar.value = round(target.health)
+	target.missionhealthbar = hpbar
+	
+	vbox.add_child(panel)
+	panel.add_child(label)
+	vbox.add_child(hpbar)
+	
+	missionUI.get_node("VBox/Targets_HP").add_child(vbox)
+

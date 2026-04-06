@@ -9,6 +9,8 @@ func _ready():
 	pass
 	
 func _on_Start_pressed():
+	Globals.GAMESCREEN.start_new_game_without_map()
+	return
 	var scene = load("res://scenes/Stage_0.tscn").instance()
 #	var scene = stage0.instance()
 	Globals.curScene = scene

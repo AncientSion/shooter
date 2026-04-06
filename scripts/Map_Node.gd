@@ -20,9 +20,9 @@ var mission_class
 var connections: Dictionary = {}
 var is_hovered:bool = false
 var is_tweening:bool = false
-#var is_selected:bool = false
 
-func do_init(node_id: String, node_position: Vector2, path_idx: int, node_idx: int, node_type):
+func do_init(name_str:String, node_id: String, node_position: Vector2, path_idx: int, node_idx: int, node_type):
+	name = name_str
 	id = node_id
 	position = Vector2(round(node_position.x), round(node_position.y))
 	path_index = path_idx
@@ -54,19 +54,19 @@ func reset_animation_state():
 	$MC/VBox/C/Node_Sprite.rect_rotation = 0.0
 	$MC/VBox/C/Node_Sprite.rect_scale = Vector2(1.0, 1.0)
 		
-func do_complete():
-	print("do_complete: ", name)
+func do_mark_mapnode_as_complete():
+	print("do_mark_mapnode_as_complete: ", name)
 	is_completed = true
 	is_behind = true
 	can_be_selected = false
 	is_tweening = false
-	tween.stop()
+	if tween: tween.stop()
 	get_node("MC/VBox/C/Node_Sprite").modulate = Globals.GREEN
 	do_unselect_map_node()
 	toggle_mission_quick_desc(false)
 
 func do_init_selected_node_tween():
-	#print("do_init_selected_node_tween, node: ", name, ", tweening: ", is_tweening)
+#	print("do_init_selected_node_tween, node: ", name, ", tweening: ", is_tweening)
 	
 	tween = get_tree().create_tween()#.set_parallel(true)
 	tween.tween_property($MC/VBox/C/Node_Sprite, "rect_scale", Vector2(2.0, 2.2), 0.5)
@@ -87,14 +87,11 @@ func do_select_map_node():
 func do_unselect_map_node():
 #	print(id)
 	is_selected = false
-	Globals.MAP_SCENE.selected_node = null
-#	tween.stop()
-	$MC/VBox/C/Node_Sprite.rect_rotation = 0.0
-#	$MC/VBox/C/Node_Sprite.rect_scale = Vector2(1.0, 1.0)
-#	tween.stop()
-#	tween = null
-	Globals.MAP_SCENE.hide_selected_node_mission_details()
-	toggle_mission_quick_desc(true)
+	if Globals.MAP_SCENE:
+		Globals.MAP_SCENE.selected_node = null
+		$MC/VBox/C/Node_Sprite.rect_rotation = 0.0
+		Globals.MAP_SCENE.hide_selected_node_mission_details()
+		toggle_mission_quick_desc(true)
 	
 func check_node_and_lane_highlight():
 	if is_selected or is_completed or is_behind: return

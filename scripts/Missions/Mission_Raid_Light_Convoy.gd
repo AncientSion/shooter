@@ -1,5 +1,5 @@
 extends Mission_Base
-class_name Mission_Raid
+class_name Mission_Raid_Light_Convoy
 
 func _ready():
 	pass
@@ -14,19 +14,30 @@ func set_base_props():
 	reward = 0
 	desc = "Ambush the lightly armored supply convoy before it reaches enemy lines.\nEliminate all escorts and destroy the cargo trucks with minimal collateral damage"
 
-func do_init(time):
-	type = "Mission_Raid"
-	handler_m.missiontext.text = "Destroy Target"
-	time = 15.0
-	maxTime = time
-	timeRemain = time
+func mission_final_setup_self():
+	do_init(60)
+	
+	var group = []
+	group.append({"name": "MOBILE_AA_LIGHT", "amount": Globals.rng.randi_range(1, 1), "target": false})
+	group.append({"name": "TRUCK_LIGHT", "amount": Globals.rng.randi_range(1, 2), "target": true})
+	group.append({"name": "MOBILE_AA_LIGHT", "amount": Globals.rng.randi_range(1, 1), "target": false})
+	group.append({"name": "TRUCK_LIGHT", "amount": Globals.rng.randi_range(1, 2), "target": true})
+	group.append({"name": "MOBILE_AA_LIGHT", "amount": Globals.rng.randi_range(1, 1), "target": false})
+	do_setup(group)
+	
+	Globals.PLAYER.connect("_has_warped_in", self, "do_start_mission")
+	
+
+func do_init(init_time):
+	maxTime = init_time
+	timeRemain = init_time
 	remaining = amount
 	
 func on_mission_target_destroyed():
 	print("on_mission_target_destroyed")
 	return
 	remaining -= 1
-	handler_m.bar.value = (1 - (float(remaining) / amount))*100
+	bar.value = (1 - (float(remaining) / amount))*100
 	
 func do_setup(unitArray):
 	var num_targets:int = 0
@@ -44,10 +55,10 @@ func do_setup(unitArray):
 		for i in unit.amount:
 			var object = handler_s.get(unit.name).instance()
 			allUnits.append(object)
-			Globals.curScene.addUnit("Enemy_Units", object)
-			object.setHostile()
-			object.setArmament()
-			object.setDirection(Vector2(dir, 0))
+			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.set_hostile()
+			object.set_armaments()
+			object.set_direction(Vector2(dir, 0))
 			object.look_ahead = 0
 			object.doInit()
 			lowestSpeed = min(lowestSpeed, object.maxSpeed)
@@ -68,21 +79,15 @@ func do_setup(unitArray):
 			single.setActive()
 			single.get_node("SM").canChangeState = false
 			if single.display == "Heavy Truck" or single.display == "Light Truck":
-				single.markAsTarget()
+				single.mark_as_target()
 				single.add_health_bar()
 #				single.addHealthLabel()
 		
 	amount = num_targets
 	remaining = num_targets
-#	missiontext.text = "Destroy Target"
-	
+		
 	for n in targets:
-		handler_m.setupMissionObjectiveHealthBar(n)
-	
-#	setupObjectiveTimer(time)
-#	missionStart()
-	
-#	pass
+		Globals.UI.add_target_healthbar_to_mission_bar(n)
 
 func do_process(_delta):
 #	if inArea:
@@ -93,14 +98,8 @@ func do_process(_delta):
 	timeRemain = max(0, timeRemain - _delta)
 	timerPct = timeRemain / maxTime * 100 / 100
 	
-	handler_m.timerLabel.text = "%.2f" % timeRemain
-	handler_m.bar.value = (1-timerPct)*100
+	timerLabel.text = "%.2f" % timeRemain
+	bar.value = (1-timerPct)*100
 	
 	if timeRemain <= 0.0:
-		do_complete_mission()
-	
-func do_complete_mission():
-	handler_m.missionState = 2
-	handler_m.missionUI.get_node("VBox/Time").hide()
-	handler_m.missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
-	handler_m.missionUI.get_node("VBox/mission_state_label/label").show()
+		set_mission_condition_fullfilled()

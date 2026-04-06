@@ -104,10 +104,6 @@ custom_styles/panel = SubResource( 11 )
 [node name="Place" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 20.0
-margin_right = -20.0
-margin_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -236,6 +232,9 @@ anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -125.0
 margin_right = 125.0
+
+[node name="Type" parent="Place/TopCenter/Mission_PC/VBox" index="0"]
+text = "mission_type"
 
 [node name="TopleftLower" type="MarginContainer" parent="Place"]
 margin_left = 6.0
@@ -617,3 +616,5 @@ valign = 1
 [connection signal="value_changed" from="Glow/MC/HA/VA/R" to="." method="_on_R_value_changed"]
 [connection signal="value_changed" from="Glow/MC/HA/VA/G" to="." method="_on_G_value_changed"]
 [connection signal="value_changed" from="Glow/MC/HA/VA/B" to="." method="_on_B_value_changed"]
+
+[editable path="Place/TopCenter/Mission_PC"]

@@ -12,11 +12,11 @@ func _ready():
 	print("adding")
 	indestructable = true
 	if faction == 0:
-		setFriendly()
+		set_friendly()
 	elif faction == 1:
-		setHostile()
+		set_hostile()
 	elif faction == 2:
-		setNeutral()
+		set_neutral()
 		
 	$Sight.set_collision_mask_bit(4, 0)
 	pass

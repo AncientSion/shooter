@@ -156,7 +156,7 @@ func spawnRewardCrates():
 		var y = 300
 
 		var node = Position2D.new()
-		var box = Globals.REWARD_BOX.instance()
+		var box = Globals.CURRENCY_BOX.instance()
 		node.add_child(box)
 		$Neutral_Units.add_child(node)
 		box.setCost()

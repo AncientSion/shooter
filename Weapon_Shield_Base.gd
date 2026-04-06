@@ -11,6 +11,9 @@ var shieldFastCharge:float
 var shieldLength:int = 36
 var shieldDist:int = 60
 var is_powering_up:bool = false
+var is_breaking: bool = false
+
+const SHIELD_BREAK_TWEEN_TIME:float = 0.6
 
 #var time:float
 
@@ -44,6 +47,9 @@ func setShieldBaseStats():
 		self[key] = baseStats[key]
 	
 func _physics_process(_delta):
+#	if is_breaking:
+#		print($Shield.modulate.a)
+#		print($Shield.scale)
 	pass
 
 func isInActiveBurst():
@@ -82,16 +88,18 @@ func unpowerShield():
 #	shield = 0
 #	updateShield()
 #	active = false
+
+	is_breaking = true
 	
 	disableCollisionNodes()
 	
 	$Tween.interpolate_property($Shield, "modulate:a",
-			1.0, 0.0, 0.6,
+			1.0, 0.0, SHIELD_BREAK_TWEEN_TIME,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
-	
+#	
 	$Tween.interpolate_property($Shield, "scale",
-			Vector2(1, 1), Vector2(3.5, 3.5), 0.6,
+			get_shield_end_scale(), Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
 	$TimerNodes/ShieldRegen.stop()
@@ -101,6 +109,7 @@ func powerShield():
 		return
 	active = false
 	is_powering_up = true
+	is_breaking = false
 	print("powering shield on ", display, " #", get_instance_id())
 #	active = true
 	
@@ -123,11 +132,10 @@ func powerShield():
 			
 	
 	var tween = get_tree().create_tween().set_parallel(true)
-	tween.tween_property($Shield, "modulate:a", shieldFastCharge, 0.6)
-	tween.tween_property($Shield, "scale", get_shield_end_scale(), 0.6)
+	tween.tween_property($Shield, "modulate:a", shieldFastCharge, SHIELD_BREAK_TWEEN_TIME)
+	tween.tween_property($Shield, "scale", get_shield_end_scale(),SHIELD_BREAK_TWEEN_TIME)
 	tween.set_parallel(false)
 	tween.tween_callback(self, "powering_up_done")
-	
 	
 	$TimerNodes/ShieldSupercharge.wait_time = total_time
 	$TimerNodes/ShieldSupercharge.start()
@@ -170,11 +178,14 @@ func _on_Supercharge_timeout():
 	$TimerNodes/ShieldRegen.start()	
 
 func updateShield():
-#	print("updateShield")
+	#print("updateShield")
 	setShieldBarHealth()
-	if not is_powering_up:
+#	if not is_powering_up:
+
+	if true:
 		var factor:float = float(shield) / maxShield
-		$Shield.modulate.a = factor
+		$Shield.material.set_shader_param("shield_strength", factor)
+#		$Shield.modulate.a = factor
 	
 func doBreakShield():
 	unpowerShield()
@@ -220,17 +231,11 @@ func takeDamage(entity, totalDmg:int):
 #	print("takeDmg on ", self.display, " totalDmg: ", totalDmg)
 	
 	if shield > 0:
-		#print("shield > 0")
 		shield -= remDmg
-		#print("taking shield ", remDmg)
-		#print("shield left ", shield)
 		remDmg = 0
 		if shield < 0:
-			##print("shield < 0")
 			remDmg = -shield
-			#print("remDmg: ", remDmg)
 			shield = 0
-			#print("shield = 0")
 			
 	if remDmg:
 		remDmg = max(0, remDmg - self.armor)
@@ -240,12 +245,12 @@ func takeDamage(entity, totalDmg:int):
 	var shieldDmgTaken = shieldBefore - shield
 	
 	if shieldDmgTaken:
-		handleShieldDamage(shieldDmgTaken, pos, angle)
+		handle_shield_damage(shieldDmgTaken, pos, angle)
 	if remDmg:
 		handle_shield_overflow_damage(entity, remDmg)
 	emit_signal("damageTaken")
 		
-func handleShieldDamage(shieldDmgTaken, pos, angle):
+func handle_shield_damage(shieldDmgTaken, pos, angle):
 	addShieldExplosion(shieldDmgTaken, pos, angle)
 	var labelPos = pos + Vector2(0, -(texDim.y/2) -10)
 	createFloatingLabel(shieldDmgTaken, labelPos, Vector2(0, -100), false, "00b7ff")

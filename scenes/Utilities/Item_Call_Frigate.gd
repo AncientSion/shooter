@@ -29,11 +29,11 @@ func effector():
 	
 	unit.position = Globals.PLAYER.position + position
 	unit.position.y = clamp(unit.position.y, 1000, Globals.HEIGHT - 1000)
-	unit.setFriendly()
-	unit.setArmament()
-	unit.setDirection()
+	unit.set_friendly()
+	unit.set_armaments()
+	unit.set_direction()
 	unit.lifetime = result[0].lifetime
 	unit.doInit()
 	unit.add_health_bar()
-#	unit.setInactive()
-	unit.setupDelayedWarpIn(0.1)
+#	unit.set_inactive()
+	unit.setup_delayed_warp_in(0.1)

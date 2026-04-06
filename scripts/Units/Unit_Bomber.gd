@@ -21,7 +21,7 @@ func _ready():
 func _physics_process(_delta):
 	pass
 	
-func setDirection(_dirVector = false):
+func set_direction(_dirVector = false):
 	pass
 	
 #func missile_move_logic(delta):
@@ -225,5 +225,5 @@ func setNewWanderTarget():
 	
 	moveTarget = newTarget
 	
-#func setupDelayedWarpIn(time):
-#	print("setupDelayedWarpIn for ", self.display, ": ", time, " seconds.")
+#func setup_delayed_warp_in(time):
+#	print("setup_delayed_warp_in for ", self.display, ": ", time, " seconds.")

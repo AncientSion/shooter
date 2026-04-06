@@ -7,6 +7,10 @@ var w:int
 var h:int
 var color = Color(1.0, 0.0, 0.0, 0.2)
 var inArea:bool = false
+var poi_dummy:Currency = null
+
+onready var zone_polygon:Polygon2D = owner.get_node("Area")
+onready var zone_area:Area2D = owner.get_node("Area2D")
 
 func _ready():
 	pass
@@ -21,49 +25,57 @@ func set_base_props():
 	reward = 0
 	desc = "Secure the fortified zone and eliminate all hostiles.\nHold position until reinforcements arrive."
 	
-	
 func mission_final_setup_self():
-#func setup_control_area_mission(time):
-#	mission = mission_control_area.instance()
-#	Globals.curScene.get_node("Various").add_child(mission)
 	do_init(60)
 	
 	var w = 900 * 1.0
 	var h = 600 * 1.0
-#	mission.doInit(Globals.WIDTH/2 - w/2, Globals.HEIGHT/2 - h/2, w, h)
 	do_setup(Globals.WIDTH/2, Globals.HEIGHT/2, w, h)
-#	setupObjectiveTimer(time)
-#	missionStart()
-	#Globals.curScene.get_node("MissionTimer").paused = false
+	create_poi()
 
-
-func do_init(time):
-	type = "Control Area"
-	handler_m.missiontext.text = "Control Area"
-	Globals.add_poi_marker(self)
+func do_init(init_time):
 	flicker()
-	time = 3.0
-	maxTime = time
-	timeRemain = time
+	maxTime = init_time
+	timeRemain = init_time
 	
 func do_setup(centerX, centerY, init_w, init_h):
-#	print(init_x, "/", init_y)
-#	position = Vector2(init_x + init_w/2, init_y + init_h/2)
-	position = Vector2(centerX, centerY)
 	x = centerX
 	y = centerY
 	w = init_w
 	h = init_h
-	#var col = $CollisionShape2D
 	
-	#print(col.shape.extents)
-	#print(col.position)	
-	$Area.polygon[0] = Vector2(-w/2, -h/2)
-	$Area.polygon[1] = Vector2(w/2, -h/2)
-	$Area.polygon[2] = Vector2(w/2, h/2)
-	$Area.polygon[3] = Vector2(-w/2, h/2)
-	$Area2D/CollisionShape2D.position = Vector2(0, 0)
-	$Area2D/CollisionShape2D.shape.extents = Vector2(w/2, h/2)
+	zone_polygon.position = Vector2(centerX, centerY)
+	var points = [Vector2(-w/2, -h/2), Vector2(w/2, -h/2), Vector2(w/2, h/2), Vector2(-w/2, h/2)]
+	var poly = PoolVector2Array()
+	for n in points:
+		poly.append(n)
+	zone_polygon.polygon = poly
+
+#	zone_polygon.polygon[0] = Vector2(-w/2, -h/2)
+#	zone_polygon.polygon[1] = Vector2(w/2, -h/2)
+#	zone_polygon.polygon[2] = Vector2(w/2, h/2)
+#	zone_polygon.polygon[3] = Vector2(-w/2, h/2)
+
+	zone_area.position = Vector2(centerX, centerY)
+	zone_area.monitoring = true
+	zone_area.get_node("CollisionShape2D").disabled = false
+	zone_area.get_node("CollisionShape2D").position = Vector2(0, 0)
+	zone_area.get_node("CollisionShape2D").shape.extents = Vector2(w/2, h/2)
+	
+	create_poi_dummy_unit(Vector2(centerX, centerY))
+	
+func create_poi():
+	Globals.add_poi_marker(poi_dummy)
+	
+func create_poi_dummy_unit(pos):
+	var reward = Globals.CURRENCY.instance()
+	Globals.curScene.get_node("Various").add_child(reward)
+#	reward.hide()
+	reward.set_physics_process(false)
+	reward.get_node("ColNodes").monitoring = false
+	poi_dummy = reward
+#	Globals.curScene.get_node("Various").add_child(reward)
+	reward.position = global_position + pos
 
 func do_process(_delta):
 	if inArea:
@@ -74,42 +86,34 @@ func do_process(_delta):
 	timeRemain = max(0, timeRemain)
 	timerPct = timeRemain / maxTime * 100 / 100
 	
-	handler_m.timerLabel.text = "%.2f" % timeRemain
-	handler_m.bar.value = (1-timerPct)*100
+	timerLabel.text = "%.2f" % timeRemain
+	bar.value = (1-timerPct)*100
 	
 	if timeRemain <= 0.0:
-		do_complete_mission()
+		set_mission_condition_fullfilled()
+
+func player_toggle_area_control():
+	inArea = !inArea
+	
+	if inArea:
+		zone_polygon.color.g = 1
+		zone_polygon.color.r = 0
+	else:
+		zone_polygon.color.r = 1
+		zone_polygon.color.g = 0
 
 func flicker():
-#	return
-	if handler_m.missionState != 2:
+	if missionState == M_State.ACTIVE:
 		var tree = get_tree()
 		var tween = get_tree().create_tween()
-		tween.tween_property($Area, "color:a", 0.3, 1.0)
-		tween.tween_property($Area, "color:a", 0.1, 0.2)
+		tween.tween_property(zone_polygon, "color:a", 0.3, 1.0)
+		tween.tween_property(zone_polygon, "color:a", 0.1, 0.2)
 		tween.tween_callback(self, "flicker")
-#		var tween = get_tree().create_tween()
-#		tween.tween_property($Area, "color:a", 0.3, 1.0)
-#		tween.tween_property($Area, "color:a", 0.1, 0.2)
-#		tween.tween_callback(self, "flicker")
 	
-func do_complete_mission():
-	handler_m.missionState = 2
-	handler_m.missionUI.get_node("VBox/Time").hide()
-	handler_m.missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
-	handler_m.missionUI.get_node("VBox/mission_state_label/label").show()
-	$Area.hide()
-	Globals.remove_poi_marker(self)
-	
-func __draw():
-	draw_rect(Rect2(0-(w/2), 0-(h/2), w, h), Color(1, 0, 0, 0.2))
+func set_mission_condition_fullfilled():
+	.set_mission_condition_fullfilled()
+	if has_node("Area"):
+		zone_polygon.hide()
+	if Target_Indicator != null:
+		Globals.remove_poi_marker(self)
 
-func _on_Area2D_area_entered(area):
-	inArea = true
-	$Area.color.r = 0
-	$Area.color.g = 1
-	
-func _on_Area2D_area_exited(area):
-	$Area.color.r = 1
-	$Area.color.g = 0
-	inArea = false

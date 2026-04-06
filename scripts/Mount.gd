@@ -33,11 +33,11 @@ func initArc():
 		$DebugAim/Start.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle-maximum_rotation))
 		$DebugAim/End.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle+maximum_rotation))
 
-func setFriendly():
-	.setFriendly()
+func set_friendly():
+	.set_friendly()
 	
-func setHostile():
-	.setHostile()
+func set_hostile():
+	.set_hostile()
 
 func add_smoke_fx(node):
 	node.position = global_position - owner.global_position

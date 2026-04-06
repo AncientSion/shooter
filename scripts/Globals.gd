@@ -71,8 +71,8 @@ const HEALTHLABEL: PackedScene = preload("res://scenes/Health_Label.tscn")
 
 const DUMMY: PackedScene = preload("res://scenes/Units/Dummy.tscn")
 
-const REWARD_BOX: PackedScene =  preload("res://scenes/Utilities/Reward_Crate.tscn")
-const REWARD: PackedScene =  preload("res://scenes/Utilities/Reward.tscn")
+const CURRENCY_BOX: PackedScene =  preload("res://scenes/Utilities/Reward_Crate.tscn")
+const CURRENCY: PackedScene =  preload("res://scenes/Utilities/Currency.tscn")
 
 const PLAYERSCENE = preload("res://scenes/Player.tscn")
 
@@ -86,6 +86,8 @@ var PLAYER:Node = null
 
 var GAMESCREEN:Node = null
 var MAP_SCENE:Node = null
+const MAP_NODE = preload("res://scenes/Map_Node.tscn")
+
 var MAIN_MENU:Node = null
 
 var INTERMISSION = load("res://scenes/Intermission.tscn")

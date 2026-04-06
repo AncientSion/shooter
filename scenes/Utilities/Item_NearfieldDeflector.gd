@@ -19,7 +19,7 @@ func addSelfDrones():
 #		func construct(init_orbit_radius, init_orbit_speed, init_orbit_radius_offset):
 		bit.construct(result[0].orbit_radius, result[0].orbit_speed, TAU/result[0].stacks*(stack+1))
 		bit.setOrbitTarget(targetProp)
-		bit.setArmament()
+		bit.set_armaments()
 		bit.doInit()
 		bit.setActive()
 		bits.append(bit)

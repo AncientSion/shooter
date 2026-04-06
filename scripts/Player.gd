@@ -55,8 +55,8 @@ func _ready():
 	print("ready ship")
 	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	isPlayer = true
-	setFriendly()
-#	setHostile()
+	set_friendly()
+#	set_hostile()
 	setBaseStats()
 	#addKeyForItem()
 	health = baseStats.maxHealth
@@ -165,10 +165,10 @@ func process_movement(delta: float):
 
 func doInit():
 	visible = false
-	updateStats()
+	update_stats()
 	
-	if not is_connected("hasWarpedOut", Globals.GAMESCREEN, "end_current_level"):
-		connect("hasWarpedOut", Globals.GAMESCREEN, "end_current_level")
+	if not is_connected("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level"):
+		connect("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level")
 		
 	$Label.set_as_toplevel(true)
 
@@ -178,17 +178,12 @@ func doInit():
 func on_exit_level():
 	for item in items:
 		item.addCharge()
-		
-#	player.connect("hasWarpedIn", self, "missionStart")
-	if is_connected("hasWarpedIn", Globals.handler_mission, "missionStart"):
-		disconnect("hasWarpedIn", Globals.handler_mission, "missionStart")
-		print("is connected")
 
 func add_resources(val):
 	materials += val
 	emit_signal("update_player_materials", materials)
 	
-func setInactive():
+func set_inactive():
 	ready = false
 	disableCollisionNodes()
 	set_physics_process(false)
@@ -310,7 +305,7 @@ func can_warp_out():
 		return false
 	if ready and not isWarping:
 		return true
-	if Globals.handler_mission != null and Globals.handler_mission.isMissionCompleted():
+	if Globals.handler_mission != null and Globals.handler_mission.is_mission_completed():
 		return true
 	elif Globals.handler_mission == null:
 #		print("Globals.handler_mission == null")
@@ -816,7 +811,7 @@ func addWeapon(weapon, mount = $Mounts/A):
 	weapon.active = true
 	weapon.isSelected = false
 	weapon.shooter = self
-	weapon.setFaction(faction)
+	weapon.set_faction(faction)
 	weapon.makeInvisible()
 	weapon.doInit()
 	weapon.doInitUI()
@@ -855,7 +850,6 @@ func setShield():
 	shield_omni.connect("updateShield_UI_Nodes", mainUI, "_on_updateShield_UI_Nodes")
 	shield_omni.connect("updateShieldBreakCooldown", mainUI, "_on_updateShieldBeakCooldown")
 	shield_omni.shieldbar = Globals.UI.get_node("Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield")
-	
 	return shield_omni
 	
 func addStartingItems():
@@ -915,7 +909,7 @@ func addStartingItems():
 func isLegalTarget():
 	return true
 
-func updateStats():
+func update_stats():
 	setBaseStats()
 	maxHealth = baseStats.maxHealth
 	sideThrustDuration = maxSideThrustDuration
@@ -1000,11 +994,11 @@ func setMass():
 #	ramBullet.impactForce = Vector2.ZERO
 #	return ramBullet
 	
-func onWarpInDone():
-	print("onWarpInDone")
+func on_warp_in_done():
+	print("on_warp_in_done")
+	emit_signal("_has_warped_in")
 	isWarping = false
 	setActive()
-#	enableCollisionNodes()
 	do_init_gear()
 
 func kill():

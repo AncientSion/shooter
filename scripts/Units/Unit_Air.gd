@@ -11,7 +11,7 @@ func adjustStatsRes():
 func killByCrash():
 	print("kill by crash ", get_instance_id())
 	destroyed = true
-	call_deferred("createResources")
+	call_deferred("create_currency")
 	set_physics_process(false)
 	$SM.enabled = false
 	
