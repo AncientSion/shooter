@@ -65,7 +65,7 @@ func setupCrashing():
 	var scale = 0.4
 	add_fire_smoke_fx(scale, 0.0)
 	
-	for n in (maxSmoke * 2):
+	for n in (max_smoke * 2):
 		var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
 		explo.set_as_toplevel(true)
 		explo.offset = get_point_inside_tex()

@@ -26,9 +26,9 @@ func construct(init_orbit_radius, init_orbit_speed, init_orbit_radius_offset):
 	orbit_speed = init_orbit_speed
 	orbit_radius_offset = init_orbit_radius_offset
 	
-func doInit():
-	.doInit()
-	maxSmoke = 0
+func do_specific_unit_init():
+#	.doInit()
+	max_smoke = 0
 #func doInit():
 #	$Sprites/Main.scale = Vector2(0, 0)
 #	var tween = get_tree().create_tween()#.set_parallel(true)

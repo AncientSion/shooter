@@ -5,9 +5,9 @@ class_name Drone_Kamikaze
 #var boosting = false
 #var boostTimeRemain:float = 2.0
 
-func doInit():
+func do_specific_unit_init():
 	display = "Drone_Kamikaze"
-	.doInit()
+#	.doInit()
 	boostStrength = 200
 	boostTimeRemain = 2.0
 #func doInit():

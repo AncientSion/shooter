@@ -38,7 +38,7 @@ const BEAM_IMPACT = preload("res://scenes/BeamImpact.tscn")
 const HULL_DMG =  preload("res://scenes/HullDmg.tscn")
 
 const POI = preload("res://addon/POI.tscn")
-const MARKER = preload("res://addon/Marker.tscn")
+const POI_MARKER = preload("res://addon/POI_Marker.tscn")
 
 const BULLET = preload("res://scenes/Proj/Proj_Bullet.tscn")
 #const BULLET_BLUE = preload("res://scenes/Proj/Proj_Bullet_Blue.tscn")
@@ -600,13 +600,6 @@ func add_shockwave_at(pos):
 	var shader = Globals.shock_shader.instance()
 	shader.position = pos
 	Globals.PROJCONT.add_child(shader)
-
-func add_poi_marker(target):
-	curScene.get_node("UI/POI").add_indicator(target, PLAYER)
-	
-func remove_poi_marker(target):
-	if "target_indicator" in target and target.target_indicator != null and is_instance_valid(target.target_indicator):
-		target.target_indicator.queue_free()
 	
 func getRawDamage(minDmg, maxDmg, multi):
 	return round(rng.randi_range(minDmg, maxDmg) * multi)

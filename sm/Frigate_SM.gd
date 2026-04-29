@@ -81,6 +81,6 @@ func _enter_state(prev_state, new_state):
 #			print(target)
 			parent.moveTarget = target
 		states.prepareWarpOut:
-			parent.setupDelayedWarpOut(6.0)
+			parent.setup_delayed_warp_out(6.0)
 		states.crash:
 			parent.setupCrashing()

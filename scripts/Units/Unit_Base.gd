@@ -50,6 +50,34 @@ var dir_update_frames:int = 12
 func _ready():
 	add_to_group("isUnit")
 	set_physics_process(true)
+
+func do_init_unit():
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
+	name = str(self.display, "-", self.id)
+	max_smoke = ceil(texDim.length() / 100)
+	
+	setStats()
+	setMass()
+	
+	if has_node("ColNodes"):
+		connect("damageTaken", self, "on_damage_taken")
+		connectHurtBoxes()
+	if has_node("Jump"):
+		$Jump.set_as_toplevel(true)
+		
+	check_controlnodes_top_level()
+	
+	
+	setDamageBreaks()
+	randomizeWeaponStartCooldown()
+	init_lifetime()
+	showDebug()
+	init_debug_menu_entry()
+	addPhysCollision()
+	initSteering()
+	initAvoidValues()	
+	
+	do_custom_init()
 	
 func initAvoidValues():
 	pass
@@ -88,8 +116,8 @@ func getDamageObject():
 	
 func setDamageBreaks():
 #	print("setDamageBreak: ", self.display)
-	for n in maxSmoke:
-		dmgBreaks.append(100/(maxSmoke+1)*(n+1))
+	for n in max_smoke:
+		dmgBreaks.append(100/(max_smoke+1)*(n+1))
 #	print(dmgBreaks)
 	
 func check_hp_post_dmg(amount):
@@ -101,14 +129,16 @@ func check_hp_post_dmg(amount):
 	elif stats.canCrash and crashCondition(amount):
 		enter_crash_condition_state()
 	else:
-		if smoke < maxSmoke:
-			var fraction:float = float(health) / maxHealth * 100
-			if fraction < dmgBreaks[len(dmgBreaks)-1]:
-				dmgBreaks.pop_back()
-				smoke += 1
-				var scale = get_dmg_gfx_scale()
-				add_exp_fire_smoke_fx(scale * rand_range(0.8, 1.2), rand_range(0.4, 0.7))
-	return false
+		check_add_gfx_dmg_effect()
+
+func check_add_gfx_dmg_effect():
+	if smoke < max_smoke:
+		var fraction:float = float(health) / maxHealth * 100
+		if fraction < dmgBreaks[len(dmgBreaks)-1]:
+			dmgBreaks.pop_back()
+			smoke += 1
+			var scale = get_dmg_gfx_scale()
+			add_exp_fire_smoke_fx(scale * rand_range(0.8, 1.2), rand_range(0.4, 0.7))
 		
 func enter_withdraw_condition_state():
 	check_support_duration()
@@ -155,20 +185,6 @@ func check_support_duration():
 		get_node("TimerNodes/rem_lifetime").stop()
 		get_node("ControlNodes/rem_lifetime_label").isUpdating = false
 
-func doInit():
-	maxSmoke = ceil(texDim.length() / 100)
-	setDamageBreaks()
-	randomizeWeaponStartCooldown()
-	init_lifetime()
-	showDebug()
-	init_debug_menu_entry()
-	addPhysCollision()
-	addSightCollision()
-	initSteering()
-	initAvoidValues()
-#	do_init_mounts()
-#	$SM.do_init()
-
 func set_wave_strength(strength):
 	wave_strength = strength
 	
@@ -198,6 +214,7 @@ func showDebug():
 func hideDebug():
 	if not has_node("Debug"):
 		return
+	$Debug.hide()
 	$Debug/moveTarget.set_as_toplevel(false)
 	$Debug/moveTarget.hide()
 	$Debug/MoveTargetVector.set_as_toplevel(false)
@@ -262,10 +279,6 @@ func _physics_process(_delta):
 		
 	handle_weapons(_delta)
 	handleItems(_delta)
-	
-#func handleControlNodes():
-#	for n in $ControlNodes.get_children():
-#		n.rect_position = global_position + n.offset
 		
 func process_movement(_delta):
 	pass
@@ -385,7 +398,7 @@ func setActive():
 	$SM.do_init()
 		
 func set_inactive():
-#	print("set set_inactive: ", self.display)
+	print("set set_inactive: ", self.display)
 	ready = false
 	set_physics_process(false)
 	disableItems()
@@ -408,7 +421,7 @@ func setUnitFacing():
 	
 func setStats():
 	stats = stats.duplicate()
-	adjustStatsRes()
+	adjust_stats_res()
 	
 	maxHealth = stats.health
 	armor = stats.armor
@@ -419,7 +432,7 @@ func setStats():
 	look_ahead = stats.look_ahead
 	num_rays = stats.num_rays
 	
-func adjustStatsRes():
+func adjust_stats_res():
 	pass
 
 func hideSelf():
@@ -445,13 +458,13 @@ func setup_delayed_warp_in(time):
 func can_warp_in():
 	return false
 	
-func setupDelayedWarpOut(time):
-	print("setupDelayedWarpOut for ", self.display, ": ", time, " seconds.")
+func setup_delayed_warp_out(time):
+	print("setup_delayed_warp_out for ", self.display, ": ", time, " seconds.")
 	var timer = Timer.new()
 	timer.name = "WarpOutTimer"
 	$TimerNodes.add_child(timer)
 #	Globals.curScene.add_child(timer)
-	timer.connect("timeout", self, "doDelayedWarpOut", [timer])
+	timer.connect("timeout", self, "warp_out_phase_one")
 	timer.wait_time = time
 	timer.start()
 
@@ -471,9 +484,9 @@ func warpInStepOne():
 	
 	tween.tween_property($Jump, "scale", Vector2(10, 1), durIn)
 	tween.tween_property($Jump, "scale", Vector2(20, 15), durIn)
-	tween.tween_callback(self, "warpInStepTwo")
+	tween.tween_callback(self, "warp_in_phase_two")
 
-func warpInStepTwo():
+func warp_in_phase_two():
 	show()
 	$Sprites.scale = Vector2.ZERO
 	$Sprites.modulate.a = 0.0
@@ -502,7 +515,7 @@ func on_warp_in_done():
 	$Jump.modulate.a = 1
 	
 	setActive()
-	showAllControlNodes()
+	show_all_control_nodes()
 	enableWeapons()
 	enableItems()
 	
@@ -516,27 +529,29 @@ func doDisableShield():
 func cancelWarpOut():
 	print("cancelWarpOut")
 		
-func doDelayedWarpOut(timer):
+func _do_delayed_warp_out(timer):
 	timer.queue_free()
-	warpOutStepOne()
+	warp_out_phase_one()
 	
-func warpOutStepOne():
-	print("warpOutStepOne")
+func warp_out_phase_one():
+	print("warp_out_phase_one")
+	if $TimerNodes.has_node("WarpOutTimer"):
+		$TimerNodes.get_node("WarpOutTimer").queue_free()
+		
 	isWarping = true
 	$Jump.visible = true
-	doUnselectWeapons()
+	do_unselect_all_weapons()
+	hide_all_control_nodes()
+	
 	var durOut = 1.0 * Globals.mod / 5
 	var tween = get_tree().create_tween()
 	
 	tween.tween_property($Jump, "scale", Vector2(20, 15), durOut)
-	tween.tween_callback(self, "warpOutStepTwo")
+	tween.tween_callback(self, "warp_out_phase_two")
 	
-func warpOutStepTwo():
-	print("warpOutStepTwo")
+func warp_out_phase_two():
+	print("warp_out_phase_two")
 	$EffectNodes.visible = false
-	$ControlNodes.visible = false
-	for n in $Mounts.get_children():
-		n.get_node("Weapon/ControlNodes").visible = false
 	$ThrusterNodes.visible = false
 	$Mounts.visible = false
 	
@@ -550,10 +565,10 @@ func warpOutStepTwo():
 	tween.tween_property($Mounts, "modulate:a", 0.0, durOut)
 	tween.tween_property($Mounts, "scale", Vector2(0, 0), durOut/2)
 	tween.set_parallel(false)
-	tween.tween_callback(self, "warpOutStepThree")
+	tween.tween_callback(self, "warp_out_phase_three")
 	
-func warpOutStepThree():
-	print("warpOutStepThree")
+func warp_out_phase_three():
+	print("warp_out_phase_three")
 	var durIn = 2.0 * Globals.mod / 5
 	var tween = get_tree().create_tween()
 	
@@ -566,7 +581,6 @@ func warp_out_done():
 #	return
 	set_inactive()
 	unload_gear()
-	hide_all_controlnodes()
 	hideDebug()
 	velocity = Vector2.ZERO
 	extForces = Vector2.ZERO
@@ -575,36 +589,29 @@ func warp_out_done():
 	$Mounts.modulate.a = 1.0
 	$Mounts.scale = Vector2(1, 1)
 	
-	if isTarget:
-		unmark_as_target()
-	elif isProtect:
-		unmark_as_protect()
+	unmark_as_target()
+	unmark_as_protect()
 		
 	if isPlayer:
-		Globals.MAP_SCENE.selected_node.mission_class.logic.set_mission_condition_fullfilled()
-	
-	if has_node("Debug") and get_node("Debug").visible:
-		get_node("Debug").hide()
+		Globals.MAP_SCENE.selected_node.mission_class.logic.set_mission_condition_success()	
 		
 	emit_signal("_has_warped_out")
 	
-func showAllControlNodes():
-	if not isPlayer:
-		if has_node("ControlNodes"):
-			has_ControlNodes = true
-			$ControlNodes.visible = true
+func show_all_control_nodes():
+	if not isPlayer and has_node("ControlNodes"):
+		has_ControlNodes = true
+		$ControlNodes.visible = true
 		for mount in $Mounts.get_children():
-			mount.get_node("ControlNodes").show()
-			mount.get_node("Weapon/ControlNodes").show()
+			mount.show_control_nodes()
+			mount.get_node("Weapon").show_control_nodes()
 
-func hide_all_controlnodes():
-	if not isPlayer:
-		if has_node("ControlNodes"):
-			has_ControlNodes = false
-			$ControlNodes.visible = false
+func hide_all_control_nodes():
+	if not isPlayer and has_node("ControlNodes"):
+		has_ControlNodes = false
+		$ControlNodes.visible = false
 		for mount in $Mounts.get_children():
-			mount.get_node("ControlNodes").hide()
-			mount.get_node("Weapon/ControlNodes").hide()
+			mount.hide_control_nodes()
+			mount.get_node("Weapon").hide_control_nodes()
 	
 func unload_gear():
 	for n in items:
@@ -711,11 +718,13 @@ func set_armaments():
 		mount.set_faction(faction)
 		mount.do_init()
 		var weapon = getPossibleWeapons(index)
+		weapon.doInit()
 		index += 1
 #		if !weapon:
 #			continue
 		addWeapon(weapon, mount)
 		
+	addSightCollision()
 	addStartingItems()
 	
 func addWeapon(weapon, mount):
@@ -745,7 +754,7 @@ func getPossibleWeapons(_index):
 func _on_support_duration_timeout(timer):
 	print("_on_support_duration_timeout")
 	timer.stop()
-	warpOutStepOne()
+	warp_out_phase_one()
 
 func getDummyTarget(xa, xb, ya, yb):
 	#var x = Globals.getRandomEntry([-1, 1])
@@ -789,6 +798,7 @@ func create_currency():
 	for n in total:
 		var reward = Globals.CURRENCY.instance()
 		Globals.curScene.get_node("Various").add_child(reward)
+		reward.do_init_unit()
 		reward.position = global_position + Vector2(Globals.rng.randi_range(-texDim.x/2, texDim.x/2), Globals.rng.randi_range(-texDim.y/2, texDim.y/2))
 		reward.rotation_degrees = Globals.rng.randi_range(0, 359)
 		reward.velocity = Vector2(500, 0).rotated(reward.rotation)
@@ -929,8 +939,8 @@ func _on_AggroLeave_area_exited(area):
 	if index > -1:
 		targetsArr.erase(area.owner)
 		
-func doUnselectWeapons():
-	return "ERROR doUnselectWeapons"
+func do_unselect_all_weapons():
+	return "ERROR do_unselect_all_weapons"
 	
 func disableItemsAndWeapons():
 	return "ERROR disableItemsAndWeapons"	
@@ -1059,15 +1069,15 @@ func hasNoTargetSet():
 		return true
 	return false
 
-func _on_target__has_warped_out(target):
+func _on_target_has_warped_out(target):
 	print(self.display, ": my target has warped out")
 	for n in targetsArr:
 		if n.target == target:
 			targetsArr.erase(n)
 	set_new_target()
 	
-	if rand_range(0, 1) > 5:
-		setupDelayedWarpOut(2.0)
+	if rand_range(0, 1) > 0:
+		setup_delayed_warp_out(4.0)
 
 func init_as_attacker():
 	$SM.set_state($SM.states.close)

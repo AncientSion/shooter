@@ -33,9 +33,6 @@ func wpn_has_valid_target():
 		return true
 	return false
 	
-#func handleHullDamage(remDmg, pos, angle):
-#	return
-	
 func get_shield_end_scale():
 	return Vector2(0.4, 0.4 / 36 * shieldLength)
 	

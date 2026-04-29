@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/PartExplo.gd" type="Script" id=1]
 [ext_resource path="res://textures/Explo_Tex.png" type="Texture" id=2]
-[ext_resource path="res://textures/explosion-6.png" type="Texture" id=3]
+[ext_resource path="res://textures/explosion_in_use.png" type="Texture" id=3]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.216092, 0.395402, 0.624088, 0.990805, 1 )

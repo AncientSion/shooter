@@ -1,7 +1,7 @@
 extends Node2D
 
 var logic: Node = null
-var target_indicator:Target_Indicator = null
+var target_indicator:POI_MARKER = null
 var inArea:bool = false
 
 func _ready():

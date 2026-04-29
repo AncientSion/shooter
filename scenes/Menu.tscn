@@ -50,13 +50,24 @@ size_flags_vertical = 4
 custom_constants/separation = 24
 alignment = 1
 
-[node name="Start" type="Button" parent="MC/PC/VBC"]
-margin_left = 155.0
-margin_right = 305.0
+[node name="HBoxContainer" type="HBoxContainer" parent="MC/PC/VBC"]
+margin_right = 460.0
+margin_bottom = 26.0
+
+[node name="OptionButton" type="OptionButton" parent="MC/PC/VBC/HBoxContainer"]
+margin_right = 300.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 300, 0 )
+size_flags_horizontal = 6
+text = "test"
+align = 1
+
+[node name="Start" type="Button" parent="MC/PC/VBC/HBoxContainer"]
+margin_left = 307.0
+margin_right = 457.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 150, 0 )
-size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_horizontal = 6
 text = "Start"
 
 [node name="SepA" type="HSeparator" parent="MC/PC/VBC"]
@@ -130,7 +141,7 @@ margin_top = 390.0
 margin_right = 460.0
 margin_bottom = 416.0
 
-[connection signal="pressed" from="MC/PC/VBC/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="MC/PC/VBC/HBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="MC/PC/VBC/Intermission" to="." method="_on_Intermission_pressed"]
 [connection signal="pressed" from="MC/PC/VBC/Map" to="." method="_on_Map_pressed"]
 [connection signal="pressed" from="MC/PC/VBC/Quit" to="." method="_on_Quit_pressed"]

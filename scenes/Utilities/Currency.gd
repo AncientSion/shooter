@@ -6,9 +6,6 @@ var velocity = Vector2.ZERO
 var accel = Vector2.ZERO
 var steer_force = 30
 var resValue:int
-
-func _ready():
-	pass 
 	
 func _physics_process(delta):
 	accel += seekVector()

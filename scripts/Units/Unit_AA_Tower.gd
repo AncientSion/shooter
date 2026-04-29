@@ -9,10 +9,6 @@ func _ready():
 func _physics_process(_delta):
 	pass
 	
-func doInit():
-#	maxSmoke = 10
-	.doInit()
-	
 func getPossibleWeapons(index):
 	match index:
 		0:

@@ -9,10 +9,6 @@ func _ready():
 func _physics_process(_delta):
 	pass
 	
-func doInit():
-	.doInit()
-	$Mounts/A.get_node("Weapon").scale.x = 0.7
-	
 func set_direction(_dirVector = false):
 	pass
 

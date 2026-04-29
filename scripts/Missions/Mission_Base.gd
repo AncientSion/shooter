@@ -10,7 +10,6 @@ enum M_State {
 
 var type:String = "Mission_Base"
 var targets = []
-var mission
 var timerPct = 100
 var virtTimeLeft = 0
 var virtFullTime = 0
@@ -39,7 +38,7 @@ onready var timerLabel = missionUI.get_node("VBox/Time/timeStr")
 func _ready():
 	pass
 	
-func _physics_process(_delta):
+func _process(_delta):
 	if missionState == M_State.ACTIVE:
 		do_process(_delta)
 		do_process_time(_delta)
@@ -53,7 +52,7 @@ func do_process_time(_delta):
 		timerLabel.text = "%.2f" % timeRemain
 		bar.value = (1.0 - (timeRemain / maxTime)) * 100.0
 		if timeRemain <= 0.0:
-			set_mission_condition_fullfilled()
+			set_mission_condition_success()
 	
 func do_init(init_time):
 	pass
@@ -120,11 +119,31 @@ func do_start_mission():
 	missionState = M_State.ACTIVE
 	Globals.UI.update_on_start_mission(self)
 
-func set_mission_condition_fullfilled():
-	print("set_mission_condition_fullfilled()")
+func set_mission_condition_success():
+	print("set_mission_condition_success()")
 	missionState = M_State.SUCCESS
-	Globals.MAP_SCENE.selected_node.do_mark_mapnode_as_complete()
-	Globals.UI.update_on_complete_mission(self)
+	Globals.UI.update_on_success_mission(self)
+	
+	if Globals.MAP_SCENE:
+		Globals.MAP_SCENE.selected_node.do_mark_mapnode_as_complete()
 #
 	if Globals.PLAYER.is_connected("_has_warped_in", self, "do_start_mission"):
 		Globals.PLAYER.disconnect("_has_warped_in", self, "do_start_mission")
+		
+func set_mission_condition_fail():
+	print("set_mission_condition_fail()")
+	missionState = M_State.FAIL
+	Globals.UI.update_on_fail_mission(self)
+
+func on_mission_protect_destroyed():
+	print("on_mission_protect_destroyed")
+	remaining -= 1
+	if remaining <= 0:
+		set_mission_condition_fail()
+	
+func on_mission_target_destroyed():
+	print("on_mission_target_destroyed")
+	remaining -= 1
+	if remaining <= 0:
+		set_mission_condition_success()
+	

@@ -33,12 +33,6 @@ func do_init(init_time):
 	timeRemain = init_time
 	remaining = amount
 	
-func on_mission_target_destroyed():
-	print("on_mission_target_destroyed")
-	return
-	remaining -= 1
-	bar.value = (1 - (float(remaining) / amount))*100
-	
 func do_setup(unitArray):
 	var num_targets:int = 0
 	var allUnits = []
@@ -56,6 +50,7 @@ func do_setup(unitArray):
 			var object = handler_s.get(unit.name).instance()
 			allUnits.append(object)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.do_init_unit()
 			object.set_hostile()
 			object.set_armaments()
 			object.set_direction(Vector2(dir, 0))
@@ -102,4 +97,4 @@ func do_process(_delta):
 	bar.value = (1-timerPct)*100
 	
 	if timeRemain <= 0.0:
-		set_mission_condition_fullfilled()
+		set_mission_condition_success()

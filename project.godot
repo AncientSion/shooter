@@ -374,6 +374,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addon/POI.gd"
 }, {
+"base": "Node2D",
+"class": "POI_MARKER",
+"language": "GDScript",
+"path": "res://addon/POI_Marker.gd"
+}, {
 "base": "Base_Unit",
 "class": "Player",
 "language": "GDScript",
@@ -448,11 +453,6 @@ _global_script_classes=[ {
 "class": "Skyscraper",
 "language": "GDScript",
 "path": "res://scripts/Units/Skyscraper.gd"
-}, {
-"base": "Node2D",
-"class": "Target_Indicator",
-"language": "GDScript",
-"path": "res://addon/Marker.gd"
 }, {
 "base": "SM",
 "class": "Truck",
@@ -613,6 +613,7 @@ _global_script_class_icons={
 "Obstacle": "",
 "ObstacleSM": "",
 "POI": "",
+"POI_MARKER": "",
 "Player": "",
 "PlayerSM": "",
 "Proj_Base": "",
@@ -628,7 +629,6 @@ _global_script_class_icons={
 "Reward_Box": "",
 "SM": "",
 "Skyscraper": "",
-"Target_Indicator": "",
 "Truck": "",
 "Truck_Heavy": "",
 "Truck_Light": "",

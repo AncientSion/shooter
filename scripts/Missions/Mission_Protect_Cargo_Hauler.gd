@@ -1,6 +1,10 @@
 extends Mission_Base
 class_name Mission_Protect_Cargo_Hauler
 
+
+const mission_time:float = 30.0
+const time_until_target_arrives:float = 3.0
+
 func _ready():
 	pass
 	
@@ -15,17 +19,20 @@ func set_base_props():
 	desc = "Protect the Cargo hauler"
 
 func mission_final_setup_self():
-	do_init(10)
+	do_init(mission_time)
 	do_setup()
 	
-func do_process(_delta):
-	pass
-#	timeRemain = max(0, timeRemain - _delta)
-#	timerLabel.text = "%.2f" % timeRemain
-#	bar.value = (1.0 - (timeRemain / maxTime)) * 100.0
-#
-#	if timeRemain <= 0.0:
-#		set_mission_condition_fullfilled()
+func do_process_time(_delta):
+	if timeRemain > 0.0:
+		timeRemain = max(0, timeRemain - _delta)
+		timerLabel.text = "%.2f" % timeRemain
+		bar.value = (1.0 - (timeRemain / maxTime)) * 100.0
+		if timeRemain <= 0.0:
+			
+			for n in targets:
+				n.setup_delayed_warp_out(Globals.rng.randf_range(0.1, 0.6))
+#				n.warp_out_phase_one()
+			set_mission_condition_success()
 
 func do_init(init_time):
 	maxTime = init_time
@@ -54,20 +61,22 @@ func setup_targets(unitArray):
 			var target_unit = handler_s.get(unit.name).instance()
 			allUnits.append(target_unit)
 			Globals.curScene.add_unit_to_scene("Neutral_Units", target_unit)
+			target_unit.do_init_unit()
 			target_unit.set_friendly()
 			target_unit.set_armaments()
 			target_unit.set_direction(Vector2(dir, 0))
 			target_unit.add_health_bar()
 			target_unit.mark_as_protect()
-			target_unit.doInit()
+#			target_unit.doInit()
 			if unit.target:
 				num_targets += 1
 #				object.display = "Cargohauler"
 				targets.append(target_unit)
-				target_unit.connect("objectiveDestroyed", self, "on_mission_target_destroyed")
+				target_unit.connect("objectiveDestroyed", self, "on_mission_protect_destroyed")
 	
 	var initialX:int
 	var initialY:int
+	var variance:Vector2 = Vector2.ZERO
 	
 	match targets[0].display:
 		"City":
@@ -94,10 +103,12 @@ func setup_targets(unitArray):
 		elif single.display == "Cargohauler":
 			x = (initialX + ((Globals.rng.randi_range(200, 300) + 100) * i)) * dir
 			y = initialY + (i*-Globals.getRandomEntry([-225, -150, 150, 225]))
+			variance = Vector2(Globals.rng.randi_range(-25, 25), Globals.rng.randi_range(-25, 25))
 			single.connect("_has_warped_in", self, "do_start_mission")
-			single.setup_delayed_warp_in(3 + i*3) 
+			single.setup_delayed_warp_in(time_until_target_arrives + Globals.rng.randf_range(0.1, 0.6))
+#			single.setup_delayed_warp_out(time_until_target_arrives + mission_time) 
 			
-		single.position = Vector2((Globals.WIDTH / 2) + x, y)
+		single.position = Vector2((Globals.WIDTH / 2) + x, y) + variance
 		
 	amount = num_targets
 	remaining = num_targets
@@ -111,12 +122,13 @@ func setup_attackers(unitArray):
 			var attacker = handler_s.get(unit.name).instance()
 			var target = Globals.getRandomEntry(targets)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", attacker)
+			attacker.do_init_unit()
 			attacker.set_hostile()
 			attacker.set_armaments()
 			attacker.add_primary_target(target)
 			attacker.stats.flee_tresh = 0.25
 			attacker.connect("_has_warped_in", target, "add_primary_target", [attacker])
-			target.connect("_has_warped_out", attacker, "_on_target__has_warped_out", [target])
+			target.connect("_has_warped_out", attacker, "_on_target_has_warped_out", [target])
 #			attacker.speed = target.speed
 			attacker.set_direction(target.direction)
 #			print(attacker.direction.x)
@@ -124,7 +136,7 @@ func setup_attackers(unitArray):
 			var y:int = 0
 				
 			if target.position.y > Globals.HEIGHT * 0.9:
-				y = target.position.y - Globals.rng.randi_range(500, 750)
+				y = target.position.y - Globals.rng.randi_range(400, 650)
 #				y = target.position.y - Globals.rng.randi_range(200, 350)
 			else:
 				y = target.position.y + (Globals.rng.randi_range(200, 350) * Globals.getRandomEntry([-1, 1]))
@@ -138,7 +150,7 @@ func setup_attackers(unitArray):
 					x = target.position.x + (1200 * -target.direction.x)
 					y = target.position.y - 400
 				"Frigate":
-					x = target.position.x + (600 * -attacker.direction.x)
+					x = target.position.x + (400 * -attacker.direction.x)
 					attacker.stats.can_withdraw = true
 					attacker.stats.canCrash = false
 			
@@ -151,7 +163,7 @@ func setup_attackers(unitArray):
 			attacker.init_as_attacker()
 			
 			if attacker.can_warp_in():
-				attacker.setup_delayed_warp_in(5 + i*3)
+				attacker.setup_delayed_warp_in(time_until_target_arrives+3)
 			else:
 				attacker.setActive()
 

@@ -396,13 +396,19 @@ func looking_at(trans, pos):
 func kill():
 	if destroyed or indestructable: return
 	destroyed = true
+	doDisable()
 	hide()
 	set_physics_process(false)
 	emit_signal("isDestroyed")
 	if has_node("ControlNodes"):
 		$ControlNodes.set_as_toplevel(false)
-	if has_node("ColNodes"):
-		disableCollisionNodes()
+	disableCollisionNodes()
+	disable_all_timers()
+		
+func disable_all_timers():
+	if has_node("TimerNodes"):
+		for n in $TimerNodes.get_children():
+			n.stop()
 
 func fillQualityRows():
 	subPanel_Stats.get_node("VBox/MC_Qual/Vbox/Label").text = str("-- ", getQualityAsString(), " --")

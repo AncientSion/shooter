@@ -6,30 +6,17 @@ var crash_rotation_speed:float
 
 var display = "Fighter"
 	
-func doInit():
-	
+func do_specific_unit_init():	
 	if position.x < Globals.WIDTH / 2:
 		rotation_degrees += Globals.rng.randi_range(-4, 4)
 	else:
 		rotation_degrees += 180 + Globals.rng.randi_range(-4, 4)
 	
-	.doInit()
+#	.doInit()
 	velocity = (moveTarget - global_position).normalized() * maxSpeed/2
 	accel = velocity
 	rotation = velocity.angle()
 	enginePower = maxSpeed
-#	var facing = Globals.rng.randi_range(-6, 6)
-#	boostStrength = 30
-#	boostTimeRemain = 2.0
-#	steer_force = 5
-#	if position.x > Globals.WIDTH / 2:
-#		facing += 180
-#	velocity = Vector2(maxSpeed/2, 0).rotated(deg2rad(facing))
-#	rotation = velocity.angle()
-##	speed = 220
-#	minSpeed = maxSpeed * 0.9
-	
-#	print("spawning fighter #", self.id, ", rota: ", rotation_degrees, " on pos ", global_position)
 	
 func _ready():
 	pass

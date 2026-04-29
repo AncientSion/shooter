@@ -11,9 +11,10 @@ var shieldFastCharge:float
 var shieldLength:int = 36
 var shieldDist:int = 60
 var is_powering_up:bool = false
-var is_breaking: bool = false
 
 const SHIELD_BREAK_TWEEN_TIME:float = 0.6
+
+var tween = null
 
 #var time:float
 
@@ -47,9 +48,6 @@ func setShieldBaseStats():
 		self[key] = baseStats[key]
 	
 func _physics_process(_delta):
-#	if is_breaking:
-#		print($Shield.modulate.a)
-#		print($Shield.scale)
 	pass
 
 func isInActiveBurst():
@@ -61,19 +59,35 @@ func canFire():
 func set_all_cooldown_timers():
 	return
 	
-#func handleHullDamage(remDmg, pos, angle):
-#	return
-	
 func doUnselect():
 	return false
 	doDisable()
 	setShieldBarHealth()
 	
+func kill():
+	.kill()
+	
 func doDisable():
-	unpowerShield()
-	.doDisable()
-	shield = 0
-	updateShield()
+	if not destroyed:
+		unpowerShield()
+		.doDisable()
+		shield = 0
+		updateShield()
+	else:
+		handle_shield_disable_on_kill()
+		
+func handle_shield_disable_on_kill():
+#	print(tween.is_running())
+#	print(tween.is_valid())
+	print("handle_shield_disable_on_kill")
+	
+	if tween.is_running():
+		if is_powering_up:
+			tween.stop()
+			unpowerShield()
+		else:
+			pass
+			
 
 func doEnable():
 	.doEnable()
@@ -83,36 +97,36 @@ func get_shield_end_scale():
 	return Vector2.ZERO
 	
 func unpowerShield():
-	if not active: 
+	if active == false: 
 		return
-#	shield = 0
-#	updateShield()
-#	active = false
-
-	is_breaking = true
 	
 	disableCollisionNodes()
-	
-	$Tween.interpolate_property($Shield, "modulate:a",
-			1.0, 0.0, SHIELD_BREAK_TWEEN_TIME,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
-#	
-	$Tween.interpolate_property($Shield, "scale",
-			get_shield_end_scale(), Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME,
-			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.start()
 	$TimerNodes/ShieldRegen.stop()
+	$Shield.modulate.a = 1.0
+	$Shield.scale = get_shield_end_scale()
+
+	tween = get_tree().create_tween().set_parallel(true)
+	tween.tween_property($Shield, "modulate:a", 0.0, SHIELD_BREAK_TWEEN_TIME)
+	tween.tween_property($Shield, "scale", Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME)
+#
+	
+	
+#	$Tween.interpolate_property($Shield, "modulate:a",
+#			1.0, 0.0, SHIELD_BREAK_TWEEN_TIME,
+#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+#	$Tween.start()
+##	
+#	$Tween.interpolate_property($Shield, "scale",
+#			get_shield_end_scale(), Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME,
+#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+#	$Tween.start()
 	
 func powerShield():
-	if not active:
+	if active == false:
 		return
 	active = false
 	is_powering_up = true
-	is_breaking = false
 	print("powering shield on ", display, " #", get_instance_id())
-#	active = true
-	
 	
 	var target_charge:int = maxShield * shieldFastCharge
 	var charge_tick:float = 0.05
@@ -131,9 +145,9 @@ func powerShield():
 #			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			
 	
-	var tween = get_tree().create_tween().set_parallel(true)
+	tween = get_tree().create_tween().set_parallel(true)
 	tween.tween_property($Shield, "modulate:a", shieldFastCharge, SHIELD_BREAK_TWEEN_TIME)
-	tween.tween_property($Shield, "scale", get_shield_end_scale(),SHIELD_BREAK_TWEEN_TIME)
+	tween.tween_property($Shield, "scale", get_shield_end_scale(), SHIELD_BREAK_TWEEN_TIME)
 	tween.set_parallel(false)
 	tween.tween_callback(self, "powering_up_done")
 	
@@ -145,34 +159,6 @@ func powering_up_done():
 	active = true
 	enableCollisionNodes()
 
-func powerShield_X():
-	if not active:
-		return
-	print("powering shield on ", display, " #", get_instance_id())
-#	active = true
-	
-	enableCollisionNodes()
-	
-	var target_charge:int = maxShield * shieldFastCharge
-	var charge_tick:float = 0.05
-	var total_time:float = (charge_tick * target_charge) + charge_tick
-
-	$TimerNodes/ShieldRegen.wait_time = charge_tick
-	$TimerNodes/ShieldRegen.start()
-
-#	$Tween.interpolate_property($Shield, "scale",
-#			Vector2(0.0, 0.0), get_shield_end_scale(), 1.0,
-#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.start()
-
-	var tween = get_tree().create_tween()
-	$Shield.scale = Vector2.ZERO
-	tween.tween_property($Shield, "scale", get_shield_end_scale(), 1.0)
-#	tween.tween_callback(self, "warpOutStepTwo")
-	
-	$TimerNodes/ShieldSupercharge.wait_time = total_time
-	$TimerNodes/ShieldSupercharge.start()
-#
 func _on_Supercharge_timeout():
 	$TimerNodes/ShieldRegen.wait_time = shieldRegenTime
 	$TimerNodes/ShieldRegen.start()	

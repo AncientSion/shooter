@@ -163,7 +163,7 @@ func process_movement(delta: float):
 		
 	mainUI.updateBoostChargeBar()
 
-func doInit():
+func do_init_player():
 	visible = false
 	update_stats()
 	
@@ -255,7 +255,7 @@ func selectWeapon(step):
 func getActiveWeapon():
 	return $Mounts/A.get_child(aWeapon)
 	
-func doUnselectWeapons():
+func do_unselect_all_weapons():
 	for n in $Mounts/A.get_children():
 		n.doUnselect()
 			
@@ -383,7 +383,7 @@ func get_input(_delta):
 	if Input.is_action_pressed("ui_select"):
 		if can_warp_out():
 #			print("can_warp_out")
-			warpOutStepOne()
+			warp_out_phase_one()
 			
 	if Input.is_action_just_pressed("alt_use_item"):
 		if aItem >= 0: getActiveItem().doUse()

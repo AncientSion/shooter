@@ -41,8 +41,8 @@ func set_various_settings():
 func set_stage_dimensions():
 	Globals.WIDTH = 8000
 	Globals.HEIGHT = 2000
-	Globals.ROADY = Globals.HEIGHT - 45
-	Globals.MUDY = Globals.HEIGHT - 35
+	Globals.MUDY = Globals.HEIGHT - 85
+	Globals.ROADY =Globals.MUDY - 10
 	
 func createTestBG(): #forest bg	
 	
@@ -563,7 +563,7 @@ func readyPlayer():
 #	player.position = Vector2(Globals.WIDTH - 400, Globals.HEIGHT-400)
 #	player.hide()
 #	player.set_inactive()
-	player.doInit()
+	player.do_init_player()
 	player.setup_delayed_warp_in(1.0)
 	
 func positionCamera():

@@ -6,9 +6,6 @@ class_name Ground_Entity
 func _ready():
 	pass
 	
-func doInit():
-	.doInit()
-	
 func _physics_process(delta):
 	pass
 	
@@ -24,7 +21,7 @@ func getSpawnY(viewFrom, viewTo):
 func applyForce(force):
 	pass
 		
-func handle_kill_explos():
+func create_final_kill_explos():
 	var amount = ceil((texDim.x + texDim.y) / 24)
 #	print("killing ", self.display, ", explos: ", amount)
 #	amount = 3

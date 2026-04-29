@@ -6,8 +6,7 @@ var display = "Frigate"
 func _ready():
 	pass
 	
-func doInit():
-	.doInit()
+func do_specific_unit_init():
 	for n in $Mounts.get_children():
 		n.add_health_bar()
 		n.scaleBar("healthbar", 0.5)
@@ -78,7 +77,10 @@ func getPossibleWeapons(index):
 #			return shield
 			return Globals.getWeaponBase("Light Autocannon");
 		1:
-			return Globals.getWeaponBase("Light Autocannon");
+#			return Globals.getWeaponBase("Heavy Autocannon");
+			var w = Globals.getWeaponBase("Heavy Autocannon");
+			w.rof = 1.0
+			return w
 			
 			
 func addStartingItems():

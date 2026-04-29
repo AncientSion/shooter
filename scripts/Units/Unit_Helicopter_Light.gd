@@ -3,9 +3,6 @@ class_name Helicopter_Light
 
 var display = "Helicopter_Light"
 
-func doInit():
-	.doInit()
-
 func _physics_process(_delta):
 	pass
 	
@@ -77,7 +74,7 @@ func getCrashAngle():
 func killByCrash():
 	.killByCrash()
 		
-	for n in maxSmoke * 2:
+	for n in max_smoke * 2:
 		var explo = Globals.getExplo("radial", get_dmg_gfx_scale())
 		explo.position += position + get_point_inside_tex()
 		explo.rotation = Globals.rng.randi_range(0, 2*PI)

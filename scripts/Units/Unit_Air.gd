@@ -1,7 +1,7 @@
 extends Base_Unit
 class_name Air_Unit
 
-func adjustStatsRes():
+func adjust_stats_res():
 	stats.canCrash = true
 	
 #func set_danger():
@@ -24,8 +24,7 @@ func killByCrash():
 			$Tween.stop_all()
 			$Tween.remove_all()
 		
-	for n in $ControlNodes.get_children():
-		n.hide()
+	hide_all_control_nodes()
 	
 	if debug_menu_row != null:
 		debug_menu_row.queue_free()
@@ -44,22 +43,24 @@ func killByCrash():
 		explo.rotation_degrees = Globals.rng.randi_range(0, 359)
 		Globals.curScene.get_node("Various").add_child(explo)
 		
-	for n in (maxSmoke):
+	for n in (max_smoke):
 		add_exp_fire_smoke_fx(0.8, 0.0)
 		
-	for n in ceil(maxSmoke/2):
+	for n in ceil(max_smoke/2):
 		add_exp_fire_smoke_fx(0.4, 0.0)
 		
 func crashCondition(remDmg):
-	if $SM.state != $SM.states.crash:
-#		return true
-		var rand = rand_range(0, 1)
-		if (health < float(maxHealth * stats.crashTresh) and rand < remDmg / float(health)):
+	if $SM.state == $SM.states.crash:
+		return false
+		
+	var rand = rand_range(0, 1)
+	var trigger_min = float(maxHealth * stats.crashTresh)
+	var cur_health = remDmg / float(health+remDmg)
+	if (health < trigger_min and rand < cur_health):
 #			print("Crash!")
-			print("hit for: ", remDmg, ", health remaining: ", health ,"/", maxHealth)
-			print("rand 0-1: ", str(rand), " < than: ", (remDmg / float(health)))
-			return true
-	return false
+		print("hit for: ", remDmg, ", health remaining: ", health ,"/", maxHealth)
+		print("rand 0-1: ", str(rand), " < than: ", cur_health)
+		return true
 	
 func withdraw_condition(remDmg):
 	return false
@@ -79,12 +80,12 @@ func doFaceTarget():
 			doTurnaround()
 
 func setupCrashing():
-#	invul = true
+#	invulnerable = true
 	danger.fill(0.0)
-	for n in maxSmoke:
+	for n in max_smoke:
 		add_exp_fire_smoke_fx(1.0, rand_range(0, 1) * n*2)
 		
-	for n in maxSmoke:
+	for n in max_smoke:
 		var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
 		explo.set_as_toplevel(true)
 		explo.offset = get_point_inside_tex()
@@ -110,9 +111,9 @@ func doInitCrash():
 	$Tween.start()
 		
 func kill():
-	.kill()
 	if indestructable:
 		return
+	.kill()
 	if position.y < Globals.ROADY - 15:
 		hide()
 		disableCollisionNodes()

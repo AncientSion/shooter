@@ -8,7 +8,7 @@ var texDim
 var targetsArr = []
 var curTarget = null
 var faction:int
-var id = Globals.getId()
+var id:int = Globals.getId()
 
 signal damageTaken
 signal isDestroyed
@@ -17,16 +17,17 @@ signal _has_warped_in
 signal _has_warped_out
 
 var smoke:int
-var maxSmoke:int
-var destroyed = false
-var isTarget = false
-var isProtect = false
-var target_indicator:POI = null
-var indestructable = false
-var invul = false
-var real = true
-var isObstacle = false
-var forcedLock = false
+var max_smoke:int
+var destroyed:bool = false
+var is_target:bool = false
+var is_protect:bool = false
+var target_indicator:POI_MARKER = null
+var indestructable:bool = false
+var targetable:bool = true
+var invulnerable:bool = false
+var real:bool = true
+var isObstacle:bool = false
+var forcedLock:bool = false
 
 var healthbar = null
 var missionhealthbar = null
@@ -72,25 +73,22 @@ var recoilForce = Vector2.ZERO
 var impactForce = Vector2.ZERO
 
 func _ready():
+	pass
+	
+func do_init_unit():
 	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	setStats()
-	setMass()
-	setRamDamage()
 	
-#	print("_ready: ", get_class())
-#	print("_ready: ", self.display)
-	
-#	print(get_class())
-#	if healthbar != null:
-#		healthbar.offset = Vector2(0, texDim.y/2 + 60)
 	if has_node("ColNodes"):
 		connect("damageTaken", self, "on_damage_taken")
 		connectHurtBoxes()
-#	if has_node("ControlNodes"):
 	if has_node("Jump"):
 		$Jump.set_as_toplevel(true)
 		
 	check_controlnodes_top_level()
+	do_custom_init()
+	
+func do_custom_init():
+	pass
 
 func check_controlnodes_top_level():
 	if has_node("ControlNodes") and $ControlNodes.get_children():
@@ -114,18 +112,12 @@ func connectHurtBoxes():
 			n.connect("area_exited", self, str("_on_area_exited"))
 	
 func doInit():
-	return
-	
-func setStats():
-	return
-	
-func setMass():
-	mass = 1.0
+	pass
 
 func _draw():
-	if isTarget:
+	if is_target:
 		draw_rect(Rect2(-texDim.x*0.75, -texDim.y*0.75, texDim.x*1.5, texDim.y*1.55), Color(1, 0, 0, 0.2))
-	elif isProtect:
+	elif is_protect:
 		draw_rect(Rect2(-texDim.x*0.75, -texDim.y*0.75, texDim.x*1.5, texDim.y*1.55), Color(0, 1, 0, 0.2))
 	return
 	
@@ -214,7 +206,7 @@ func handleHullDamage(remDmg, pos, angle):
 	var labelPos = global_position + Vector2(Globals.rng.randi_range(-25, 25), -(texDim.y/2) -10)
 	createFloatingLabel(remDmg, labelPos, Vector2(0, -100))
 	addHitExplosion(remDmg, pos, angle)
-	if invul or destroyed:
+	if invulnerable or destroyed:
 		return
 	health -= remDmg
 	checkForTriggers("on_damage")
@@ -233,7 +225,7 @@ func check_hp_post_dmg(amount):
 #	print("check_hp_post_dmg ", get_class())
 	if health <= 0:
 		kill()
-	elif smoke == 0 && smoke < maxSmoke && health <= self.maxHealth / 2:
+	elif smoke == 0 && smoke < max_smoke && health <= self.maxHealth / 2:
 #	elif smoke == 0 && health <= self.maxHealth / 2:
 		smoke += 1
 		add_smoke_fx(Globals.getSmokeNode(0.5))
@@ -263,11 +255,11 @@ func add_smoke_fx(node):
 	$EffectNodes.add_child(node)
 	
 func disableCollisionNodes():
-#	print(self.display, ": DISABLE collisions")
-	call_deferred("next_frame_disableCollisionNodes")
+	if has_node("ColNodes"):
+		call_deferred("next_frame_disableCollisionNodes")
 	
 func next_frame_disableCollisionNodes():
-#	print("disabling ", self.display)
+	print("disabling ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", false)
 		n.set("monitorable", false)
@@ -287,11 +279,11 @@ func next_frame_disableCollisionNodes():
 			n.disabled = true
 			
 func enableCollisionNodes():
-#	print(self.display, ": ENABLE collisions")
+	print(self.display, ": ENABLE collisions")
 	call_deferred("next_frame_enableCollisionNodes")
 			
 func next_frame_enableCollisionNodes():
-#	print("enabling ", self.display)
+	print("enabling ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", true)
 		n.set("monitorable", true)
@@ -333,24 +325,35 @@ func kill():
 		if $TimerNodes.has_node("WarpOutTimer"):
 			$TimerNodes/WarpOutTimer.stop()
 			cancelWarpOut()
-		
-	for n in $ControlNodes.get_children():
-		n.hide()
-	for n in $EffectNodes.get_children():
-		if n.delay > 0.0:
-			n.set_physics_process(false)
+	
+	hide_control_nodes()
+	stop_upcoming_effect_nodes()
+	
 
 	if debug_menu_row != null:
 		mark_debug_menu_entry_as_killed()
 	
-	if isTarget:
+	if is_target:
 		unmark_as_target()
-	elif isProtect:
+	elif is_protect:
 		unmark_as_protect()
 		
-	handle_kill_explos()
+	create_final_kill_explos()
+	
+func show_control_nodes():
+	for n in $ControlNodes.get_children():
+		n.show()
+	
+func hide_control_nodes():
+	for n in $ControlNodes.get_children():
+		n.hide()
+		
+func stop_upcoming_effect_nodes():
+	for n in $EffectNodes.get_children():
+		if n.delay > 0.0:
+			n.set_physics_process(false)
 
-func handle_kill_explos():
+func create_final_kill_explos():
 	var amount = ceil((texDim.x + texDim.y) / 24)
 #	print("killing ", self.display, ", explos: ", amount)
 #	amount = 3
@@ -373,24 +376,28 @@ func cancelWarpOut():
 	return 
 	
 func mark_as_target():
-	isTarget = true
-	update()
-	Globals.add_poi_marker(self)
+	if not is_target:
+		is_target = true
+		Globals.UI.poi.add_indicator(Globals.PLAYER, self)
+		update()
 	
 func unmark_as_target():
-	isTarget = false
-	update()
-	Globals.remove_poi_marker(self)
+	if is_target:
+		is_target = false
+		Globals.UI.poi.remove_indicator(self)
+		update()
 	
 func mark_as_protect():
-	isProtect = true
-	update()
-	Globals.add_poi_marker(self)
+	if not is_protect:
+		is_protect = true
+		Globals.UI.poi.add_indicator(Globals.PLAYER, self)
+		update()
 	
 func unmark_as_protect():
-	isProtect = false
-	update()
-	Globals.remove_poi_marker(self)
+	if is_protect:
+		is_protect = false
+		Globals.UI.poi.remove_indicator(self)
+		update()
 
 func create_currency():
 	return
@@ -504,37 +511,97 @@ func setShieldLabelHealth():
 	
 func modify():
 	pass
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	
+func get_point_inside_tex() -> Vector2:
+	var tex: Image = $Sprites/Main.texture.get_data()
+	var dim: Vector2 = tex.get_size()
+	var scale: Vector2 = $Sprites/Main.scale
+	var tex_dim: Vector2 = Vector2(dim.x * scale.x, dim.y * scale.y)
+
+	tex.lock()
+
+	for tries in range(100):
+		var pos := Vector2(
+			Globals.rng.randi_range(0, dim.x - 1),
+			Globals.rng.randi_range(0, dim.y - 1)
+		)
+
+		var p: Color = tex.get_pixelv(pos)
+
+		if p.a > 0.5:
+			var scaled_pos := Vector2(pos) * scale
+
+			# Offset so returned point is centered relative to sprite
+			var final_pos := Vector2(
+				clamp(-tex_dim.x / 2 + scaled_pos.x, -tex_dim.x / 2, tex_dim.x / 2),
+				clamp(-tex_dim.y / 2 + scaled_pos.y, -tex_dim.y / 2, tex_dim.y / 2)
+			)
+
+			tex.unlock()
+			return final_pos
+
+	tex.unlock()
+
+	# Fallback if no opaque pixel found
+	return Vector2.ZERO
 	
-#	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
+func xget_point_inside_tex():
+	var tex: Image = $Sprites/Main.texture.get_data()
+	var dim: Vector2 = tex.get_size()
+	var scale: Vector2 = $Sprites/Main.scale
+	var texDim: Vector2 = Vector2(dim.x * scale.x, dim.y * scale.y)
+
+	tex.lock()
+
+	for tries in range(100):
+		var pos: Vector2 = Vector2(
+		Globals.rng.randi_range(0, int(dim.x) - 1),
+		Globals.rng.randi_range(0, int(dim.y) - 1)
+		)
+		var p: Color = tex.get_pixelv(pos)
+		if p.a > 0.5:
+			pos *= scale
+			pos = Vector2(-texDim.x / 2 + pos.x, -texDim.y / 2 + pos.y)
+			
+			if pos.x < -texDim.x/2:
+				print("ding")
+			if pos.x > texDim.x/2:
+				print("ding")
+			tex.unlock()
+		return pos
+
+	tex.unlock()
+	push_error("No non-transparent pixel found after 100 tries")
+	return Vector2.ZERO
 	
-func get_point_inside_tex():
+func xxget_point_inside_tex():
 	var valid = false
 	var tex = $Sprites/Main.get_texture().get_data()
 	var dim = $Sprites/Main.get_texture().get_size()
+	#texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	tex.lock()
 	
 	var tries:int = 0
 	
 	while not valid:
 		tries += 1
-#		print("looping!")
 		var pos = Vector2(Globals.rng.randi_range(0, dim.x-1), Globals.rng.randi_range(0, dim.y-1))
-#		print(pos)
 		var p = tex.get_pixelv(pos)
 		if p[3] == 1:
 			pos *= $Sprites/Main.scale
 			pos = Vector2((-texDim.x/2)+pos.x, (-texDim.y/2)+pos.y)
+			tex.unlock()
 			return pos
 		if tries >= 100:
 			break
-			
 	
 func makeInvisible():
 	$Sprites.visible = false
 	
 func makeUntargetable():
 	indestructable = true
+	disableCollisionNodes()
 	call_deferred("next_frame_disableCollisionNodes")
 
 func _on_LOOTNODE_mouse_entered(node):
@@ -674,7 +741,7 @@ func handleImpact(area, dmgMulti):
 			area.owner.postImpacting()
 		
 func initRamming(area):
-#	print("initRamming scope: ", self.display, " #", self.id, " being hit by: ", area.owner.display, " #", area.owner.id, " on frame: ", Engine.get_idle_frames())
+#	print("initRamming scope: ", selwwwwwwwwf.display, " #", self.id, " being hit by: ", area.owner.display, " #", area.owner.id, " on frame: ", Engine.get_idle_frames())
 	
 	var dict = {
 		"rammedById": area.owner.id,
@@ -696,9 +763,6 @@ func has_active_omni_shield():
 #		print("active omni, making ram illegal")
 		return true
 	return false
-	
-func setRamDamage():
-	pass
 	
 func processRamming():
 	if not len(rammings):

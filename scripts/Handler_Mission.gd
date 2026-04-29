@@ -13,11 +13,17 @@ var pick:int
 var timeSinceLast:float = 0.0
 var missionState:int = 0 #0:inactve, 1:active, 2:success, 3:fail
 
-onready var mission_base = preload("res://scenes/Missions/Mission_Base.tscn")
-onready var mission_control_area = preload("res://scenes/Missions/Mission_Base.tscn")
-onready var mission_raid_cargo_hauler = preload("res://scripts/Missions/Mission_Base.gd")
-onready var mission_raid_convoy_light = preload("res://scripts/Missions/Mission_Base.gd")
-onready var mission_survive_time = preload("res://scripts/Missions/Mission_Base.gd")
+#onready var mission_base = preload("res://scenes/Missions/Mission_Base.tscn")
+#onready var mission_control_area = preload("res://scenes/Missions/Mission_Base.tscn")
+#onready var mission_raid_cargo_hauler = preload("res://scripts/Missions/Mission_Base.gd")
+#onready var mission_raid_convoy_light = preload("res://scripts/Missions/Mission_Base.gd")
+#onready var mission_survive_time = preload("res://scripts/Missions/Mission_Base.gd")
+
+onready var mission_base = ""
+onready var mission_control_area = ""
+onready var mission_raid_cargo_hauler = ""
+onready var mission_raid_convoy_light = ""
+onready var mission_survive_time = ""
 
 var missionUI
 var missiontext
@@ -30,13 +36,17 @@ var missions_new:Array
 var mission_dict:Dictionary
 
 func mission_loader():
-	mission_dict = {
+	mission_dict = get_mission_dict()
+	for n in mission_dict:
+		mission_dict[n]["scene"] = load(mission_dict[n]["scene_url"])
+	
+func get_mission_dict():
+	return {
 		"mission_control_area":
 		{
 			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
 			"script_url": "res://scripts/Missions/Mission_Control_Area.gd",
 			"scene": null,
-			"switch_script": false,
 		},
 		"mission_survive_time":
 		{
@@ -58,8 +68,6 @@ func mission_loader():
 		},
 	}
 
-	for n in mission_dict:
-		mission_dict[n]["scene"] = load(mission_dict[n]["scene_url"])
 		
 #	print(mission_dict.keys())
 #	print(mission_dict.keys().size())
@@ -274,6 +282,7 @@ func setupRaidObj(unitArray, time):
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.do_init_unit()
 			object.set_hostile()
 			object.set_armaments()
 			object.set_direction(Vector2(dir, 0))
@@ -333,6 +342,7 @@ func setupRaidBuildingObjective(unitArray, time):
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", object)
+			object.do_init_unit()
 			object.set_hostile()
 			object.set_armaments()
 			object.doInit()
@@ -385,12 +395,13 @@ func setupAttacker(unitArray):
 			var attacker = handler_spawn.get(unit.name).instance()
 			var target = Globals.getRandomEntry(targets)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", attacker)
+			attacker.do_init_unit()
 			attacker.set_hostile()
 			attacker.set_armaments()
 			attacker.add_primary_target(target)
 			attacker.stats.flee_tresh = 0.25
 			attacker.connect("_has_warped_in", target, "add_primary_target", [attacker])
-			target.connect("_has_warped_out", attacker, "_on_target__has_warped_out", [target])
+			target.connect("_has_warped_out", attacker, "_on_target_has_warped_out", [target])
 #			attacker.speed = target.speed
 			attacker.set_direction(target.direction)
 #			print(attacker.direction.x)
@@ -446,6 +457,7 @@ func setupProtectObj(unitArray, time):
 			var object = handler_spawn.get(unit.name).instance()
 			allUnits.append(object)
 			Globals.curScene.add_unit_to_scene("Neutral_Units", object)
+			object.do_init_unit()
 			object.set_friendly()
 			object.set_armaments()
 			object.set_direction(Vector2(dir, 0))
@@ -519,6 +531,7 @@ func setupSalvageObj(unitArray, time):
 			var object = handler_spawn.get(unit.name).instance()
 			var dir = Globals.getRandomEntry([-1, 1])
 			Globals.curScene.add_unit_to_scene("Neutral_Units", object)
+			object.do_init_unit()
 			object.set_friendly()
 			object.set_armaments()
 			object.set_direction(Vector2(dir, 0))
@@ -557,6 +570,7 @@ func setupBossObj(unitArray, escortArray, time):
 			var unit = handler_spawn.get(entry.name).instance()
 			mainTarget = unit
 			Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+			unit.do_init_unit()
 			unit.set_hostile()
 			unit.set_armaments()
 			unit.add_health_bar()
@@ -571,6 +585,7 @@ func setupBossObj(unitArray, escortArray, time):
 			for i in entry.amount:
 				var unit = handler_spawn.get(entry.name).instance()
 				Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+				unit.do_init_unit()
 				unit.set_hostile()
 				unit.set_armaments()
 				unit.doInit()
@@ -593,6 +608,7 @@ func setupBlank(unitArray):
 			for i in entry.amount:
 				var unit = handler_spawn.get(entry.name).instance()
 				Globals.curScene.add_unit_to_scene("Enemy_Units", unit)
+				unit.do_init_unit()
 				unit.set_hostile()
 				unit.set_armaments()
 				unit.add_health_bar()
@@ -606,31 +622,9 @@ func setupBlank(unitArray):
 #randi() % 100 + 1 # Returns random integer between 1 and 100
 
 	
-func on_mission_protect_destroyed():
-	print("on_mission_protect_destroyed")
-	mission.remaining -= 1
-	#bar.value = (1 - (float(mission.remaining) / mission.amount))*100
-	
-	if (pick == missions.PROTECT_CARGOHAULER or pick == missions.PROTECT_CITY) and mission.remaining == 0:
-		hasFailedMission()
-	
-func on_mission_target_destroyed():
-	print("on_mission_target_destroyed")
-	return
-	mission.remaining -= 1
-	bar.value = (1 - (float(mission.remaining) / mission.amount))*100
 	
 func on_mission_timer_timeout():
 	print("on_mission_timer_timeout")
-	
-func hasFailedMission():
-	print("hasFailedMission")
-	
-	var text = "MISSION FAILED"
-	missionState = 3
-	timerLabel.set("text", text)
-	timerLabel.set("custom_colors/font_color", Color(1, 0, 0, 1))
-	Globals.UI.set_main_text(text)
 
 func is_mission_completed():
 	if mission == null: return true
@@ -692,7 +686,7 @@ func updateMissionTimeState(delta):
 func warpMissionTargets():
 	for n in mission.targets:
 		if n.canWarp:
-			n.warpOutStepOne()
+			n.warp_out_phase_one()
 
 func terminate_remains_on_mission_scene_end():
 	print("terminate_remains_on_mission_scene_end")

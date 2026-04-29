@@ -104,6 +104,8 @@ custom_styles/panel = SubResource( 11 )
 [node name="Place" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -1.0
+margin_right = -1.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -407,16 +409,16 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+margin_top = -1080.0
 
 [node name="Panel" type="TextureRect" parent="Bars"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -215.0
-margin_top = -96.0
-margin_right = 285.0
-margin_bottom = -3.0
+margin_left = -250.0
+margin_top = -93.0
+margin_right = 250.0
 texture = ExtResource( 17 )
 expand = true
 
@@ -429,8 +431,9 @@ custom_constants/separation = 6
 alignment = 1
 
 [node name="CC_SideBoost" type="CenterContainer" parent="Bars/Panel/VBox"]
+margin_top = 3.0
 margin_right = 500.0
-margin_bottom = 20.0
+margin_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -438,11 +441,13 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.0
 
 [node name="Bar_SideBoost" type="TextureProgress" parent="Bars/Panel/VBox/CC_SideBoost"]
+visible = false
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 material = ExtResource( 10 )
 margin_left = 175.0
+margin_top = -10.0
 margin_right = 325.0
-margin_bottom = 20.0
+margin_bottom = 10.0
 rect_min_size = Vector2( 150, 20 )
 size_flags_horizontal = 12
 size_flags_vertical = 12
@@ -469,9 +474,9 @@ align = 1
 valign = 1
 
 [node name="CC_Boost" type="CenterContainer" parent="Bars/Panel/VBox"]
-margin_top = 26.0
+margin_top = 9.0
 margin_right = 500.0
-margin_bottom = 46.0
+margin_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -510,9 +515,9 @@ align = 1
 valign = 1
 
 [node name="CC_HealthShield" type="CenterContainer" parent="Bars/Panel/VBox"]
-margin_top = 52.0
+margin_top = 35.0
 margin_right = 500.0
-margin_bottom = 107.0
+margin_bottom = 90.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_vertical = 0

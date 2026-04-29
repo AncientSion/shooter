@@ -16,7 +16,7 @@ func start_new_game():
 	init_ui()
 	init_map_scene()
 	
-func start_new_game_without_map():
+func start_new_mission_by_name(name):
 	init_handlers()
 	init_ui()
 	
@@ -29,7 +29,7 @@ func start_new_game_without_map():
 		0,
 #		Globals.handler_mission.get_mission_by_name("mission_protect_cargo_hauler")
 #		Globals.handler_mission.get_mission_by_name("mission_survive_time")
-		Globals.handler_mission.get_mission_by_name("mission_raid_convoy_light")
+		Globals.handler_mission.get_mission_by_name(name)
 	)
 	
 	start_new_mission(node)
@@ -88,12 +88,12 @@ func on_warp_out_end_level():
 	print("on_warp_out_end_level")
 	
 #	for n in Globals.curScene.get_node("Enemy_Units").get_children():
-##		if n.isTarget:
+##		if n.is_target:
 ##			n.unmark_as_target()
 #		n.queue_free()
 #
 #	for n in Globals.curScene.get_node("Neutral_Units").get_children():
-##		if n.isTarget:
+##		if n.is_target:
 ##			n.unmark_as_target()
 #		n.queue_free()
 	Globals.handler_mission.terminate_remains_on_mission_scene_end()

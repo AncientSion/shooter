@@ -2,7 +2,8 @@ extends CanvasLayer
 
 onready var player = Globals.PLAYER
 var ticks = 0
-var shipstats = null
+var shipstats:Node = null
+var poi:Node = null
 
 onready var missionUI = $Place/TopCenter/Mission_PC
 onready var main_text = $Center/Difficulty_Text/Label
@@ -20,7 +21,7 @@ func _ready():
 	text_tween.connect("tween_all_completed", self, "empty_main_text")
 	
 	connect_difficulty_ui()
-	add_child(Globals.POI.instance())
+	init_poi_handler()
 	add_player_debug_panel()
 	addKeyForItem()
 	
@@ -29,6 +30,10 @@ func _ready():
 func _process(delta):
 	fps.text = String(Engine.get_frames_per_second())
 	
+func init_poi_handler():
+	poi = Globals.POI.instance()
+	add_child(poi)
+
 func reset_mission_sub_ui():
 	missionUI.get_node("VBox/Type").hide()
 	missionUI.get_node("VBox/Time").hide()
@@ -264,7 +269,7 @@ func _on_B_value_changed(value):
 		if n is AnimatedSprite:
 			n.self_modulate.b = val
 	
-func update_on_start_mission(mission_class):sss
+func update_on_start_mission(mission_class):
 	print("update_on_start_mission")
 	missionUI.get_node("VBox/mission_state_label/label").text = "ongoing"
 	missionUI.get_node("VBox/mission_state_label/label").hide()
@@ -276,10 +281,16 @@ func update_on_start_mission(mission_class):sss
 	if missionUI.get_node("VBox/Targets_HP").get_children().size() > 1:
 		missionUI.get_node("VBox/Targets_HP").show()
 	
-func update_on_complete_mission(mission_class):
-	print("update_on_complete_mission")
+func update_on_success_mission(mission_class):
+	print("update_on_success_mission")
 	missionUI.get_node("VBox/Time").hide()
 	missionUI.get_node("VBox/mission_state_label/label").text = "Mission Completed !"
+	missionUI.get_node("VBox/mission_state_label/label").show()
+	
+func update_on_fail_mission(mission_class):
+	print("update_on_fail_mission")
+	missionUI.get_node("VBox/Time").hide()
+	missionUI.get_node("VBox/mission_state_label/label").text = "Mission Failed !"
 	missionUI.get_node("VBox/mission_state_label/label").show()
 		
 func add_target_healthbar_to_mission_bar(target):

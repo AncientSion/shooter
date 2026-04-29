@@ -173,7 +173,7 @@ func adjustWaveDataByMission():
 func check_for_reinforce():
 	if enemy_str_cur < enemy_str_max * 0.7:
 		var reinforceStrength:int = floor(enemy_str_max/5)
-		print("enemies under 0.7 of max", enemy_str_cur, "/", enemy_str_max)
+		print("enemies under 0.7 of max ---", enemy_str_cur, "/", enemy_str_max)
 		print("add: ", reinforceStrength)
 		Globals.UI.set_main_text(str("Reinforce by ", reinforceStrength))
 		
@@ -204,6 +204,7 @@ func spawn_and_init_unit(enemy):
 #	enemy.queue_free()
 #	return
 	Globals.curScene.add_unit_to_scene("Enemy_Units", enemy)
+	enemy.do_init_unit()
 	enemy.position = getSpawnOutsideView(enemy)
 #	print("deploying enemy: ", enemy.display, " at ", pos)
 #	enemy.position = Vector2(player.position.x + 100, player.position.y - 700 + Globals.curScene.get_node("Enemy_Units").get_children().size() * 125)
@@ -227,6 +228,7 @@ func spawnSpecial():
 			
 	var enemy = DRONE_KAMIKAZE.instance()
 	Globals.curScene.add_unit_to_scene("Enemy_Units", enemy)
+	enemy.do_init_unit()
 	var pos = getSpawnOutsideView(enemy)
 	enemy.position = pos
 #	enemy.kill()

@@ -31,10 +31,14 @@ func mission_final_setup_self():
 	var w = 900 * 1.0
 	var h = 600 * 1.0
 	do_setup(Globals.WIDTH/2, Globals.HEIGHT/2, w, h)
-	create_poi()
+	Globals.UI.poi.add_indicator(Globals.PLAYER, poi_dummy)
+	Globals.PLAYER.connect("_has_warped_in", self, "do_start_mission")
+	
+func do_start_mission():
+	.do_start_mission()
+	flicker()
 
 func do_init(init_time):
-	flicker()
 	maxTime = init_time
 	timeRemain = init_time
 	
@@ -61,11 +65,7 @@ func do_setup(centerX, centerY, init_w, init_h):
 	zone_area.get_node("CollisionShape2D").disabled = false
 	zone_area.get_node("CollisionShape2D").position = Vector2(0, 0)
 	zone_area.get_node("CollisionShape2D").shape.extents = Vector2(w/2, h/2)
-	
 	create_poi_dummy_unit(Vector2(centerX, centerY))
-	
-func create_poi():
-	Globals.add_poi_marker(poi_dummy)
 	
 func create_poi_dummy_unit(pos):
 	var reward = Globals.CURRENCY.instance()
@@ -90,7 +90,7 @@ func do_process(_delta):
 	bar.value = (1-timerPct)*100
 	
 	if timeRemain <= 0.0:
-		set_mission_condition_fullfilled()
+		set_mission_condition_success()
 
 func player_toggle_area_control():
 	inArea = !inArea
@@ -110,10 +110,10 @@ func flicker():
 		tween.tween_property(zone_polygon, "color:a", 0.1, 0.2)
 		tween.tween_callback(self, "flicker")
 	
-func set_mission_condition_fullfilled():
-	.set_mission_condition_fullfilled()
+func set_mission_condition_success():
+	.set_mission_condition_success()
 	if has_node("Area"):
 		zone_polygon.hide()
-	if Target_Indicator != null:
+	if poi_dummy.target_indicator != null:
 		Globals.remove_poi_marker(self)
 

@@ -18,7 +18,7 @@ func _ready():
 	
 func do_init():
 #	print("mount init")
-	maxSmoke = 1
+	max_smoke = 1
 	maxHealth = health
 	add_to_group("isMount")
 	initArc()
@@ -61,13 +61,11 @@ func kill():
 	
 	if debug_menu_row != null:
 		debug_menu_row.queue_free()
-		
-	for n in $ControlNodes.get_children():
-		n.hide()
+	
+	hide_control_nodes()
+	create_final_kill_explos()
 
-	handle_kill_explos()
-
-func handle_kill_explos():
+func create_final_kill_explos():
 	var amount = 1
 	for n in amount:
 		var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
