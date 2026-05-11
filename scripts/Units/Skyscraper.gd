@@ -11,7 +11,7 @@ func _ready():
 func _physics_process(delta):
 	pass
 	
-func setStats():
+func set_stats():
 	maxHealth = 0
 	armor = 1
 	

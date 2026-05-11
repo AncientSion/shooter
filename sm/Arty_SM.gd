@@ -38,4 +38,4 @@ func _enter_state(prev_state, new_state):
 		states.close:
 			parent.moveTarget = Vector2.ZERO
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

@@ -21,9 +21,9 @@ func do_specific_unit_init():
 		if mount.has_node("Weapon"):
 			if mount.get_node("Weapon").display == "Flak":
 				mount.add_health_bar()
-				mount.scaleBar("healthbar", 0.5)
+				mount.scale_progress_bar("healthbar", 0.5)
 				
-#	$Mounts/Shield.get_node("Weapon").scaleBar("shieldbar", 2.0)
+#	$Mounts/Shield.get_node("Weapon").scale_progress_bar("shieldbar", 2.0)
 		
 		
 func killByCrash():
@@ -38,8 +38,8 @@ func killByCrash():
 		explo.rotation = Globals.rng.randi_range(0, 2*PI)
 		Globals.curScene.get_node("Various").add_child(explo)
 
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	
 	for n in $ThrusterNodes.get_children():
 		n.get_node("Particle2D").emitting = false
@@ -86,7 +86,7 @@ func getCrashSpeed():
 func getCrashAngle():
 	return round(rand_range(8, 12))
 	
-func doTurnaround():
+func do_turnaround():
 	pass
 	
 func getPossibleWeapons(index):
@@ -122,7 +122,7 @@ func getPossibleWeapons(index):
 			shield.construct(5, "Shield", stats)
 			shield.add_shield_bar()
 			
-#			shield.scaleBar("shieldBar", 2.0)
+#			shield.scale_progress_bar("shieldBar", 2.0)
 			return shield
 		7:
 #			return Globals.getWeaponBase("Heavy Autocannon")

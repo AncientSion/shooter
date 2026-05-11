@@ -21,7 +21,7 @@ func _ready():
 
 	$Debug.queue_free()
 
-func setStats():
+func set_stats():
 	maxHealth = 30
 	
 func updateDebugList():

@@ -44,7 +44,7 @@ func drawCurrentDeviationARC():
 #func setPostFireCooldown():
 #	cooldown = min(rof, cooldown + 0.5)
 
-func hasViableFireSolution():
+func has_fire_solution():
 	var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
 #	var dif = angleToTarget - global_rotation_degrees
 #	print("dif: ", abs(round(dif)))

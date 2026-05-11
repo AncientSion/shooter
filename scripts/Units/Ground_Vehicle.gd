@@ -19,9 +19,9 @@ func process_movement(_delta):
 	
 func setUnitFacing():
 	if velocity.x < 0 and sprite.flip_h == false:
-		doTurnaround()
+		do_turnaround()
 	elif velocity.x >= 0 and sprite.flip_h == true:
-		doTurnaround()
+		do_turnaround()
 	
 func applyForce(force):
 	force.y = 0
@@ -60,7 +60,7 @@ func setNewWanderTarget():
 #	moveTarget = newTarget
 #	moveTarget.y = Globals.ROADY
 	
-func setupCrashing():
+func crash_step_one():
 	$SM.canChangeState = false
 	var scale = 0.4
 	add_fire_smoke_fx(scale, 0.0)

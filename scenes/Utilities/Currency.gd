@@ -17,7 +17,7 @@ func _physics_process(delta):
 func connectHurtBoxes():
 	return
 	
-func setStats():
+func set_stats():
 	maxHealth = 1
 	maxSpeed = 500
 

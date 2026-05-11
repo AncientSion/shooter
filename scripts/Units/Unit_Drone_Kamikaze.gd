@@ -7,17 +7,8 @@ class_name Drone_Kamikaze
 
 func do_specific_unit_init():
 	display = "Drone_Kamikaze"
-#	.doInit()
 	boostStrength = 200
 	boostTimeRemain = 2.0
-#func doInit():
-#	.doInit()
-#	rotation = 0.5 * PI
-##	var facing = Globals.rng.randi_range(-8, 8)
-##	if position.x > Globals.WIDTH / 2:
-##		facing += 180
-##	velocity = Vector2(1, 0).rotated(deg2rad(facing))
-##	rotation = velocity.angle()
 
 func _ready():
 	pass
@@ -65,7 +56,7 @@ func disableBoosting():
 		$Sprites/AnimatedSprite.stop()
 		call_deferred("selfDestruct")
 		
-func processRamming():
+func processRamming(delta):
 	if not len(rammings):
 		return
 	selfDestruct()
@@ -88,8 +79,8 @@ func getCrashSpeed():
 func getCrashAngle():
 	return 0
 	
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	
 	if velocity.x > 0:
 #		moveTarget = Vector2(global_position.x + (Globals.HEIGHT-global_position.y)*2, Globals.HEIGHT)

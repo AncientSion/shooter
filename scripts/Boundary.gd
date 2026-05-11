@@ -60,7 +60,7 @@ func getAttackAngle(impactedEntity):
 func postImpacting():
 	return false
 	
-func takeDamage(entity, totalDmg:int):
+func take_damage(entity, totalDmg:int):
 	return
 	
 func get_class():

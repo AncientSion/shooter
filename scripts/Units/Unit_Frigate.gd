@@ -6,11 +6,6 @@ var display = "Frigate"
 func _ready():
 	pass
 	
-func do_specific_unit_init():
-	for n in $Mounts.get_children():
-		n.add_health_bar()
-		n.scaleBar("healthbar", 0.5)
-	
 func process_movement(_delta):
 #	if $SM.state == $SM.states.crash:
 #		return
@@ -68,20 +63,30 @@ func toggleThrusterparticles():
 	
 	
 func getPossibleWeapons(index):
-#	return 
+#	return false
 	match index:
 		0:
+			return false
 #			var shield = Globals.weapon_shield_dir.instance()
 #			var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
 #			return shield.construct(5, "Shield", stats)
 #			return shield
-			return Globals.getWeaponBase("Light Autocannon");
+#			return Globals.getWeaponBase("Light Autocannon");
+			var w = Globals.getWeaponBase("Heavy Autocannon");
+			w.rof = 2.0
+			return w
 		1:
+			return false
 #			return Globals.getWeaponBase("Heavy Autocannon");
 			var w = Globals.getWeaponBase("Heavy Autocannon");
-			w.rof = 1.0
+			w.rof = 2.0
 			return w
-			
+		2:
+#			return Globals.getWeaponBase("Heavy Autocannon");
+			var w = Globals.getWeaponBase("Heavy Autocannon");
+			w.rof = 2.0
+			return w
+	
 			
 func addStartingItems():
 	return
@@ -97,8 +102,13 @@ func addStartingItems():
 func initAvoidValues():
 	avoidValues = {"Player": 1.0, "Fighter": 0.0, "Helicopter_Light": 0.0, "Boundary": 5.0, "Obstacle": 5.0, "Cargohauler": 1.5, "City": 1.5, "Boss": 2.0}
 	
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, getCrashSpeed(), 3.0)
 	$Tween.start()
-	$Tween.connect("tween_all_completed", self, "doInitCrash")
+	$Tween.connect("tween_all_completed", self, "crash_step_two")
+	
+func set_hold_position():
+	moveTarget = global_position
+	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, maxSpeed/4, 3.0)
+	$Tween.start()

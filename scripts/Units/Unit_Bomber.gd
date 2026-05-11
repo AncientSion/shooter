@@ -188,8 +188,8 @@ func addStartingItems():
 func initAvoidValues():
 	avoidValues = {"Player": 1.0, "Fighter": 1.0, "Helicopter_Light": 1.0, "Boundary": 5.0, "Obstacle": 5.0, "Cargohauler": 3.5, "City": 0.0}
 		
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	if rotation_degrees > 55 and rotation_degrees < 125:
 		moveTarget = global_position + (Vector2.RIGHT.rotated(rotation + rand_range(-0.3, 0.3)) * 1000)
 	elif velocity.x > 0:

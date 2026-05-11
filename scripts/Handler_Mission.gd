@@ -493,7 +493,7 @@ func setupProtectObj(unitArray, time):
 #			single.get_node("Mounts/C/Weapon/ControlNodes/ShieldBar").offset.x = +20 * dir
 #			single.get_node("ControlNodes/HealthBar/ProgressBar").rect_min_size += Vector2(50, 0)
 #	shield.add_shield_bar()
-#	shield.scaleBar("shieldbar", 0.5)
+#	shield.scale_progress_bar("shieldbar", 0.5)
 #			single.setup_delayed_warp_in(3 + i*3) 
 		elif single.display == "Cargohauler":
 			x = (initialX + ((Globals.rng.randi_range(200, 300) + 100) * i)) * dir

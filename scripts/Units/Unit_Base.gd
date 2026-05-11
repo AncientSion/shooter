@@ -56,28 +56,26 @@ func do_init_unit():
 	name = str(self.display, "-", self.id)
 	max_smoke = ceil(texDim.length() / 100)
 	
-	setStats()
+	set_stats()
 	setMass()
+
+	connectHurtBoxes()
 	
-	if has_node("ColNodes"):
-		connect("damageTaken", self, "on_damage_taken")
-		connectHurtBoxes()
 	if has_node("Jump"):
 		$Jump.set_as_toplevel(true)
-		
-	check_controlnodes_top_level()
-	
 	
 	setDamageBreaks()
-	randomizeWeaponStartCooldown()
 	init_lifetime()
 	showDebug()
 	init_debug_menu_entry()
 	addPhysCollision()
 	initSteering()
-	initAvoidValues()	
+	initAvoidValues()
 	
-	do_custom_init()
+	do_specific_unit_init()
+	
+func do_specific_unit_init():
+	pass
 	
 func initAvoidValues():
 	pass
@@ -87,8 +85,8 @@ func addSightCollision():
 	var maxSight:int = 0
 	
 	for mount in $Mounts.get_children():
-#		if mount.has_node("Weapon"):
-		maxSight = max(maxSight, mount.get_node("Weapon").getMaxRange())
+		if mount.has_node("Weapon"):
+			maxSight = max(maxSight, mount.get_node("Weapon").getMaxRange())
 #	print(self.display, " ", maxSight, " maxSight")
 	if not has_node("Sight"): 
 		return
@@ -153,7 +151,7 @@ func enter_crash_condition_state():
 	$SM.canChangeState = false
 	$SM.set_state($SM.states.crash)
 	
-func setupCrashing():
+func crash_step_one():
 	pass
 
 func crashCondition(remDmg):
@@ -178,8 +176,6 @@ func init_lifetime():
 	node.init_text_label_string(lifetime)
 	$ControlNodes.add_child(node)
 	
-	check_controlnodes_top_level()
-	
 func check_support_duration():
 	if has_node("ControlNodes/rem_lifetime_label") and get_node("ControlNodes/rem_lifetime_label").isUpdating:
 		get_node("TimerNodes/rem_lifetime").stop()
@@ -187,10 +183,6 @@ func check_support_duration():
 
 func set_wave_strength(strength):
 	wave_strength = strength
-	
-func do_init_mounts():
-	for n in $Mounts.get_children():
-		n.do_init()
 	
 func showDebug():
 	
@@ -290,7 +282,10 @@ func get_weapon_by_index(index:int):
 	return $Mounts.get_child(index).get_node("Weapon")
 
 func handle_weapons(_delta): # context: unit with several weapon mounts
-	for n in $Mounts.get_children(): 
+	for n in $Mounts.get_children():
+		if not n.has_node("Weapon"):
+			continue
+			
 		var weapon = n.get_node("Weapon")
 		if not is_instance_valid(weapon) or weapon.destroyed or not weapon.active:
 			continue
@@ -300,7 +295,7 @@ func handle_weapons(_delta): # context: unit with several weapon mounts
 			continue
 		weapon.do_track_target() # it has a target, rotate the weapon towards it
 		if weapon.canFire(): # check cooldown, emp or other conditions
-			if weapon.bursting or weapon.hasViableFireSolution(): # do i have the right vector / rotation achieved `?
+			if weapon.bursting or weapon.has_fire_solution(): # do i have the right vector / rotation achieved `?
 				weapon.handleFiring() # spawn projectile
 				
 func handleItems(_delta):
@@ -380,11 +375,9 @@ func setActive():
 #	print("set active: ", self.display)
 	ready = true
 	set_physics_process(true)
+	enableWeapons()
 	enableItems()
 	enableAllCollisionNodes()
-	
-	for n in $Mounts.get_children():
-		n.get_node("Weapon").doEnable()
 		
 	for n in $ThrusterNodes.get_children():
 		n.visible = true
@@ -405,7 +398,8 @@ func set_inactive():
 	disableAllCollisionNodes()
 
 	for n in $Mounts.get_children():
-		n.get_node("Weapon").doDisable()
+		if n.has_node("Weapon"):
+			n.get_node("Weapon").doDisable()
 		
 	for n in $ThrusterNodes.get_children():
 		n.visible = false
@@ -419,7 +413,7 @@ func set_inactive():
 func setUnitFacing():
 	return
 	
-func setStats():
+func set_stats():
 	stats = stats.duplicate()
 	adjust_stats_res()
 	
@@ -434,17 +428,14 @@ func setStats():
 	
 func adjust_stats_res():
 	pass
-
-func hideSelf():
-	hide()
-	for mount in $Mounts.get_children():
-#		if mount.has_node("Weapon"):
-		mount.get_node("ControlNodes").hide()
-		mount.get_node("Weapon/ControlNodes").hide()
+	
+func can_warp_in():
+	return false
 		
 func setup_delayed_warp_in(time):
 	print("setup_delayed_warp_in for ", self.display, ": ", time, " seconds.")
-	hideSelf()
+	hide()
+	hide_all_control_nodes()
 	set_inactive()
 	var timer = Timer.new()
 	timer.name = "WarpInTimer"
@@ -455,11 +446,12 @@ func setup_delayed_warp_in(time):
 	timer.start()
 	$Jump.visible = true
 	
-func can_warp_in():
-	return false
-	
 func setup_delayed_warp_out(time):
 	print("setup_delayed_warp_out for ", self.display, ": ", time, " seconds.")
+	if $TimerNodes.has_node("WarpOutTimer"):
+		print("trying to delay warp out, but its already happening")
+		return false
+	
 	var timer = Timer.new()
 	timer.name = "WarpOutTimer"
 	$TimerNodes.add_child(timer)
@@ -516,8 +508,8 @@ func on_warp_in_done():
 	
 	setActive()
 	show_all_control_nodes()
-	enableWeapons()
-	enableItems()
+#	enableWeapons()
+#	enableItems()
 	
 	if lifetime > 0.0:
 		$TimerNodes.get_node("rem_lifetime").start()
@@ -573,12 +565,12 @@ func warp_out_phase_three():
 	var tween = get_tree().create_tween()
 	
 	tween.tween_property($Jump, "scale", Vector2(0, 0), durIn)
-	tween.tween_callback(self, "warp_out_done")
+	tween.tween_callback(self, "on_warp_out_done")
 	
-func warp_out_done():
-	print(self.display, ": warp_out_done")
+func on_warp_out_done():
+	print(self.display, ": on_warp_out_done")
 	isWarping = false
-#	return
+	
 	set_inactive()
 	unload_gear()
 	hideDebug()
@@ -593,25 +585,29 @@ func warp_out_done():
 	unmark_as_protect()
 		
 	if isPlayer:
-		Globals.MAP_SCENE.selected_node.mission_class.logic.set_mission_condition_success()	
+		Globals.MAP_SCENE.selected_node.mission_class.logic.set_mission_condition_success()
 		
 	emit_signal("_has_warped_out")
 	
 func show_all_control_nodes():
 	if not isPlayer and has_node("ControlNodes"):
 		has_ControlNodes = true
-		$ControlNodes.visible = true
+		for n in $ControlNodes.get_children():
+			n.show()
 		for mount in $Mounts.get_children():
 			mount.show_control_nodes()
-			mount.get_node("Weapon").show_control_nodes()
+			if mount.has_node("Weapon"):
+				mount.get_node("Weapon").show_control_nodes()
 
 func hide_all_control_nodes():
 	if not isPlayer and has_node("ControlNodes"):
 		has_ControlNodes = false
-		$ControlNodes.visible = false
+		for n in $ControlNodes.get_children():
+			n.hide()
 		for mount in $Mounts.get_children():
 			mount.hide_control_nodes()
-			mount.get_node("Weapon").hide_control_nodes()
+			if mount.has_node("Weapon"):
+				mount.get_node("Weapon").hide_control_nodes()
 	
 func unload_gear():
 	for n in items:
@@ -668,12 +664,12 @@ func set_direction(dirVector:Vector2 = Vector2.ZERO):
 	
 	if direction == Vector2(-1, 0):
 		direction *= -1
-		doTurnaround()
+		do_turnaround()
 		
 	#print(self.display, " set dir to ", direction)
 	
-func doTurnaround():
-#	print(self.display, " #", id, ": doTurnaround")
+func do_turnaround():
+#	print(self.display, " #", id, ": do_turnaround")
 	direction *= -1
 	$Sprites/Main.flip_h = !$Sprites/Main.flip_h
 	mirrorTurrets()
@@ -681,16 +677,16 @@ func doTurnaround():
 	mirrorVarious()
 	mirrorColNodes()
 
-func mirrorTurrets():
+func mirrorTurrets():dd
 	for n in $Mounts.get_children():
 		n.position.x *= -1
-#		if not n.has_node("Weapon"): return
-		var weapon = n.get_node("Weapon")
-		weapon.anchor.x *= -1
-		weapon.current_rot.x *= -1
-		weapon.rotation = weapon.current_rot.angle()
-		n.get_node("DebugAim/Start").scale.x *= -1
-		n.get_node("DebugAim/End").scale.x *= -1
+		if n.has_node("Weapon"):
+			var weapon = n.get_node("Weapon")
+			weapon.anchor.x *= -1
+			weapon.current_rot.x *= -1
+			weapon.rotation = weapon.current_rot.angle()
+			n.get_node("DebugAim/Start").scale.x *= -1
+			n.get_node("DebugAim/End").scale.x *= -1
 		
 func mirrorThrusters():
 	for n in $ThrusterNodes.get_children():
@@ -716,14 +712,17 @@ func set_armaments():
 	var index = 0
 	for mount in $Mounts.get_children():
 		mount.set_faction(faction)
-		mount.do_init()
+		mount.do_init_mount()
 		var weapon = getPossibleWeapons(index)
-		weapon.doInit()
 		index += 1
+		if not weapon:
+			continue
+		weapon.do_init_weapon()
 #		if !weapon:
 #			continue
 		addWeapon(weapon, mount)
 		
+	randomizeWeaponStartCooldown()
 	addSightCollision()
 	addStartingItems()
 	
@@ -798,7 +797,7 @@ func create_currency():
 	for n in total:
 		var reward = Globals.CURRENCY.instance()
 		Globals.curScene.get_node("Various").add_child(reward)
-		reward.do_init_unit()
+		reward.do_init_entity()
 		reward.position = global_position + Vector2(Globals.rng.randi_range(-texDim.x/2, texDim.x/2), Globals.rng.randi_range(-texDim.y/2, texDim.y/2))
 		reward.rotation_degrees = Globals.rng.randi_range(0, 359)
 		reward.velocity = Vector2(500, 0).rotated(reward.rotation)
@@ -866,11 +865,11 @@ func remove_cur_target():
 				forcedLock = false
 			break
 	for n in $Mounts.get_children():
-#		if n.has_node("Weapon"):
-		var w = n.get_node("Weapon")
-		w.curTarget = null
-		if w.forcedLock:
-			w.forcedLock = false
+		if n.has_node("Weapon"):
+			var w = n.get_node("Weapon")
+			w.curTarget = null
+			if w.forcedLock:
+				w.forcedLock = false
 
 func set_new_target():
 #	print("set_new_target on ", self.display, " #", get_instance_id())
@@ -947,12 +946,14 @@ func disableItemsAndWeapons():
 	
 func enableWeapons():
 	for n in $Mounts.get_children():
-		n.get_node("Weapon").doEnable()
+		if n.has_node("Weapon"):
+			n.get_node("Weapon").doEnable()
 #	getActiveWeapon().doSelect()
 
 func disableWeapons():
 	for n in $Mounts.get_children():
-		n.get_node("Weapon").doDisable()
+		if n.has_node("Weapon"):
+			n.get_node("Weapon").doDisable()
 
 func enableItems():
 	if Globals.curScene.get_class() != "Intermission":
@@ -1098,7 +1099,7 @@ func addItem(item):
 	items.append(item)
 	if item.needsTarget():
 		item.setItemTarget(self)
-	item.doInit()
+	item.do_init_item()
 	item.makeUntargetable()
 	item.makeInvisible()
 	update_stats()
@@ -1121,3 +1122,16 @@ func enterBoundary():
 func exitBoundary():
 	toching_bound = false
 	gravity_vec = Globals.BASEGRAVITY
+	
+func has_active_omni_shield():
+	if $Mounts.get_children():
+		if $Mounts/A.get_child(0) is Weapon_Shield_Omni:
+			if $Mounts/A.get_child(0).shield > 0:
+				return true
+		
+	return false
+	
+#	if is_in_group("isUnit") and $Mounts.get_children() and $Mounts/A.get_child(0).get_class() == "Weapon_Shield_Omni" and $Mounts/A.get_child(0).shield > 0:
+##		print("active omni, making ram illegal")
+#		return true
+#	return false

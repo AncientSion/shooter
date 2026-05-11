@@ -69,4 +69,4 @@ func _enter_state(prev_state, new_state):
 			var variance = Vector2(1, 0).rotated(parent.global_rotation + deg2rad(angle)) * 900
 			parent.moveTarget = parent.global_position + variance
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

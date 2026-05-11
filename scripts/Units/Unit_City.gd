@@ -8,8 +8,8 @@ func _ready():
 	add_to_group("skyscraper")
 	modify()
 
-func setStats():
-	.setStats()
+func set_stats():
+	.set_stats()
 	coreRange = 150
 
 func getSpawnY(viewFrom, viewTo):
@@ -19,7 +19,7 @@ func getPossibleWeapons(index):
 #	var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
 #	shield.construct(5, "Shield", stats)
 #	shield.add_shield_bar()
-#	shield.scaleBar("shieldbar", 0.5)
+#	shield.scale_progress_bar("shieldbar", 0.5)
 #	
 	var	shield = Globals.weapon_shield_dir.instance()
 	var stats = {}
@@ -44,7 +44,7 @@ func getPossibleWeapons(index):
 	shield.construct(5, "Shield", stats)
 	shield.shield = shield.maxShield
 	shield.add_shield_bar()
-	shield.scaleBar("shieldbar", 0.8)
+	shield.scale_progress_bar("shieldbar", 0.8)
 	return shield
 #	pass
 

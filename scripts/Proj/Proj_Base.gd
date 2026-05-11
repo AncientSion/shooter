@@ -161,28 +161,12 @@ func doAreaAttack():
 		for area in areas:
 #			print("hitting: ", area.owner.display)
 			if not area.owner.has_active_omni_shield():
-				area.owner.takeDamage(self, Globals.getRawDamage(self.minDmg, self.maxDmg, area.owner.dmgZones[area.name]))
+				area.owner.take_damage(self, Globals.getRawDamage(self.minDmg, self.maxDmg, area.owner.dmgZones[area.name]))
 #			area.owner.checkAggro(shooter)
 		queue_free()
 
 func postImpacting():
 	queue_free()
-
-
-
-#	if has_active_omni_shield() or area.owner.has_active_omni_shield():
-#		dict.legal = false
-#
-#	isRamming = true
-#	rammings.append(dict)
-#
-#func has_active_omni_shield():
-#	if is_in_group("isUnit") and $Mounts.get_children() and $Mounts/A.get_child(0).get_class() == "Weapon_Shield_Omni" and $Mounts/A.get_child(0).shield > 0:
-##		print("active omni, making ram illegal")
-#		return true
-#	return false
-
-	
 
 func getDamageObject():
 	return self

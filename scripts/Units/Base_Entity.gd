@@ -10,7 +10,7 @@ var curTarget = null
 var faction:int
 var id:int = Globals.getId()
 
-signal damageTaken
+signal _damage_taken
 signal isDestroyed
 signal objectiveDestroyed
 signal _has_warped_in
@@ -75,44 +75,39 @@ var impactForce = Vector2.ZERO
 func _ready():
 	pass
 	
-func do_init_unit():
+func do_init_entity():
 	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	
-	if has_node("ColNodes"):
-		connect("damageTaken", self, "on_damage_taken")
-		connectHurtBoxes()
-	if has_node("Jump"):
-		$Jump.set_as_toplevel(true)
-		
-	check_controlnodes_top_level()
+	connectHurtBoxes()
 	do_custom_init()
+	set_stats()
+
+func set_stats():
+	pass
 	
 func do_custom_init():
 	pass
-
-func check_controlnodes_top_level():
-	if has_node("ControlNodes") and $ControlNodes.get_children():
-		has_ControlNodes = true
-		$ControlNodes.set_as_toplevel(true)
 		
-func _physics_process(_delta):
+func _physics_process(delta):
+	processRamming(delta)
 	if has_ControlNodes:
 		handleControlNodes()
-	processRamming()
 	
 func handleControlNodes():
 	for n in $ControlNodes.get_children():
 		n.rect_position = global_position + n.offset
 	
 func connectHurtBoxes():
+#	print("connectHurtBoxes for: ", self.display)
+	
+	if !has_node("ColNodes") or health == 0:
+		return
+		
+	connect("_damage_taken", self, "on_damage_taken")
 	for n in $ColNodes.get_children():
 		if n.name != "Hover":
 			n.connect("area_entered", self, str("_on_", n.name, "_area_entered"))
 #	for n in $ColNodes.get_children():
 			n.connect("area_exited", self, str("_on_area_exited"))
-	
-func doInit():
-	pass
 
 func _draw():
 	if is_target:
@@ -177,10 +172,10 @@ func icon_on_mouse_exited():
 #	print("icon out")
 	$Icon.material.set_shader_param("width", 0.0)
 
-func takeDamage(entity, totalDmg:int):
+func take_damage(entity, totalDmg:int):
 	
 #	totalDmg *= 2
-	#print("takeDamage scope: ", self.display, " #", self.id)
+	#print("take_damage scope: ", self.display, " #", self.id)
 #	var minDmg:int = entity.minDmg * dmgMulti
 #	var maxDmg:int = entity.maxDmg * dmgMulti
 #	var totalDmg:int = Globals.rng.randi_range(minDmg, maxDmg)
@@ -193,8 +188,8 @@ func takeDamage(entity, totalDmg:int):
 	if totalDmg > 0:
 		var remDmg:int = max(0, totalDmg - self.armor)
 		if remDmg > 0:
-			handleHullDamage(remDmg, pos, angle)
-			emit_signal("damageTaken")
+			handle_hull_damage(remDmg, pos, angle)
+			emit_signal("_damage_taken")
 
 func applyForce(_force):
 	return
@@ -202,7 +197,7 @@ func applyForce(_force):
 func updateShield():
 	return
 	
-func handleHullDamage(remDmg, pos, angle):
+func handle_hull_damage(remDmg, pos, angle):
 	var labelPos = global_position + Vector2(Globals.rng.randi_range(-25, 25), -(texDim.y/2) -10)
 	createFloatingLabel(remDmg, labelPos, Vector2(0, -100))
 	addHitExplosion(remDmg, pos, angle)
@@ -283,7 +278,7 @@ func enableCollisionNodes():
 	call_deferred("next_frame_enableCollisionNodes")
 			
 func next_frame_enableCollisionNodes():
-	print("enabling ", self.display)
+	print("enabling colNodes ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", true)
 		n.set("monitorable", true)
@@ -328,7 +323,6 @@ func kill():
 	
 	hide_control_nodes()
 	stop_upcoming_effect_nodes()
-	
 
 	if debug_menu_row != null:
 		mark_debug_menu_entry_as_killed()
@@ -402,34 +396,43 @@ func unmark_as_protect():
 func create_currency():
 	return
 	
-func add_shield_bar():
-	#print("add_shield_bar on ", self.display)
+func add_shield_bar(size:float = 1.0):
+#	print("add_shield_bar on ", self.display)
 	shieldbar = Globals.SHIELDBAR.instance()
 	shieldbar.offset = Vector2(0, 80)
-	$ControlNodes.add_child(shieldbar)
 	var bar = shieldbar.get_node("ProgressBar")
 	bar.min_value = 0
 	bar.max_value = round(self.maxShield)
 	setShieldBarHealth()
-	has_ControlNodes = true
-	$ControlNodes.set_as_toplevel(true)
+	add_controlNode(shieldbar)
+	
+	if size:
+		shieldbar.rect_scale = Vector2(size, size)
+	#	target.offset.y *= targetScale
+		if size <= 0.5:
+			shieldbar.get_child(0).percent_visible = false
+			
 
 func add_health_bar():
 #	print("add_health_bar on ", self.display)
 	healthbar = Globals.HEALTHBAR.instance()
-	$ControlNodes.add_child(healthbar)
 	var bar = healthbar.get_node("ProgressBar")
 	bar.min_value = 0
 	bar.max_value = round(self.maxHealth)
 	setHealthBarHealth()
+	add_controlNode(healthbar)
+
+func add_controlNode(ele):
+	print("adding control element to: ", self.display)
 	has_ControlNodes = true
-	$ControlNodes.set_as_toplevel(true)
+	$ControlNodes.add_child(ele)
+	ele.set_as_toplevel(true)
 	
 #	healthbar.rect_scale = Vector2(0.5, 0.5)
 #	healthbar.offset.y += 60
 #	healthbar.get_child(0).percent_visible = false
 
-func scaleBar(bartype, targetScale):
+func scale_progress_bar(bartype, targetScale):
 	var target = get(bartype)
 	target.rect_scale = Vector2(targetScale, targetScale)
 #	target.offset.y *= targetScale
@@ -447,15 +450,15 @@ func getMissionHealthBar():
 	
 func addHealthLabel():
 	healthlabel = Globals.HEALTHLABEL.instance()
-	$ControlNodes.add_child(healthlabel)
 	setHealthLabelHealth()
 	healthlabel.offset = Vector2(0, texDim.y/2 + 20)
+	add_controlNode(healthlabel)
 	
 func addShieldLabel():
 	shieldlabel = Globals.HEALTHLABEL.instance()
-	$ControlNodes.add_child(shieldlabel)
 	setHealthLabelHealth()
 	shieldlabel.offset = Vector2(0, texDim.y/2 + 20)
+	add_controlNode(shieldlabel)
 	
 func on_damage_taken():
 	if healthbar != null:
@@ -716,18 +719,20 @@ func _on_DmgStrong_area_entered(area):
 	
 func _on_DmgNormal_area_entered(area):
 #	print("Frame: ", Engine.get_idle_frames(), ", collision")
-#	print(area.owner.get_class(), "-", area.name, " entering ", self.get_class(), "/", name)
+#	print(area.owner.display, "-", area.name, " ENTER ", self.display, "/", name, " frame: ", Engine.get_idle_frames())
 	handleImpact(area, self.dmgZones["DmgNormal"])
 	
 func _on_Shield_area_entered(area):
-#	print(area.owner.get_class(), "-", area.name, " entering ", self.get_class(), "/", name)
+#	print(area.owner.display, "-", area.name, " ENTER ", self.display, "/", name, " frame: ", Engine.get_idle_frames())
+	if area.owner.is_in_group("isUnit"):
+		return
 	handleImpact(area, self.dmgZones["Shield"])
 	
 func _on_area_exited(area):
-#	print(area.owner.get_class(), " EXIT ", self.get_class(), ": NORMAL")
+#	print(area.owner.display, "-", area.name, " EXIT ", self.display, "/", name, " frame: ", Engine.get_idle_frames())
 	endRamming(area)
 
-func handleImpact(area, dmgMulti):
+func xhandleImpact(area, dmgMulti):
 	if area.owner.canExplodeOnContact():
 		area.owner.explode()
 	else:
@@ -737,60 +742,90 @@ func handleImpact(area, dmgMulti):
 			killByCrash()
 		else:
 			var dmgObj = area.owner.getDamageObject()
-			takeDamage(dmgObj, Globals.getRawDamage(dmgObj.minDmg, dmgObj.maxDmg, dmgMulti))
+			take_damage(dmgObj, Globals.getRawDamage(dmgObj.minDmg, dmgObj.maxDmg, dmgMulti))
 			area.owner.postImpacting()
+
+func handleImpact(area, dmgMulti):
+	var impact_owner = area.owner
+
+	if impact_owner.canExplodeOnContact():
+		impact_owner.explode()
+		return
+
+#	if owner.is_in_group("isUnit") or owner.is_in_group("isMount") or owner.is_in_group("isShield"):
+#		initRamming(area)
+#		return
+	if impact_owner.is_in_group("isUnit"):
+		initRamming(area)
+		return
+	if impact_owner.is_in_group("isShield") or impact_owner.is_in_group("isMount"):
+		return
+
+	if not destroyed and impact_owner.display == "Boundary":
+		killByCrash()
+		return
+
+	var dmgObj = impact_owner.getDamageObject()
+	var dmg = Globals.getRawDamage(dmgObj.minDmg, dmgObj.maxDmg, dmgMulti)
+	take_damage(dmgObj, dmg)
+	impact_owner.postImpacting()
 		
 func initRamming(area):
-#	print("initRamming scope: ", selwwwwwwwwf.display, " #", self.id, " being hit by: ", area.owner.display, " #", area.owner.id, " on frame: ", Engine.get_idle_frames())
 	
-	var dict = {
-		"rammedById": area.owner.id,
-		"rammedByDisplay": area.owner.display,
-		"dmgCooldown": 1,
-		"rammingArea": area,
-		"initFrame": Engine.get_idle_frames(),
-		"legal": true
-	}
+	var dict = RamState.new(area.owner.id, area.owner.display, 0.1, area, Engine.get_idle_frames(), true, Globals.getId())
 	
-	if has_active_omni_shield() or area.owner.has_active_omni_shield():
-		dict.legal = false
+#	var dict = {
+#		"rammedById": area.owner.id,
+#		"rammedByDisplay": area.owner.display,
+#		"dmgCooldown": 1.0,
+#		"rammingArea": area,
+#		"initFrame": Engine.get_idle_frames(),
+#		"legal": true,
+#		"uid": Globals.getId()
+#	}
+#	print("initRamming scope: ", self.display, " #", self.id, " being hit by: ", area.owner.display, " #", area.owner.id, " on frame: ", Engine.get_idle_frames(), " uid: ", dict.uid)
+
+#	if has_active_omni_shield() or area.owner.has_active_omni_shield():
+#		dict.legal = false
 	
 	isRamming = true
 	rammings.append(dict)
 	
-func has_active_omni_shield():
-	if is_in_group("isUnit") and $Mounts.get_children() and $Mounts/A.get_child(0).get_class() == "Weapon_Shield_Omni" and $Mounts/A.get_child(0).shield > 0:
-#		print("active omni, making ram illegal")
-		return true
+func has_active_omni_shixeld():
 	return false
 	
-func processRamming():
+func processRamming(delta):
 	if not len(rammings):
 		return
 #	print("processRamming, scope ", self.display, ", #", self.id)
-	for opp in rammings:
-		if opp.legal == true:
-			opp.dmgCooldown -= 1
-			if opp.dmgCooldown == 0:
-				opp.dmgCooldown = 20
-#				print("processing ramming incoming from: ", opp.rammedByDisplay, " #", opp.rammedById, ", frame: ", Engine.get_idle_frames())
-				processRamDamage(opp)
+	for ramming in rammings:
+		if ramming.legal == true:
+			ramming.dmgCooldown -= delta
+			print("ram cooldown: ", ramming.dmgCooldown)
+			if ramming.dmgCooldown <= 0:
+				ramming.dmgCooldown = 1.0
+#				print("processing ramming incoming from: ", ramming.rammedByDisplay, " #", ramming.rammedById, ", frame: ", Engine.get_idle_frames())
+				processRamDamage(ramming)
 	#			print("rammed by position: ", n.rammingArea.owner.global_position)
 	#			print("own speed: ", self.velocity, "___", self.velocity.length())
 	#			print("other speed: ", n.rammingArea.owner.velocity ,"____", n.rammingArea.owner.velocity.length())
 
-func processRamDamage(opp):
-#	print("processRamDamage:", self.display, " position: ", global_position)
+func processRamDamage(ramming):
+	print("processRamDamage:", self.display, " position: ", global_position)
 	var ramBullet = getRamDamage()
 	if ramBullet:
-		var a = (global_position - opp.rammingArea.owner.global_position).angle()
+		var a = (global_position - ramming.rammingArea.owner.global_position).angle()
 #		var b = rad2deg(global_position.angle_to(n.rammingArea.owner.global_position))
 		ramBullet.velocity = Vector2(1, 0).rotated(a)
 #		print("ram impactF: ", ramBullet.impactForce)
 #		print("angle: ", round(rad2deg(a)))
-		
-		opp.rammingArea.owner.takeDamage(ramBullet, Globals.getRawDamage(ramBullet.minDmg, ramBullet.maxDmg, 1.0))
-		ramBullet.queue_free()
+
+		if ramming.rammingArea.owner.has_active_omni_shield():
+			ramming.rammingArea.owner.get_shield_weapon().take_damage(ramBullet, Globals.getRawDamage(ramBullet.minDmg, ramBullet.maxDmg, 1.0))
+		else:
+			ramming.rammingArea.owner.take_damage(ramBullet, Globals.getRawDamage(ramBullet.minDmg, ramBullet.maxDmg, 1.0))
+			
+	ramBullet.queue_free()
 		
 func getRamDamage():
 #	return false
@@ -816,11 +851,13 @@ func endRamming(area):
 	for n in rammings:
 		if n.rammingArea == area:
 			rammings.erase(n)
-			print("endRamming-erasing ", n.rammedByDisplay, " #", n.rammedById, " on frame ", Engine.get_idle_frames())
+			#print("endRamming-erasing ", n.rammedByDisplay, " #", n.rammedById, " on frame ", Engine.get_idle_frames(), ", id: ", n.uid)
 			break
 	if not len(rammings):
 #		print("isRamming = false")
 		isRamming = false
+	else:
+		print("dign")
 	
 func canExplodeOnContact():
 	return false
@@ -831,7 +868,7 @@ func postImpacting():
 func getIconContainer():
 	return
 
-func setStatsPanel():
+func set_statsPanel():
 	if subPanel_Stats == null:
 		subPanel_Stats = load("res://ui/PanelItemStats.tscn").instance()
 	subPanel_Stats.rect_position = Vector2(0, 0)
@@ -861,7 +898,7 @@ func set_full_ui_box():
 	cont.name = "Vbox"
 	
 	cont.add_child(getIconContainer())
-	setStatsPanel()
+	set_statsPanel()
 	cont.add_child(subPanel_Stats)
 	
 	root.add_child(cont)
@@ -888,3 +925,9 @@ func exitBoundary():
 	
 func get_dmg_gfx_scale():
 	return 1
+
+func get_shield_weapon():
+	for n in $Mounts/A.get_children():
+		if n.display == "Shield":
+			return n
+	return null

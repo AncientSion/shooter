@@ -51,23 +51,26 @@ var maximum_rotation: float# = PI / 6.0 # 30
 signal hasFired
 
 func _ready():
+	pass
+	
+func do_init_weapon():
 #	print("_ready weapon BASE #", id, "__", display, "___", $Sprite.scale)
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	isWeapon = true
-#	active = true
 	$Muzzle/AnimatedSprite.stop()
 	$Muzzle/AnimatedSprite.hide()
 	$Muzzle/AnimatedSprite.frame = 0
-	_subready()
-#	doDisable()
+	connectHurtBoxes()
 	drawAimVector()
+	do_sub_init_weapon()
+	
+func do_sub_init_weapon():
+	pass
 	
 func check_init_aimdebug():
 	if Globals.AIMDEBUG and faction != 0:
 		if not has_node("ControlNodes/rem_cooldown_label"):
 			init_cooldown_debug_label()
-	
-func _subready():
-	pass
 
 func _draw():
 	if Globals.AIMDEBUG and faction != 0:
@@ -120,7 +123,7 @@ func setRecoilForce():
 #	recoil.x = 0
 	
 
-func hasViableFireSolution():
+func has_fire_solution():
 	if abs(global_position.y - curTarget.global_position.y) > minFireDist:
 		var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
 		var dif = angleToTarget - global_rotation_degrees

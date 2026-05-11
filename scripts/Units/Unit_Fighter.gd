@@ -161,7 +161,6 @@ func bound_process(_delta):
 		set_inactive()
 		$Debug.show()
 		showDebug()
-#		hideSelf()
 		mark_debug_menu_entry_as_removed()
 		return
 		
@@ -175,7 +174,7 @@ func bound_process(_delta):
 		ram.global_position = global_position + Vector2(0, 10)
 		ram.velocity = Vector2(0, -10)
 
-		takeDamage(ram, ram.minDmg)
+		take_damage(ram, ram.minDmg)
 		ram.postImpacting()
 	
 func getSelfSpawnPosition(viewFrom, viewTo):
@@ -316,8 +315,8 @@ func crashCondition(remDmg):
 		return true
 	return false
 	
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	disableWeapons()
 	
 	if rotation_degrees > 55 and rotation_degrees < 125:
@@ -348,7 +347,7 @@ func setupCrashing():
 func _on_crash_explo_timer_timeout():
 	kill()
 		
-func doInitCrash():
+func crash_step_two():
 	return
 
 func killByCrash():

@@ -27,14 +27,12 @@ func construct(init_orbit_radius, init_orbit_speed, init_orbit_radius_offset):
 	orbit_radius_offset = init_orbit_radius_offset
 	
 func do_specific_unit_init():
-#	.doInit()
 	max_smoke = 0
-#func doInit():
 #	$Sprites/Main.scale = Vector2(0, 0)
 #	var tween = get_tree().create_tween()#.set_parallel(true)
 #	tween.tween_property($Sprites/Main, "scale", Vector2(.28, .28), 0.5)
 	
-#func setStats():
+#func set_stats():
 #	pass
 
 func getPossibleWeapons(index):

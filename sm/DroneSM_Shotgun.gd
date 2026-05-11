@@ -71,4 +71,4 @@ func _enter_state(prev_state, new_state):
 		states.standoff:
 			parent.moveTarget = parent.curTarget.global_position
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

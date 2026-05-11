@@ -16,10 +16,10 @@ func process_movement(_delta):
 	velocity += accel * _delta
 	velocity = velocity.limit_length(maxSpeed)
 
-func doTurnaround():
+func do_turnaround():
 #	$Sprites/Main.flip_h = !$Sprites/Main.flip_h
 	mirrorTurrets()
-	mirrorThrusters()
+
 	mirrorVarious()
 	mirrorColNodes()
 	mirrorSprite()
@@ -43,10 +43,10 @@ func setUnitFacing():
 	if curTarget == null:
 		if moveTarget.x - position.x < 0:
 			if $Sprites/Main.flip_h == false:
-				doTurnaround()
+				do_turnaround()
 		else:
 			if $Sprites/Main.flip_h == true:
-				doTurnaround()
+				do_turnaround()
 	else: doFaceTarget()
 
 func getPossibleWeapons(index):
@@ -59,11 +59,11 @@ func getPossibleWeapons(index):
 #	var weapon = Globals.getWeaponBase("Minelayer");
 	return weapon
 	
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, getCrashSpeed(), 2.0)
 	$Tween.start()
-	$Tween.connect("tween_all_completed", self, "doInitCrash")
+	$Tween.connect("tween_all_completed", self, "crash_step_two")
 
 func getCrashSpeed():
 	return max(30, maxSpeed / 4)

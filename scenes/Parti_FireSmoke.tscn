@@ -55,6 +55,7 @@ script = ExtResource( 1 )
 
 [node name="Smoke" type="Particles2D" parent="Parts"]
 amount = 20
+lifetime = 1.3
 visibility_rect = Rect2( -20, -60, 40, 80 )
 local_coords = false
 process_material = SubResource( 8 )

@@ -25,7 +25,7 @@ func _ready():
 	target = Globals.PLAYER
 
 func add_trauma(amount):
-	print("traume: ", trauma)
+#	print("trauma: ", trauma)
 	trauma = min(trauma + amount, 1.0)
 
 func _physics_process(delta):

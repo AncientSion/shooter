@@ -3,27 +3,30 @@ class_name Base_Mount
 
 export var maximum_rotation: float = 90
 export var startAngle: int = 0
-export var turnrate:float
+export var turnrate:float = 0.0
 export var enabled:bool = true
 export var invis:bool = false
-
-func takeDamage(a, b):
-	.takeDamage(a, b)
 
 var display = "Mount"
 
 func _ready():
 	pass
-#	doInit()
+
+func take_damage(a, b):
+	.take_damage(a, b)
 	
-func do_init():
-#	print("mount init")
+func do_init_mount():
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	max_smoke = 1
 	maxHealth = health
 	add_to_group("isMount")
 	initArc()
 	if health == 0:
 		makeUntargetable()
+	else:
+		connectHurtBoxes()
+		add_health_bar()
+		scale_progress_bar("healthbar", 0.5)
 	if invis:
 		$Sprites/Main.hide()
 	
@@ -32,12 +35,6 @@ func initArc():
 		$DebugAim.visible = true
 		$DebugAim/Start.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle-maximum_rotation))
 		$DebugAim/End.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle+maximum_rotation))
-
-func set_friendly():
-	.set_friendly()
-	
-func set_hostile():
-	.set_hostile()
 
 func add_smoke_fx(node):
 	node.position = global_position - owner.global_position
@@ -86,5 +83,27 @@ func add_health_bar():
 #	print(position)
 #	print(global_position)
 #
-#	scaleBar("healthbar", 0.5)
+#	scale_progress_bar("healthbar", 0.5)
 #	healthbar.get_child(0).percent_visible = false
+
+func set_friendly():
+	faction = 0
+	if has_node("ColNodes"):
+		for i in $ColNodes.get_children():
+			i.set_collision_layer_bit(0, true)
+			i.set_collision_mask_bit(3, true) #contact with enemy projs
+	
+func set_hostile():
+	faction = 1
+	if has_node("ColNodes"):
+		for i in $ColNodes.get_children():
+			i.set_collision_layer_bit(1, true)
+			i.set_collision_mask_bit(2, true) #contact with player projs
+			
+func has_active_omni_shield():
+	return owner.has_active_omni_shield()
+#	if $Mounts.get_children():
+#		if $Mounts/A.get_child(0) is Weapon_Shield_Omni:
+#			if $Mounts/A.get_child(0).shield > 0:
+#				return true#
+#	return false

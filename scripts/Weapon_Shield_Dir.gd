@@ -4,15 +4,14 @@ class_name Weapon_Shield_Dir
 func _ready():
 	pass
 	
-func _subready():
-#	add_shield_bar()
-#	scaleBar("shieldbar", 0.7)
+func do_sub_init_weapon():
+	add_to_group("isShield")
+	connect_shield_timer_signals()
 	$Shield.position.x = shieldDist
 	$Shield.scale.y = $Shield.scale.y / 36 * shieldLength
 	$ColNodes/Shield/A.position.x = shieldDist
 	$ColNodes/Shield/A.shape.extents.y = (36 / 0.4 * $Shield.scale.y)
 	$Sprites/Main.hide()
-	add_to_group("isShield")
 	
 func _physics_process(_delta):
 	pass
@@ -33,7 +32,7 @@ func wpn_has_valid_target():
 		return true
 	return false
 	
-func get_shield_end_scale():
+func get_shield_max_scale():
 	return Vector2(0.4, 0.4 / 36 * shieldLength)
 	
 func get_class():

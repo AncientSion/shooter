@@ -113,8 +113,8 @@ func getCrashSpeed():
 func getCrashAngle():
 	return 0
 	
-func setupCrashing():
-	.setupCrashing()
+func crash_step_one():
+	.crash_step_one()
 	doPowerUp()
 	$ThrusterNodes/Aft/Particle2D.emitting = false
 	

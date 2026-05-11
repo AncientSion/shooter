@@ -53,4 +53,4 @@ func _enter_state(prev_state, new_state):
 		states.standoff:
 			parent.moveTarget.x = parent.curTarget.global_position.x + Globals.rng.randi_range(20, 40) * Globals.getRandomEntry([-1, 1])
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

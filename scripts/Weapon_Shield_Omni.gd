@@ -6,10 +6,12 @@ var spriteScale:float
 func _ready():
 	pass
 	
-func _subready():
+func do_sub_init_weapon():
+	add_to_group("isShield")
+	connect_shield_timer_signals()
 	$ColNodes/Shield/A.shape.radius = shieldRadius
 	spriteScale = shieldRadius / float(100) * 2
-	$Shield.scale = get_shield_end_scale()
+	$Shield.scale = get_shield_max_scale()
 	
 func _physics_process(_delta):
 	pass
@@ -20,7 +22,7 @@ func is_in_range(pos):
 func wpn_has_valid_target():
 	return false
 	
-func get_shield_end_scale():
+func get_shield_max_scale():
 	return Vector2(spriteScale, spriteScale)
 
 func get_class():

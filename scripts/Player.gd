@@ -52,27 +52,9 @@ var time_since_ground_smoke:float = 0.0
 #var boost_on:float = 0.0
 
 func _ready():
-	print("ready ship")
-	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	isPlayer = true
-	set_friendly()
-#	set_hostile()
-	setBaseStats()
-	#addKeyForItem()
-	health = baseStats.maxHealth
-	maxHealth = health
-	gravity_vec = Globals.BASEGRAVITY
-#	maxSpeed = 350
-		
-#	for n in weapons:
-#		n.doDisable()
-	
-		
-#var groceries = {"Orange": 20, "Apple": 2, "Banana": 4}
-#for fruit in groceries:
-#	var amount = groceries[fruit]
+	print("_ready player")
 
-func setStats():
+func set_stats():
 	pass
 
 func setBaseStats():
@@ -162,15 +144,27 @@ func process_movement(delta: float):
 		gravity_vec = Globals.BASEGRAVITY * 2.25
 		
 	mainUI.updateBoostChargeBar()
-
+		
 func do_init_player():
+	
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
+	isPlayer = true
+	set_friendly()
+	setBaseStats()
+	setMass()
+	health = baseStats.maxHealth
+	maxHealth = health
+	gravity_vec = Globals.BASEGRAVITY
 	visible = false
+	
 	update_stats()
+	connectHurtBoxes()
 	
 	if not is_connected("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level"):
 		connect("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level")
 		
-	$Label.set_as_toplevel(true)
+	$Label.set_as_toplevel(true)	
+	$Jump.set_as_toplevel(true)
 
 	addPhysCollision()
 #	addSightCollision()
@@ -203,9 +197,7 @@ func setActive():
 	enableShield()
 	setFirstWeaponActive()
 	getActiveWeapon().doSelect()
-#	updateShield()
 	$Mounts.visible = true
-#	$Weapons.visible = true
 
 func enableShield():
 	$Mounts/A.get_child(0).doEnable()
@@ -331,7 +323,6 @@ func enableShifting():
 	$Sprites.hide()
 	disableAllThrusterParticles()
 	disableBoosting()
-#	getShield().unpowerShield()
 		
 func disableShifting():
 	print("disableShifting")
@@ -343,7 +334,6 @@ func disableShifting():
 	enableAllThrusterParticles()
 	shiftCooldown = baseStats["shiftCooldown"]
 	shiftDuration = baseStats["shiftDuration"]
-#	getShield().powerShield()
 
 func disableAllThrusterParticles():
 	disableBoosting()
@@ -772,7 +762,7 @@ func limit_vector_magnitude(vector: Vector2, max_y: float) -> Vector2:
 	
 func do_init_gear():
 	for n in items:
-		n.doInit()
+		n.do_init_item()
 
 func addItemToUI(item):
 	if item.type == 0: #actives
@@ -811,9 +801,7 @@ func addWeapon(weapon, mount = $Mounts/A):
 	weapon.active = true
 	weapon.isSelected = false
 	weapon.shooter = self
-	weapon.set_faction(faction)
 	weapon.makeInvisible()
-	weapon.doInit()
 	weapon.doInitUI()
 	
 	if weapon.UI_node:
@@ -823,10 +811,37 @@ func addWeapon(weapon, mount = $Mounts/A):
 		Globals.curScene.get_node("UI/Place/TopleftLower/WeaponStatsPos").add_child(weapon.subPanel_Stats)
 		weapon.subPanel_Stats.hide()
 		
-func addStartingWeapons():
-	addWeapon(setShield())
-	addWeapon(Globals.getWeaponBase("Autocannon"))
-	addWeapon(Globals.getWeaponBase("Laserblaster"))
+func xset_armaments():
+#	print("set_armaments")
+	var index = 0
+	for mount in $Mounts.get_children():
+		mount.set_faction(faction)
+		mount.do_init_mount()
+		var weapon = getPossibleWeapons(index)
+		weapon.do_init_weapon()
+		index += 1
+#		if !weapon:
+#			continue
+		addWeapon(weapon, mount)
+		
+	addSightCollision()
+	addStartingItems()
+	
+	
+func set_armaments():
+	
+	var weapons = []
+	weapons.append(setShield())
+	weapons.append(Globals.getWeaponBase("Autocannon"))
+	weapons.append(Globals.getWeaponBase("Laserblaster"))
+	
+	for n in weapons:
+		n.set_faction(faction)
+		n.do_init_weapon()
+	
+	for n in weapons:
+		addWeapon(n)
+	
 #	addWeapon(Globals.getWeaponBase("Mace"))
 #	addWeapon(Globals.getWeaponBase("Twin Autocannon"))
 #	addWeapon(Globals.getWeaponBase("Scattergatling+"))
@@ -836,12 +851,6 @@ func addStartingWeapons():
 #	addWeapon(Globals.getWeaponBase("Expl. Autocannon"))
 #	addWeapon(Globals.getWeaponBase("Torpedolauncher"))
 #	addWeapon(Globals.getWeaponBase("Swarmlauncher"))
-
-func getShield():
-	for n in $Mounts/A.get_children():
-		if n.display == "Shield":
-			return n
-	return null
 
 func setShield():
 	var shield_omni = Globals.weapon_shield_omni.instance()
@@ -936,7 +945,7 @@ func update_stats():
 	updateShieldStats()
 	
 func updateShieldStats():
-	var shield = getShield()
+	var shield = get_shield_weapon()
 	if not shield: return
 	shield.setShieldBaseStats()
 	for item in items:
@@ -1028,7 +1037,7 @@ func bound_process(_delta):
 				ram.global_position = global_position + Vector2(0, 10)
 				ram.velocity = Vector2(0, -10)
 
-				takeDamage(ram, 3)
+				take_damage(ram, 3)
 				ram.postImpacting()
 			else: time_since_ground_dmg += _delta
 
@@ -1039,13 +1048,13 @@ func getStatByName(key):
 	match key:
 		"": return ""
 		"maxHealth": return get(key)
-		"maxShield": if getShield(): 
-			return getShield().maxShield
+		"maxShield": if get_shield_weapon(): 
+			return get_shield_weapon().maxShield
 		"healthRegenTime": return get(key)
-		"shieldBreakTime":  if getShield(): 
-			return str("%.1f" % getShield().shieldBreakTime)
-		"shieldRegenTime":  if getShield():
-			return str("%.1f" % getShield().shieldRegenTime)
+		"shieldBreakTime":  if get_shield_weapon(): 
+			return str("%.1f" % get_shield_weapon().shieldBreakTime)
+		"shieldRegenTime":  if get_shield_weapon():
+			return str("%.1f" % get_shield_weapon().shieldRegenTime)
 		"enginePower": return get(key)
 		"boostCharge": return str("%.1f" % get(key))
 		"boostMaxCharge": return str("%.0f" % get(key))
@@ -1054,12 +1063,6 @@ func getStatByName(key):
 		"materials": return get(key)
 		"enginePower": return get("maxSpeed")
 	return "null"
-
-func hideSelf():
-	hide()
-#	for mount in $Mounts.get_children():
-#		mount.get_node("Weapon/ControlNodes").hide()
-
 	
 func setShieldBarHealth():
 	if shieldbar == null:

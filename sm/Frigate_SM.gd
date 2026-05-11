@@ -38,11 +38,11 @@ func _state_logic(delta):
 			if d <= 50:
 				set_state(states.close)
 		states.prepareWarpOut:
-			parent.moveTarget = parent.global_position - (parent.curTarget.global_position - parent.global_position).normalized()*300
-			parent.process_movement(delta)
+			pass
+#			parent.moveTarget = parent.global_position - (parent.curTarget.global_position - parent.global_position).normalized()*300
+#			parent.process_movement(delta)
 		states.crash:
 			pass
-#			parent.process_movement(delta)
 	
 func _get_transition(delta):
 	pass
@@ -82,5 +82,6 @@ func _enter_state(prev_state, new_state):
 			parent.moveTarget = target
 		states.prepareWarpOut:
 			parent.setup_delayed_warp_out(6.0)
+			parent.set_hold_position()
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

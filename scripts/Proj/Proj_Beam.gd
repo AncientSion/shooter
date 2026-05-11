@@ -315,7 +315,7 @@ func process_beam_damage():
 			
 						
 			n.dmgCooldown = 0
-			n.target.takeDamage(self, Globals.getRawDamage(self.minDmg, self.maxDmg, n.target.dmgZones[n.dmgZone]))
+			n.target.take_damage(self, Globals.getRawDamage(self.minDmg, self.maxDmg, n.target.dmgZones[n.dmgZone]))
 #			n.target.checkAggro(shooter)
 			cleanTargetArray()
 

@@ -53,7 +53,7 @@ func _enter_state(prev_state, new_state):
 			if parent.moveTarget.y <= parent.curTarget.global_position.y - 1000:
 				parent.moveTarget.y = parent.curTarget.global_position.y - 600
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()
 		
 	if parent.moveTarget != Vector2.ZERO and state != states.crash:
 		parent.moveTarget.x = clamp(parent.moveTarget.x, 400, Globals.WIDTH - 400)

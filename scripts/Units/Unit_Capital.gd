@@ -35,10 +35,10 @@ func setUnitFacing():
 	if curTarget == null:
 		if moveTarget.x - position.x < 0:
 			if $Sprites/Main.flip_h == false:
-				doTurnaround()
+				do_turnaround()
 		else:
 			if $Sprites/Main.flip_h == true:
-				doTurnaround()
+				do_turnaround()
 	else: doFaceTarget()
 	
 func setNewWanderTarget():

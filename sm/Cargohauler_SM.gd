@@ -29,4 +29,4 @@ func _enter_state(prev_state, new_state):
 		states.wander:
 			parent.setNewWanderTarget()
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()

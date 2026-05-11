@@ -119,6 +119,15 @@ stats = ExtResource( 8 )
 [node name="SM" parent="." index="0" instance=ExtResource( 4 )]
 script = ExtResource( 7 )
 
+[node name="Debug" parent="." index="1"]
+visible = true
+
+[node name="moveTarget" parent="Debug" index="0"]
+visible = true
+
+[node name="MoveTargetVector" parent="Debug" index="1"]
+visible = true
+
 [node name="Aft" parent="ThrusterNodes" index="0" instance=ExtResource( 5 )]
 position = Vector2( -115, 2 )
 
@@ -173,6 +182,14 @@ turnrate = 2.0
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 6 )]
 position = Vector2( 102, 30 )
 rotation = -3.14159
+health = 20
+maximum_rotation = 89.0
+startAngle = -90
+turnrate = 2.0
+
+[node name="C" parent="Mounts" index="2" instance=ExtResource( 6 )]
+position = Vector2( 135, 57 )
+rotation = 1.5708
 health = 20
 maximum_rotation = 89.0
 startAngle = -90

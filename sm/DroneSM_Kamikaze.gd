@@ -84,6 +84,6 @@ func _enter_state(prev_state, new_state):
 			parent.enableBoosting()
 			canChangeState = false
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()
 #		states.selfd:
 #			parent.selfDestruct()

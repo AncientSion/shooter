@@ -74,14 +74,14 @@ func getCrashAngle():
 func doFaceTarget():
 	if curTarget.global_position.x - position.x < 0:
 		if $Sprites/Main.flip_h == false:
-			doTurnaround()
+			do_turnaround()
 	else:
 		if $Sprites/Main.flip_h == true:
-			doTurnaround()
+			do_turnaround()
 
-func setupCrashing():
-#	invulnerable = true
+func crash_step_one():
 	danger.fill(0.0)
+	
 	for n in max_smoke:
 		add_exp_fire_smoke_fx(1.0, rand_range(0, 1) * n*2)
 		
@@ -92,7 +92,7 @@ func setupCrashing():
 		explo.delay = rand_range(0.3, 1) * n + 3
 		$EffectNodes.add_child(explo)
 	
-func doInitCrash():
+func crash_step_two():
 	disableAllThrusterParticles()
 
 	var direction:int = 1
@@ -102,6 +102,7 @@ func doInitCrash():
 	var rota = getCrashAngle() * direction
 	var time = (Globals.HEIGHT - global_position.y) / getCrashSpeed() / 3
 	var targetX = 550 * direction
+	
 	$Tween.interpolate_property(self, "position",
 		global_position, Vector2(global_position.x + targetX, Globals.HEIGHT - 30), ceil(time),
 		Tween.TRANS_QUAD, Tween.EASE_IN)

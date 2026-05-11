@@ -20,10 +20,8 @@ var tween = null
 
 signal updateShield_UI_Nodes
 signal updateShieldBreakCooldown
-
-func _ready():
-	add_to_group("isShield")
-#	if shieldRegenTime > 0.0:
+		
+func connect_shield_timer_signals():
 	$TimerNodes/ShieldRegen.connect("timeout", self, "_on_ShieldRegen_timeout")
 	$TimerNodes/ShieldRegen.wait_time = shieldRegenTime
 	if shieldBreakTime > 0.0:
@@ -32,6 +30,7 @@ func _ready():
 	$TimerNodes/ShieldBreakUpdateTimer.connect("timeout", self, "_ShieldBreakUpdateTimer_timeout")
 	if shieldFastCharge > 0.0:
 		$TimerNodes/ShieldSupercharge.connect("timeout", self, "_on_Supercharge_timeout")
+	
 
 func construct(init_type, init_display, stats):
 	type = init_type
@@ -46,6 +45,10 @@ func construct(init_type, init_display, stats):
 func setShieldBaseStats():
 	for key in baseStats:
 		self[key] = baseStats[key]
+		
+func connectHurtBoxes():
+#	print("connectHurtBoxes for: ", self.display)
+	$ColNodes.get_node("Shield").connect("area_entered", self, "_on_Shield_area_entered")
 	
 func _physics_process(_delta):
 	pass
@@ -92,41 +95,28 @@ func handle_shield_disable_on_kill():
 func doEnable():
 	.doEnable()
 	powerShield()
-
-func get_shield_end_scale():
-	return Vector2.ZERO
 	
 func unpowerShield():
-	if active == false: 
-		return
-	
 	disableCollisionNodes()
 	$TimerNodes/ShieldRegen.stop()
-	$Shield.modulate.a = 1.0
-	$Shield.scale = get_shield_end_scale()
+	if active == false: 
+		$Shield.modulate.a = 0.0
+		$Shield.scale = Vector2(3.5, 3.5)
+		return
+		
+	print("unpowerShield on ", display, " #", get_instance_id(), " frame: ", Engine.get_idle_frames())
+	
 
 	tween = get_tree().create_tween().set_parallel(true)
 	tween.tween_property($Shield, "modulate:a", 0.0, SHIELD_BREAK_TWEEN_TIME)
 	tween.tween_property($Shield, "scale", Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME)
-#
-	
-	
-#	$Tween.interpolate_property($Shield, "modulate:a",
-#			1.0, 0.0, SHIELD_BREAK_TWEEN_TIME,
-#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.start()
-##	
-#	$Tween.interpolate_property($Shield, "scale",
-#			get_shield_end_scale(), Vector2(3.5, 3.5), SHIELD_BREAK_TWEEN_TIME,
-#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.start()
 	
 func powerShield():
 	if active == false:
 		return
 	active = false
 	is_powering_up = true
-	print("powering shield on ", display, " #", get_instance_id())
+	print("powerShield on ", display, " #", get_instance_id(), " frame: ", Engine.get_idle_frames())
 	
 	var target_charge:int = maxShield * shieldFastCharge
 	var charge_tick:float = 0.05
@@ -135,24 +125,17 @@ func powerShield():
 	$TimerNodes/ShieldRegen.wait_time = charge_tick
 	$TimerNodes/ShieldRegen.start()
 	
-#	$Tween.interpolate_property($Shield, "modulate:a",
-#			0.0, shieldFastCharge, 0.6,
-#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-#	$Tween.start()
-#
-#	$Tween.interpolate_property($Shield, "scale",
-#			Vector2(3.5, 3.5), get_shield_end_scale(), 0.6,
-#			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-			
-	
 	tween = get_tree().create_tween().set_parallel(true)
 	tween.tween_property($Shield, "modulate:a", shieldFastCharge, SHIELD_BREAK_TWEEN_TIME)
-	tween.tween_property($Shield, "scale", get_shield_end_scale(), SHIELD_BREAK_TWEEN_TIME)
+	tween.tween_property($Shield, "scale", get_shield_max_scale(), SHIELD_BREAK_TWEEN_TIME)
 	tween.set_parallel(false)
 	tween.tween_callback(self, "powering_up_done")
 	
 	$TimerNodes/ShieldSupercharge.wait_time = total_time
 	$TimerNodes/ShieldSupercharge.start()
+	
+func get_shield_max_scale():
+	pass
 #
 func powering_up_done():
 	is_powering_up = false
@@ -204,7 +187,7 @@ func canBeSelected():
 func getRamDamage():
 	return shooter.getRamDamage()
 	
-func takeDamage(entity, totalDmg:int):
+func take_damage(entity, totalDmg:int):
 
 	var pos = entity.getPointOfImpact(self)
 	var angle = entity.getAttackAngle(self)
@@ -234,7 +217,7 @@ func takeDamage(entity, totalDmg:int):
 		handle_shield_damage(shieldDmgTaken, pos, angle)
 	if remDmg:
 		handle_shield_overflow_damage(entity, remDmg)
-	emit_signal("damageTaken")
+	emit_signal("_damage_taken")
 		
 func handle_shield_damage(shieldDmgTaken, pos, angle):
 	addShieldExplosion(shieldDmgTaken, pos, angle)
@@ -248,6 +231,14 @@ func handle_shield_damage(shieldDmgTaken, pos, angle):
 		$TimerNodes/ShieldRegen.start()
 
 func handle_shield_overflow_damage(entity, remDmg):
-	print("handleHullDamage on SHIELD")
-	self.shooter.takeDamage(entity, remDmg)
+	print("handle_hull_damage on SHIELD")
+	self.shooter.take_damage(entity, remDmg)
 	return
+
+func set_friendly():
+	.set_friendly()
+	$ColNodes.get_child(0).set_collision_mask_bit(1, false)
+
+#	i.set_collision_layer_bit(0, true)
+#	i.set_collision_mask_bit(1, true) #contact with enemy units
+#	i.set_collision_mask_bit(3, true) #contact with enemy projs

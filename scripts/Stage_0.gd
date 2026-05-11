@@ -549,10 +549,11 @@ func set_cam_limit():
 func readyPlayer():
 	print("readyPlayer")
 	$Player_Pos.add_child(player)
+	player.do_init_player()
 	if player.new:
 		setPlayerUIConnections()
 		player.new = false
-		player.addStartingWeapons()
+		player.set_armaments()
 		player.addStartingItems()
 #		var trans = RemoteTransform2D.new()
 #		trans.name = "RemoteTransform"
@@ -563,7 +564,6 @@ func readyPlayer():
 #	player.position = Vector2(Globals.WIDTH - 400, Globals.HEIGHT-400)
 #	player.hide()
 #	player.set_inactive()
-	player.do_init_player()
 	player.setup_delayed_warp_in(1.0)
 	
 func positionCamera():

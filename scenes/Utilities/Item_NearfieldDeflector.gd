@@ -6,7 +6,7 @@ var bits = []
 func _ready():
 	pass
 		
-func doInit():
+func do_init_item():
 	addSelfDrones()
 	
 func addSelfDrones():

@@ -63,6 +63,6 @@ func _enter_state(prev_state, new_state):
 			parent.moveTarget = parent.curTarget.global_position
 			parent.get_weapon_by_index(0).doEnable()
 		states.crash:
-			parent.setupCrashing()
+			parent.crash_step_one()
 		
 	parent.moveTarget.y = Globals.ROADY

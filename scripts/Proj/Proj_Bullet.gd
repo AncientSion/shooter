@@ -22,4 +22,4 @@ func _physics_process(delta):
 #			$Trail.show()
 	
 func get_class():
-	return "Proj_Mace"
+	return "Proj_Bullet"
