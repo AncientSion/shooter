@@ -15,23 +15,25 @@ func _ready():
 func take_damage(a, b):
 	.take_damage(a, b)
 	
+	
 func do_init_mount():
 	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	max_smoke = 1
-	maxHealth = health
-	add_to_group("isMount")
-	initArc()
-	if health == 0:
-		makeUntargetable()
-	else:
+	if has_node("Weapon"):
+		maxHealth = health
+		add_to_group("isMount")
+		init_mount_debug_arcs()
 		connectHurtBoxes()
 		add_health_bar()
 		scale_progress_bar("healthbar", 0.5)
+	else:
+		health = 0
+		makeUntargetable()
+		
 	if invis:
 		$Sprites/Main.hide()
 	
-func initArc():
-	if Globals.AIMDEBUG and faction != 0:
+func init_mount_debug_arcs():
+	if Globals.AIMDEBUG and faction != 0 and has_node("Weapon"):
 		$DebugAim.visible = true
 		$DebugAim/Start.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle-maximum_rotation))
 		$DebugAim/End.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle+maximum_rotation))
@@ -39,6 +41,18 @@ func initArc():
 func add_smoke_fx(node):
 	node.position = global_position - owner.global_position
 	owner.get_node("EffectNodes").add_child(node)
+	
+func add_weapon(weapon):
+	add_child(weapon)
+	weapon.set_faction(faction)
+	weapon.anchor =  Vector2.RIGHT.rotated(deg2rad(startAngle))
+	weapon.current_rot = weapon.anchor
+	weapon.rotation = weapon.current_rot.angle()
+	weapon.maximum_rotation = deg2rad(maximum_rotation)
+	weapon.turnrate = deg2rad(turnrate)
+	weapon.owner_mount = self
+	if turnrate == 0 or maximum_rotation == 0:
+		weapon.canRotate = false
 
 func getRamDamage():
 	var ramBullet = Globals.BULLET.instance()
@@ -52,7 +66,7 @@ func getRamDamage():
 func kill():
 	destroyed = true
 	set_physics_process(false)
-	disableCollisionNodes()
+	disable_col_nodes()
 	if has_node("Weapon"):
 		$Weapon.kill()
 	

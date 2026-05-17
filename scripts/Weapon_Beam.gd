@@ -65,14 +65,14 @@ func doDisable():
 	$Muzzle/BeamChargeFireEmitter.emitting = false
 	cooldown = rof
 	$Tween.stop_all()
-	set_all_cooldown_timers()
+	update_cooldown_ui_nodes()
 	
 func doEnable():
 	.doEnable()
 	if is_processing():
 		$Muzzle/BeamChargeEmitter.emitting = true
 		cooldown = rof
-		set_all_cooldown_timers()
+		update_cooldown_ui_nodes()
 	
 func doFire(target):
 #	print("doFire")

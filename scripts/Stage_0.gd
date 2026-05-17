@@ -25,7 +25,7 @@ func setupLevel():
 	set_boundary_red()
 	create_background()
 	set_cam_limit()
-	set_various_settings()
+	set_level_gravity()
 	readyPlayer()
 	positionCamera()
 	$UI.showAIUI()
@@ -35,7 +35,7 @@ func setupLevel():
 	
 	handleLevelStartZooming()
 	
-func set_various_settings():
+func set_level_gravity():
 	Globals.BASEGRAVITY = Vector2(0, 300)
 	
 func set_stage_dimensions():

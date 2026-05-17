@@ -19,7 +19,12 @@ func process_movement(_delta):
 	velocity = velocity.limit_length(maxSpeed)
 	
 	toggleThrusterparticles()
+	
+	rotation_degrees += 20.0 * _delta
 
+func do_turnaround():
+	return
+	
 func toggleThrusterparticles():
 	if accel.x > 10:
 		if direction.x == 1:
@@ -104,7 +109,7 @@ func initAvoidValues():
 	
 func crash_step_one():
 	.crash_step_one()
-	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, getCrashSpeed(), 3.0)
+	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, get_crash_velo(), 3.0)
 	$Tween.start()
 	$Tween.connect("tween_all_completed", self, "crash_step_two")
 	

@@ -97,6 +97,8 @@ func set_mission_enemies():
 			legal_units = ["FIGHTER", "HELI_LIGHT"]
 		"CONTROL_AREA":
 			legal_units = ["FIGHTER", "HELI_LIGHT"]
+		"TEST":
+			legal_units = []
 			
 	for entry in legal_units:
 		for unit in unit_data:

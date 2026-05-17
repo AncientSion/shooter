@@ -85,6 +85,6 @@ func crash_step_one():
 	.crash_step_one()
 	crash_step_two()
 	return
-	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, getCrashSpeed(), 3.0)
+	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, get_crash_velo(), 3.0)
 	$Tween.start()
 	$Tween.connect("tween_all_completed", self, "crash_step_two")

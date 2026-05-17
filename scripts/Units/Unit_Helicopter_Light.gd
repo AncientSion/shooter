@@ -61,11 +61,11 @@ func getPossibleWeapons(index):
 	
 func crash_step_one():
 	.crash_step_one()
-	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, getCrashSpeed(), 2.0)
+	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, get_crash_velo(), 2.0)
 	$Tween.start()
 	$Tween.connect("tween_all_completed", self, "crash_step_two")
 
-func getCrashSpeed():
+func get_crash_velo():
 	return max(30, maxSpeed / 4)
 	
 func getCrashAngle():

@@ -1,7 +1,6 @@
 extends Mission_Base
 class_name Mission_Protect_Cargo_Hauler
 
-
 const mission_time:float = 30.0
 const time_until_target_arrives:float = 3.0
 

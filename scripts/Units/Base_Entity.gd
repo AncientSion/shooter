@@ -249,11 +249,11 @@ func add_smoke_fx(node):
 	node.position = get_point_inside_tex()
 	$EffectNodes.add_child(node)
 	
-func disableCollisionNodes():
+func disable_col_nodes():
 	if has_node("ColNodes"):
-		call_deferred("next_frame_disableCollisionNodes")
+		call_deferred("next_frame_disable_col_nodes")
 	
-func next_frame_disableCollisionNodes():
+func next_frame_disable_col_nodes():
 	print("disabling ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", false)
@@ -604,8 +604,8 @@ func makeInvisible():
 	
 func makeUntargetable():
 	indestructable = true
-	disableCollisionNodes()
-	call_deferred("next_frame_disableCollisionNodes")
+	disable_col_nodes()
+	call_deferred("next_frame_disable_col_nodes")
 
 func _on_LOOTNODE_mouse_entered(node):
 #	print("mouse in")
@@ -801,7 +801,7 @@ func processRamming(delta):
 	for ramming in rammings:
 		if ramming.legal == true:
 			ramming.dmgCooldown -= delta
-			print("ram cooldown: ", ramming.dmgCooldown)
+#			print("ram cooldown: ", ramming.dmgCooldown)
 			if ramming.dmgCooldown <= 0:
 				ramming.dmgCooldown = 1.0
 #				print("processing ramming incoming from: ", ramming.rammedByDisplay, " #", ramming.rammedById, ", frame: ", Engine.get_idle_frames())

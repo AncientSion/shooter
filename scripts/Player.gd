@@ -179,7 +179,7 @@ func add_resources(val):
 	
 func set_inactive():
 	ready = false
-	disableCollisionNodes()
+	disable_col_nodes()
 	set_physics_process(false)
 	disableItems()
 	for n in $Mounts/A.get_children():
@@ -319,7 +319,7 @@ func enableShifting():
 	if isShifting or shiftCooldown > 0.0:
 		return
 	isShifting = !isShifting
-	disableCollisionNodes()
+	disable_col_nodes()
 	$Sprites.hide()
 	disableAllThrusterParticles()
 	disableBoosting()

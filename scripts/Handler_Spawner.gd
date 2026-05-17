@@ -215,7 +215,6 @@ func spawn_and_init_unit(enemy):
 	enemy.set_armaments()
 #	print(enemy.get_node("Mounts").get_child(0).get_child(0).get_node("Sprites/Main").scale)
 	enemy.set_direction()
-	enemy.doInit()
 #	enemy.setActive()
 #	enemy.speed = 0
 	enemy.connect("isDestroyed", self, "_on_enemy_from_wave_destroyed", [enemy])

@@ -59,7 +59,7 @@ func start_new_mission(mission_node:Map_Node):
 	
 	if  mission_node:
 		mission_node.mission_class.logic.print_props()
-		Globals.handler_spawner.mission_unit_data =  mission_node.mission_class.logic.unit_data
+		Globals.handler_spawner.mission_unit_data = mission_node.mission_class.logic.unit_data
 		print("__________")
 		print("do start mission")
 		

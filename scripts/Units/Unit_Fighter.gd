@@ -397,9 +397,6 @@ func setNewWanderTarget():
 #		newTarget.y += Globals.HEIGHT
 	
 	moveTarget = newTarget
-
-func getCrashSpeed():
-	return maxSpeed / 2
 	
 func checkMoveTargetWithinBoundary():
 	if $SM.state != $SM.states.crash:

@@ -29,6 +29,7 @@ var shooter = null
 var active = false
 var isSelected:bool = false
 var forcedDisabled = false
+var owner_mount:Base_Mount = null
 
 #var arc = Vector2()
 
@@ -63,14 +64,19 @@ func do_init_weapon():
 	connectHurtBoxes()
 	drawAimVector()
 	do_sub_init_weapon()
+	check_init_aimdebug()
 	
 func do_sub_init_weapon():
 	pass
 	
 func check_init_aimdebug():
 	if Globals.AIMDEBUG and faction != 0:
-		if not has_node("ControlNodes/rem_cooldown_label"):
+		if !has_node("ControlNodes/rem_cooldown_label"):
 			init_cooldown_debug_label()
+		if active:
+			$LineAim.show()
+		else:
+			$LineAim.hide()
 
 func _draw():
 	if Globals.AIMDEBUG and faction != 0:
@@ -88,13 +94,13 @@ func weapon_process(_delta):
 		handleBursting(_delta)
 	else:
 		cooldown = max(cooldown - _delta, 0.0)
-	set_all_cooldown_timers()
+	update_cooldown_ui_nodes()
 	
-func set_all_cooldown_timers():
-	if Globals.AIMDEBUG and faction != 0:
-		$ControlNodes.get_node("rem_cooldown_label").update_label(cooldown)
+func update_cooldown_ui_nodes():
 	if UI_node != null:
 		UI_node.get_node("PC/CDProgress").value = cooldown/rof*100
+	if Globals.AIMDEBUG and faction != 0 and has_node("ControlNodes/rem_cooldown_label"):
+		$ControlNodes.get_node("rem_cooldown_label").update_label(cooldown)
 		
 func isInActiveBurst():
 	if burst > 1 && bursting:
@@ -121,25 +127,39 @@ func setRecoilForce():
 #	match type:
 #		1: #bull
 #	recoil.x = 0
-	
+func has_fire_solution() -> bool:
+	if curTarget == null:
+		return false
 
-func has_fire_solution():
+	if global_position.distance_squared_to(curTarget.global_position) < minFireDist * minFireDist:
+		return false
+
+	# Getting the direction vector, then the angle. 
+	# This avoids the Godot 3 angle_to_point backwards bug.
+	var dir_to_target = curTarget.global_position - global_position
+	var angle_to_target = dir_to_target.angle() 
+
+	var dif = wrapf(
+		angle_to_target - global_rotation,
+		-PI,
+		PI
+	)
+
+	return abs(dif) < deg2rad(fof)
+
+func xhas_fire_solution():
 	if abs(global_position.y - curTarget.global_position.y) > minFireDist:
-		var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
+		#var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
+		var angleToTarget = rad2deg(global_position.angle_to_point(curTarget.global_position))
 		var dif = angleToTarget - global_rotation_degrees
 	#	print("dif: ", abs(round(dif)))
 		if abs(round(angleToTarget - global_rotation_degrees)) == 360 or abs(angleToTarget - global_rotation_degrees) < fof:
+			
 			return true
 	return false
 
 func handleFiring():
 	doFire(curTarget)
-	
-#	var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
-##	var dif = angleToTarget - global_rotation_degrees
-##	print("dif: ", abs(round(dif)))
-#	if abs(round(angleToTarget - global_rotation_degrees)) == 360 or abs(angleToTarget - global_rotation_degrees) < fof:
-#		doFire(curTarget)
 			
 func handleBursting(delta):
 #	cooldown = 0.0
@@ -324,30 +344,14 @@ func set_wpn_target(allTargets):
 	else:
 		curTarget = null 
 	return
-
-func xset_wpn_target(allTargets):
-	var targets = Array()
-	for n in allTargets:
-		if n.target.isLegalTarget():
-			if is_in_range(n.target.global_position):
-				var vec = global_position.direction_to(n.target.global_position)
-				if isInArc(vec):
-					targets.append(n)
-	if targets.size():
-		var prio = 10
-		for n in targets:
-			if n.prio < prio:
-				curTarget = n.target
-				prio = n.prio
-#		curTarget = Globals.getRandomEntry(targets)
-	else:
-		curTarget = null
 	
 func isInArc(vec):
 	if maximum_rotation == PI: return true
 #	print(owner.global_rotation_degrees)
-	var from = anchor.rotated(-maximum_rotation + owner.global_rotation)
-	var to = anchor.rotated(maximum_rotation + owner.global_rotation)
+#	print(global_rotation_degrees)
+#	print(rotation_degrees)
+	var from = anchor.rotated(-maximum_rotation + owner_mount.global_rotation)
+	var to = anchor.rotated(maximum_rotation + owner_mount.global_rotation)
 #	print(rad2deg(from.angle()), " - ",  rad2deg(to.angle()))
 	if ((from.y * vec.x - from.x * vec.y) * (from.y * to.x - from.x * to.y) >= 0 && (to.y * vec.x - to.x * vec.y) * (to.y * from.x - to.x * from.y) >= 0):
 #		print("in Arc!")
@@ -372,24 +376,6 @@ func do_track_target():
 		rotation = current_rot.angle()
 #		print(Engine.get_idle_frames(), "_do_track_target: ", global_rotation_degrees)
 
-#func do_track_target(delta):
-#	if !canRotate:
-#		return
-#	if !is_instance_valid(curTarget):
-#		return
-#
-#	var target_angle = (curTarget.global_position - global_position).angle()
-#	var diff = wrapf(target_angle - rotation, -PI, PI)
-#
-#	var max_turn = turnrate * delta
-#	diff = clamp(diff, -max_turn, max_turn)
-#
-#	var candidate = rotation + diff
-#
-#	var base = anchor.angle()
-#	var min_angle = base - maximum_rotation
-#	var max_angle = base + maximum_rotation#
-#	rotation = clamp(candidate, min_angle, max_angle)
 
 func looking_at(trans, pos):
 	var x : Vector2 = (pos - trans.origin)
@@ -405,7 +391,7 @@ func kill():
 	emit_signal("isDestroyed")
 	if has_node("ControlNodes"):
 		$ControlNodes.set_as_toplevel(false)
-	disableCollisionNodes()
+	disable_col_nodes()
 	disable_all_timers()
 		
 func disable_all_timers():
@@ -544,6 +530,7 @@ func applyQualityMods():
 	
 func init_cooldown_debug_label():
 	var node = Globals.TEXT_LABEL.instance()
+	node.hide()
 	node.name = "rem_cooldown_label"
 	node.offset = Vector2(0, max(40, texDim.y + 10))
 	node.init_text_label_string(float(0.00))
@@ -565,10 +552,9 @@ func doDisable():
 	$Aim.hide()
 	active = false
 	cooldown = rof
-	set_all_cooldown_timers()
+	update_cooldown_ui_nodes()
+	check_init_aimdebug()
 #	set_physics_process(false)
-	if Globals.AIMDEBUG and faction != 0:
-		$LineAim.hide()
 
 func doEnable():
 #	print(display, ", faction: ", faction, " doEnable")
@@ -576,10 +562,9 @@ func doEnable():
 		return
 	if faction == 0 or (faction != 0 and type == 6):
 		$Aim.show()
-	if Globals.AIMDEBUG and faction != 0:
-		$LineAim.show()
 			
 	active = true
+	check_init_aimdebug()
 #	set_physics_process(true)
 	
 func doUnselect():

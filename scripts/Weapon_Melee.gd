@@ -8,7 +8,7 @@ var swipeWidth:int = 140
 func doDisable():
 	.doDisable()
 	cooldown = rof
-	set_all_cooldown_timers()
+	update_cooldown_ui_nodes()
 
 var steps:Array = [
 	{	"step": 0,

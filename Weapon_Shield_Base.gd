@@ -59,7 +59,7 @@ func isInActiveBurst():
 func canFire():
 	return false
 	
-func set_all_cooldown_timers():
+func update_cooldown_ui_nodes():
 	return
 	
 func doUnselect():
@@ -97,7 +97,7 @@ func doEnable():
 	powerShield()
 	
 func unpowerShield():
-	disableCollisionNodes()
+	disable_col_nodes()
 	$TimerNodes/ShieldRegen.stop()
 	if active == false: 
 		$Shield.modulate.a = 0.0

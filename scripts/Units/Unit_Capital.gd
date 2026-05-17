@@ -19,7 +19,7 @@ func killByCrash():
 	indestructable = true
 	.killByCrash()
 
-func getCrashSpeed():
+func get_crash_velo():
 	return maxSpeed / 2
 	
 func getCrashAngle():

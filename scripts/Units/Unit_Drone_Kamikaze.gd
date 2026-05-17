@@ -73,7 +73,7 @@ func selfDestruct():
 	kill()
 #	bomb.call_deferred("explode")#bomb.explode()
 	
-func getCrashSpeed():
+func get_crash_velo():
 	return max(30, maxSpeed / 2)
 	
 func getCrashAngle():

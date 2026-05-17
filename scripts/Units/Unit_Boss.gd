@@ -78,9 +78,8 @@ func initCallMethodTrack(method, interval, start):
 #	print("len: ", maxLength)
 		
 	$AnimationPlayer.add_animation("anim", animation)
-	
 
-func getCrashSpeed():
+func get_crash_velo():
 	return 20
 	
 func getCrashAngle():

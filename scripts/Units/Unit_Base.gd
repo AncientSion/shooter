@@ -298,6 +298,21 @@ func handle_weapons(_delta): # context: unit with several weapon mounts
 			if weapon.bursting or weapon.has_fire_solution(): # do i have the right vector / rotation achieved `?
 				weapon.handleFiring() # spawn projectile
 				
+func xhandle_weapons(_delta): # context: unit with several weapon mounts
+	for mount in $Mounts.get_children():
+		if mount.has_node("Weapon"):
+			var weapon = mount.get_node("Weapon")
+			if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
+				continue
+			if !weapon.wpn_has_valid_target(): # does it NOT have a target ?
+				weapon.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+			if weapon.curTarget == null: # if it still has no target, next
+				continue
+			mount.do_track_target()
+			if weapon.canFire(): # check cooldown, emp or other conditions
+				if weapon.bursting or weapon.has_fire_solution(): # do i have the right vector / rotation achieved `?
+					weapon.handleFiring() # spawn projectile
+				
 func handleItems(_delta):
 	for n in $Items.get_children():
 		n.item_use_check_process(_delta)
@@ -367,9 +382,9 @@ func enableAllCollisionNodes():
 			n.enableCollisionNodes()
 
 func disableAllCollisionNodes():
-	disableCollisionNodes()
+	disable_col_nodes()
 	for n in $Mounts.get_children():
-		n.disableCollisionNodes()
+		n.disable_col_nodes()
 
 func setActive():
 #	print("set active: ", self.display)
@@ -677,9 +692,10 @@ func do_turnaround():
 	mirrorVarious()
 	mirrorColNodes()
 
-func mirrorTurrets():dd
+func mirrorTurrets():
 	for n in $Mounts.get_children():
 		n.position.x *= -1
+		#n.get_node("Sprites/Main").flip_v = !n.get_node("Sprites/Main").flip_v
 		if n.has_node("Weapon"):
 			var weapon = n.get_node("Weapon")
 			weapon.anchor.x *= -1
@@ -687,6 +703,13 @@ func mirrorTurrets():dd
 			weapon.rotation = weapon.current_rot.angle()
 			n.get_node("DebugAim/Start").scale.x *= -1
 			n.get_node("DebugAim/End").scale.x *= -1
+			
+func xmirrorTurrets():
+	for n in $Mounts.get_children():
+		n.position.x *= -1
+		if n.has_node("Weapon"):
+			var weapon = n.get_node("Weapon")
+			weapon.scale.x *= -1
 		
 func mirrorThrusters():
 	for n in $ThrusterNodes.get_children():
@@ -712,19 +735,18 @@ func set_armaments():
 	var index = 0
 	for mount in $Mounts.get_children():
 		mount.set_faction(faction)
-		mount.do_init_mount()
 		var weapon = getPossibleWeapons(index)
 		index += 1
-		if not weapon:
-			continue
-		weapon.do_init_weapon()
-#		if !weapon:
-#			continue
-		addWeapon(weapon, mount)
+		if weapon:
+			weapon.do_init_weapon()
+			#addWeapon(weapon, mount)
+			weapon.shooter = self
+			mount.add_weapon(weapon)
+		mount.do_init_mount()
 		
 	randomizeWeaponStartCooldown()
 	addSightCollision()
-	addStartingItems()
+	addStartingItems()	
 	
 func addWeapon(weapon, mount):
 	if not weapon:
@@ -736,13 +758,11 @@ func addWeapon(weapon, mount):
 	weapon.rotation = weapon.current_rot.angle()
 	weapon.maximum_rotation = deg2rad(mount.maximum_rotation)
 	weapon.turnrate = deg2rad(mount.turnrate)
-	weapon.faction = faction
 	weapon.set_owner(mount)
 	if mount.turnrate == 0 or mount.maximum_rotation == 0:
 		weapon.canRotate = false
 	weapon.shooter = self
 	
-	weapon.check_init_aimdebug()
 	
 func addStartingItems():
 	pass

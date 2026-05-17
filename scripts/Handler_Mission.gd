@@ -42,6 +42,12 @@ func mission_loader():
 	
 func get_mission_dict():
 	return {
+		"mission_test":
+			{
+			"scene_url": "res://scenes/Missions/Mission_Base.tscn",
+			"script_url": "res://scripts/Missions/Mission_Test.gd",
+			"scene": null,
+		},
 		"mission_control_area":
 		{
 			"scene_url": "res://scenes/Missions/Mission_Base.tscn",

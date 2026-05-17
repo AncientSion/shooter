@@ -23,7 +23,7 @@ const MAGENTA:Color = Color(0.7, 0, 1.0, 1.0)
 #var LIGHTGREEN = Color(0.73, 0.91, 0, 1.0)
 #var GREEN = Color(0.17, 1.0, 0.0, 1.0)
 
-const AIMDEBUG:bool = false
+const AIMDEBUG:bool = true
 const SIGHTDEBUG:bool = false
 
 const AOE_MARK = preload("res://scenes/AoE_Marker.tscn")
@@ -200,15 +200,17 @@ func _physics_process(_delta):
 #	frameCounter += 1
 	
 	if Input.is_action_just_pressed("nullGravity"):
-		if Globals.BASEGRAVITY != Vector2.ZERO:
-			Globals.BASEGRAVITY = Vector2.ZERO
-		else:
-			Globals.BASEGRAVITY = Vector2(0, 300)
+		toggle_gravity()
 #
 #	 var image = Image.new()
 #    image.load(ProjectSettings.globalize_path(filepath))
 #    return image
-
+func toggle_gravity():
+	if Globals.BASEGRAVITY != Vector2.ZERO:
+		Globals.BASEGRAVITY = Vector2.ZERO
+	else:
+		curScene.set_level_gravity()
+	
 func set_resolution():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D, SceneTree.STRETCH_ASPECT_EXPAND, Globals.SCREEN)
 	Globals.GAMESCREEN.get_node("Menu_BG").rect_min_size = Globals.SCREEN

@@ -107,7 +107,7 @@ func getPossibleWeapons(index):
 	weapon.makeInvisible()
 	return weapon
 	
-func getCrashSpeed():
+func get_crash_velo():
 	return max(30, maxSpeed / 2)
 	
 func getCrashAngle():

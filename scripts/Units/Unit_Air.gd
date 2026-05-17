@@ -65,8 +65,8 @@ func crashCondition(remDmg):
 func withdraw_condition(remDmg):
 	return false
 	
-func getCrashSpeed():
-	return 0
+func get_crash_velo():
+	return max(1, maxSpeed / 2)
 	
 func getCrashAngle():
 	return 0
@@ -100,7 +100,7 @@ func crash_step_two():
 		direction = -1
 	
 	var rota = getCrashAngle() * direction
-	var time = (Globals.HEIGHT - global_position.y) / getCrashSpeed() / 3
+	var time = (Globals.HEIGHT - global_position.y) / get_crash_velo() / 3
 	var targetX = 550 * direction
 	
 	$Tween.interpolate_property(self, "position",
@@ -117,7 +117,7 @@ func kill():
 	.kill()
 	if position.y < Globals.ROADY - 15:
 		hide()
-		disableCollisionNodes()
+		disable_col_nodes()
 
 func enableBoosting():
 	if boosting:
