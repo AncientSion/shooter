@@ -40,17 +40,6 @@ func drawCurrentDeviationARC():
 #	print("draw aim frame: ", Engine.get_idle_frames())
 	$Aim/Angle.polygon[1] = Vector2(800, 0).rotated(deg2rad(curDeviation))
 	$Aim/Angle.polygon[2] = Vector2(800, 0).rotated(deg2rad(-curDeviation))
-
-#func setPostFireCooldown():
-#	cooldown = min(rof, cooldown + 0.5)
-
-func has_fire_solution():
-	var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
-#	var dif = angleToTarget - global_rotation_degrees
-#	print("dif: ", abs(round(dif)))
-	if abs(round(angleToTarget - global_rotation_degrees)) == 360 or abs(angleToTarget - global_rotation_degrees) < fof:
-		return curDeviation < deviation * 2
-	return false
 	
 func getShotDeviation(projNumber, i):
 	if linearDevi:

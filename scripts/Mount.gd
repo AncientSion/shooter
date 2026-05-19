@@ -7,6 +7,20 @@ export var turnrate:float = 0.0
 export var enabled:bool = true
 export var invis:bool = false
 
+var weapon = null
+
+var anchor: Vector2
+var max_rota_radian:float
+var canRotate:bool = true
+
+#	wpn.anchor =  Vector2.RIGHT.rotated(deg2rad(startAngle))
+#	wpn.current_rot = wpn.anchor
+#	wpn.rotation = wpn.current_rot.angle()
+#	wpn.maximum_rotation = deg2rad(maximum_rotation)
+#	wpn.turnrate = deg2rad(turnrate)
+#	wpn.owner_mount = self
+
+
 var display = "Mount"
 
 func _ready():
@@ -41,18 +55,20 @@ func init_mount_debug_arcs():
 func add_smoke_fx(node):
 	node.position = global_position - owner.global_position
 	owner.get_node("EffectNodes").add_child(node)
+
+func add_weapon(wpn):
+	add_child(wpn)
+	wpn.set_faction(faction)
+	weapon = wpn
+		
+	anchor = Vector2.RIGHT.rotated(deg2rad(startAngle))
+	weapon.current_rot = anchor
+	weapon.rotation_degrees = startAngle
+	max_rota_radian = deg2rad(maximum_rotation)
+	turnrate = deg2rad(turnrate)
 	
-func add_weapon(weapon):
-	add_child(weapon)
-	weapon.set_faction(faction)
-	weapon.anchor =  Vector2.RIGHT.rotated(deg2rad(startAngle))
-	weapon.current_rot = weapon.anchor
-	weapon.rotation = weapon.current_rot.angle()
-	weapon.maximum_rotation = deg2rad(maximum_rotation)
-	weapon.turnrate = deg2rad(turnrate)
-	weapon.owner_mount = self
 	if turnrate == 0 or maximum_rotation == 0:
-		weapon.canRotate = false
+		canRotate = false
 
 func getRamDamage():
 	var ramBullet = Globals.BULLET.instance()
@@ -121,3 +137,91 @@ func has_active_omni_shield():
 #			if $Mounts/A.get_child(0).shield > 0:
 #				return true#
 #	return false
+func mount_has_valid_target():
+#	print("wpn_has_valid_target on ", display, " #", id)
+	if not is_instance_valid(curTarget) or curTarget.destroyed == true or curTarget.ready == false: return false
+	if forcedLock and curTarget != null:
+		return !curTarget.destroyed
+	if not weapon.is_in_range(curTarget.global_position):
+		#print(display, " to ", target.display, " dist > speed x2 = illegal target")
+		return false
+	if not isInArc(global_position.direction_to(curTarget.global_position)): 
+		return false
+	return true
+	
+func set_wpn_target(allTargets):
+	var bestPrio:int = 10
+	var bestTarget = null
+	var targets = Array()
+	for n in allTargets:
+		if not n.target.isLegalTarget():
+			continue
+		if not weapon.is_in_range(n.target.global_position):
+			continue
+		var vec = global_position.direction_to(n.target.global_position)
+#		print(rad2deg(vec.angle()))
+		if not isInArc(vec):
+			continue
+			
+		if n.prio < bestPrio:
+			bestPrio = n.prio
+			bestTarget = n.target
+	
+	if bestTarget != null:
+		curTarget = bestTarget
+	else:
+		curTarget = null 
+	return
+	
+func xisInArc(vec: Vector2) -> bool:
+	if max_rota_radian >= PI:
+		return true
+	
+	var forward = anchor.rotated(global_rotation).normalized()
+	var dir = vec.normalized()
+	
+	return forward.dot(dir) >= cos(max_rota_radian)
+	
+func isInArc(vec):
+	if max_rota_radian == PI: return true
+#	print(owner.global_rotation_degrees)
+#	print(global_rotation_degrees)
+#	print(rotation_degrees)
+	var from = anchor.rotated(-max_rota_radian + global_rotation)
+	var to = anchor.rotated(max_rota_radian + global_rotation)
+	#print(rad2deg(from.angle()), " - ",  rad2deg(to.angle()))
+	if ((from.y * vec.x - from.x * vec.y) * (from.y * to.x - from.x * to.y) >= 0 && (to.y * vec.x - to.x * vec.y) * (to.y * from.x - to.x * from.y) >= 0):
+#		print("in Arc!")
+		return true
+#	print("not in Arc!")
+	return false
+
+func do_track_target():
+	if not canRotate: return
+	if not is_instance_valid(curTarget): return
+
+	# Get direction to target in local space
+	var target_dir = (curTarget.global_position - global_position).normalized()
+	var target_angle = target_dir.angle()
+
+	# Calculate shortest rotation needed
+	var change = wrapf(target_angle - weapon.global_rotation, -PI, PI)
+
+	# Apply turnrate limit
+	change = clamp(change, -turnrate, turnrate)
+
+	# Calculate candidate rotation
+	var candidate = weapon.current_rot.rotated(change)
+
+	# Check if within rotation limits
+	var angle_from_anchor = wrapf(anchor.angle_to(candidate), -PI, PI)
+
+	if abs(angle_from_anchor) <= max_rota_radian:
+		# Within limits - apply full rotation
+		weapon.current_rot = candidate
+		weapon.rotation = weapon.current_rot.angle()
+	else:
+		# Clamp to nearest rotation limit
+		var clamped_angle = clamp(angle_from_anchor, -max_rota_radian, max_rota_radian)
+		weapon.current_rot = anchor.rotated(clamped_angle)
+		weapon.rotation = weapon.current_rot.angle()

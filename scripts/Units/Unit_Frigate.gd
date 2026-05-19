@@ -71,7 +71,7 @@ func getPossibleWeapons(index):
 #	return false
 	match index:
 		0:
-			return false
+#			return false
 #			var shield = Globals.weapon_shield_dir.instance()
 #			var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
 #			return shield.construct(5, "Shield", stats)
@@ -81,7 +81,7 @@ func getPossibleWeapons(index):
 			w.rof = 2.0
 			return w
 		1:
-			return false
+#			return false
 #			return Globals.getWeaponBase("Heavy Autocannon");
 			var w = Globals.getWeaponBase("Heavy Autocannon");
 			w.rof = 2.0

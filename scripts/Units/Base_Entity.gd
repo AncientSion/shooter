@@ -547,57 +547,7 @@ func get_point_inside_tex() -> Vector2:
 	tex.unlock()
 
 	# Fallback if no opaque pixel found
-	return Vector2.ZERO
-	
-func xget_point_inside_tex():
-	var tex: Image = $Sprites/Main.texture.get_data()
-	var dim: Vector2 = tex.get_size()
-	var scale: Vector2 = $Sprites/Main.scale
-	var texDim: Vector2 = Vector2(dim.x * scale.x, dim.y * scale.y)
-
-	tex.lock()
-
-	for tries in range(100):
-		var pos: Vector2 = Vector2(
-		Globals.rng.randi_range(0, int(dim.x) - 1),
-		Globals.rng.randi_range(0, int(dim.y) - 1)
-		)
-		var p: Color = tex.get_pixelv(pos)
-		if p.a > 0.5:
-			pos *= scale
-			pos = Vector2(-texDim.x / 2 + pos.x, -texDim.y / 2 + pos.y)
-			
-			if pos.x < -texDim.x/2:
-				print("ding")
-			if pos.x > texDim.x/2:
-				print("ding")
-			tex.unlock()
-		return pos
-
-	tex.unlock()
-	push_error("No non-transparent pixel found after 100 tries")
-	return Vector2.ZERO
-	
-func xxget_point_inside_tex():
-	var valid = false
-	var tex = $Sprites/Main.get_texture().get_data()
-	var dim = $Sprites/Main.get_texture().get_size()
-	#texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	tex.lock()
-	
-	var tries:int = 0
-	
-	while not valid:
-		tries += 1
-		var pos = Vector2(Globals.rng.randi_range(0, dim.x-1), Globals.rng.randi_range(0, dim.y-1))
-		var p = tex.get_pixelv(pos)
-		if p[3] == 1:
-			pos *= $Sprites/Main.scale
-			pos = Vector2((-texDim.x/2)+pos.x, (-texDim.y/2)+pos.y)
-			tex.unlock()
-			return pos
-		if tries >= 100:
-			break
+	return Vector2.ZERO	
 	
 func makeInvisible():
 	$Sprites.visible = false

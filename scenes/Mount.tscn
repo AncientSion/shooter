@@ -7,6 +7,7 @@
 extents = Vector2( 10.75, 4 )
 
 [node name="Mount" type="Node2D"]
+position = Vector2( 0, 1 )
 script = ExtResource( 2 )
 maximum_rotation = 0.0
 turnrate = 1.0

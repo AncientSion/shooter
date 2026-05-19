@@ -80,13 +80,16 @@ func check_init_aimdebug():
 
 func _draw():
 	if Globals.AIMDEBUG and faction != 0:
+		return
 		drawRange()
 		
 func drawRange():
-	draw_arc(Vector2.ZERO, speed * lifetime * 0.5, 0, TAU, 24, Color(1, 0, 0, 1), 10)
+	draw_arc(Vector2.ZERO, speed * lifetime * 0.5, 0, TAU, 12, Color(1, 0, 0, 1), 10)
 	
 func _physics_process(_delta):
 	if active:
+#		if faction == 1:
+#			print(rotation)
 		weapon_process(_delta)
 	
 func weapon_process(_delta):
@@ -121,22 +124,14 @@ func constructWpn(props):
 	
 func setRecoilForce():
 	recoilForce = Globals.getRecoilForce(minDmg, maxDmg, speed)
-#	print(display, ": setRecoilForce: ", recoilForce)
-	return
-	
-#	match type:
-#		1: #bull
-#	recoil.x = 0
-func has_fire_solution() -> bool:
-	if curTarget == null:
-		return false
 
-	if global_position.distance_squared_to(curTarget.global_position) < minFireDist * minFireDist:
+func has_fire_solution(target) -> bool:
+	if global_position.distance_squared_to(target.global_position) < minFireDist * minFireDist:
 		return false
 
 	# Getting the direction vector, then the angle. 
 	# This avoids the Godot 3 angle_to_point backwards bug.
-	var dir_to_target = curTarget.global_position - global_position
+	var dir_to_target = target.global_position - global_position
 	var angle_to_target = dir_to_target.angle() 
 
 	var dif = wrapf(
@@ -146,17 +141,6 @@ func has_fire_solution() -> bool:
 	)
 
 	return abs(dif) < deg2rad(fof)
-
-func xhas_fire_solution():
-	if abs(global_position.y - curTarget.global_position.y) > minFireDist:
-		#var angleToTarget = rad2deg(curTarget.global_position.angle_to_point(global_position))
-		var angleToTarget = rad2deg(global_position.angle_to_point(curTarget.global_position))
-		var dif = angleToTarget - global_rotation_degrees
-	#	print("dif: ", abs(round(dif)))
-		if abs(round(angleToTarget - global_rotation_degrees)) == 360 or abs(angleToTarget - global_rotation_degrees) < fof:
-			
-			return true
-	return false
 
 func handleFiring():
 	doFire(curTarget)

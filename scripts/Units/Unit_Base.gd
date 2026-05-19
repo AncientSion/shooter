@@ -280,38 +280,20 @@ func bound_process(_delta):
 	
 func get_weapon_by_index(index:int):
 	return $Mounts.get_child(index).get_node("Weapon")
-
-func handle_weapons(_delta): # context: unit with several weapon mounts
-	for n in $Mounts.get_children():
-		if not n.has_node("Weapon"):
-			continue
-			
-		var weapon = n.get_node("Weapon")
-		if not is_instance_valid(weapon) or weapon.destroyed or not weapon.active:
-			continue
-		if not weapon.wpn_has_valid_target(): # does it NOT have a target ?
-			weapon.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
-		if weapon.curTarget == null: # if it still has no target, next
-			continue
-		weapon.do_track_target() # it has a target, rotate the weapon towards it
-		if weapon.canFire(): # check cooldown, emp or other conditions
-			if weapon.bursting or weapon.has_fire_solution(): # do i have the right vector / rotation achieved `?
-				weapon.handleFiring() # spawn projectile
 				
-func xhandle_weapons(_delta): # context: unit with several weapon mounts
+func handle_weapons(_delta): # context: unit with several weapon mounts
 	for mount in $Mounts.get_children():
-		if mount.has_node("Weapon"):
-			var weapon = mount.get_node("Weapon")
-			if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
+		if mount.weapon:
+			if !is_instance_valid(mount.weapon) or mount.weapon.destroyed or !mount.weapon.active:
 				continue
-			if !weapon.wpn_has_valid_target(): # does it NOT have a target ?
-				weapon.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
-			if weapon.curTarget == null: # if it still has no target, next
+			if !mount.mount_has_valid_target(): # does it NOT have a target ?
+				mount.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+			if mount.curTarget == null: # if it still has no target, next
 				continue
 			mount.do_track_target()
-			if weapon.canFire(): # check cooldown, emp or other conditions
-				if weapon.bursting or weapon.has_fire_solution(): # do i have the right vector / rotation achieved `?
-					weapon.handleFiring() # spawn projectile
+			if mount.weapon.canFire(): # check cooldown, emp or other conditions
+				if mount.weapon.bursting or mount.weapon.has_fire_solution(curTarget): # do i have the right vector / rotation achieved `?
+					mount.weapon.handleFiring() # spawn projectile
 				
 func handleItems(_delta):
 	for n in $Items.get_children():

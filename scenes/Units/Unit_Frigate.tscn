@@ -184,7 +184,6 @@ rotation = 1.5708
 health = 20
 maximum_rotation = 89.0
 startAngle = -90
-turnrate = 2.0
 
 [node name="VisibilityNotifier2D" parent="." index="7"]
 scale = Vector2( 5.49501, -0.922956 )
