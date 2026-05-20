@@ -87,7 +87,7 @@ polygon = PoolVector2Array( 20, 0, 100, 25, 100, -25 )
 visible = false
 points = PoolVector2Array( 0, 0, 500, 0 )
 width = 2.0
-default_color = Color( 1, 1, 0, 1 )
+default_color = Color( 1, 0, 0, 1 )
 
 [node name="Sprites" type="Position2D" parent="."]
 

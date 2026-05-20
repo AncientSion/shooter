@@ -14,8 +14,10 @@ func fill_mission_pulldown():
 		$MC/PC/VBC/HBoxContainer/OptionButton.add_item(n)
 	
 func _on_Start_pressed():
+	check_debug_options()
 	var selection = $MC/PC/VBC/HBoxContainer/OptionButton.get_item_text($MC/PC/VBC/HBoxContainer/OptionButton.get_selected_id())
 	Globals.GAMESCREEN.start_new_mission_by_name(selection)
+	
 
 func _on_Intermission_pressed():
 	var scene = load("res://scenes/Intermission.tscn")
@@ -38,3 +40,6 @@ func _on_Quit_pressed():
 
 func _on_Real_pressed():
 	Globals.GAMESCREEN.start_new_game()
+	
+func check_debug_options():
+	Globals.AIMDEBUG = $MC/PC/VBC/Debug_Box/Aim_Debug.pressed

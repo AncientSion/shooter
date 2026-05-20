@@ -23,8 +23,6 @@ const MAGENTA:Color = Color(0.7, 0, 1.0, 1.0)
 #var LIGHTGREEN = Color(0.73, 0.91, 0, 1.0)
 #var GREEN = Color(0.17, 1.0, 0.0, 1.0)
 
-const AIMDEBUG:bool = true
-const SIGHTDEBUG:bool = false
 
 const AOE_MARK = preload("res://scenes/AoE_Marker.tscn")
 
@@ -81,6 +79,9 @@ const ITEM_PASSIVE = preload("res://scenes/Utilities/Item_Passive.tscn")
 
 const WEAPONENTRYCONT = preload("res://ui//WeaponEntryCont.tscn")
 const ITEMENTRYCONT = preload("res://ui//ItemEntryCont.tscn")
+
+var AIMDEBUG:bool = false
+var SIGHTDEBUG:bool = false
 
 var PLAYER:Node = null
 

@@ -66,7 +66,7 @@ func withdraw_condition(remDmg):
 	return false
 	
 func get_crash_velo():
-	return max(1, maxSpeed / 2)
+	return max(1, maxSpeed) / 2
 	
 func getCrashAngle():
 	return 0

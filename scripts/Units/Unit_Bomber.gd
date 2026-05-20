@@ -123,9 +123,9 @@ func mirrorTurrets():
 		n.position.x *= -1
 #		if not n.has_node("Weapon"): return
 		var weapon = n.get_node("Weapon")
-		weapon.anchor.x *= -1
-		weapon.current_rot.x *= -1
-		weapon.rotation = weapon.current_rot.angle()
+		weapon.arc_midpoint_v.x *= -1
+		weapon.current_rot_v.x *= -1
+		weapon.rotation = weapon.current_rot_v.angle()
 	
 #func fireGuns(weapon):
 #	if curTarget == null or curTarget.real == false: return

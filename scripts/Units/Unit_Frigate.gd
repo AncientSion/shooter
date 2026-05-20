@@ -20,11 +20,8 @@ func process_movement(_delta):
 	
 	toggleThrusterparticles()
 	
-	rotation_degrees += 20.0 * _delta
+#	rotation_degrees += 20.0 * _delta
 
-func do_turnaround():
-	return
-	
 func toggleThrusterparticles():
 	if accel.x > 10:
 		if direction.x == 1:
@@ -71,7 +68,7 @@ func getPossibleWeapons(index):
 #	return false
 	match index:
 		0:
-#			return false
+			return false
 #			var shield = Globals.weapon_shield_dir.instance()
 #			var stats = {"maxShield": 60, "shieldRegenTime": 0.5, "shieldBreakTime": 6.0, "shieldFastCharge": 0.75, "shieldDist": 80, "shieldLength": 50}
 #			return shield.construct(5, "Shield", stats)
@@ -81,15 +78,15 @@ func getPossibleWeapons(index):
 			w.rof = 2.0
 			return w
 		1:
-#			return false
+			return false
 #			return Globals.getWeaponBase("Heavy Autocannon");
 			var w = Globals.getWeaponBase("Heavy Autocannon");
 			w.rof = 2.0
 			return w
 		2:
 #			return Globals.getWeaponBase("Heavy Autocannon");
-			var w = Globals.getWeaponBase("Heavy Autocannon");
-			w.rof = 2.0
+			var w = Globals.getWeaponBase("Light Autocannon");
+			w.rof = 12.0
 			return w
 	
 			

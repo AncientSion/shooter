@@ -179,8 +179,8 @@ startAngle = -90
 turnrate = 2.0
 
 [node name="C" parent="Mounts" index="2" instance=ExtResource( 6 )]
-position = Vector2( 151, 40 )
-rotation = 1.5708
+position = Vector2( 152, -29 )
+rotation = 1.1973
 health = 20
 maximum_rotation = 89.0
 startAngle = -90
@@ -201,3 +201,4 @@ anims/RESET = SubResource( 2 )
 [editable path="ThrusterNodes/DownB"]
 [editable path="ThrusterNodes/UpA"]
 [editable path="ThrusterNodes/UpB"]
+[editable path="Mounts/C"]

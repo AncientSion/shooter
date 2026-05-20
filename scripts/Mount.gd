@@ -9,17 +9,9 @@ export var invis:bool = false
 
 var weapon = null
 
-var anchor: Vector2
+var arc_midpoint_v: Vector2
 var max_rota_radian:float
 var canRotate:bool = true
-
-#	wpn.anchor =  Vector2.RIGHT.rotated(deg2rad(startAngle))
-#	wpn.current_rot = wpn.anchor
-#	wpn.rotation = wpn.current_rot.angle()
-#	wpn.maximum_rotation = deg2rad(maximum_rotation)
-#	wpn.turnrate = deg2rad(turnrate)
-#	wpn.owner_mount = self
-
 
 var display = "Mount"
 
@@ -60,9 +52,11 @@ func add_weapon(wpn):
 	add_child(wpn)
 	wpn.set_faction(faction)
 	weapon = wpn
-		
-	anchor = Vector2.RIGHT.rotated(deg2rad(startAngle))
-	weapon.current_rot = anchor
+	set_mount_firing_arc()
+
+func set_mount_firing_arc():
+	arc_midpoint_v = Vector2.RIGHT.rotated(deg2rad(startAngle))
+	weapon.current_rot_v = arc_midpoint_v
 	weapon.rotation_degrees = startAngle
 	max_rota_radian = deg2rad(maximum_rotation)
 	turnrate = deg2rad(turnrate)
@@ -177,7 +171,7 @@ func xisInArc(vec: Vector2) -> bool:
 	if max_rota_radian >= PI:
 		return true
 	
-	var forward = anchor.rotated(global_rotation).normalized()
+	var forward = arc_midpoint_v.rotated(global_rotation).normalized()
 	var dir = vec.normalized()
 	
 	return forward.dot(dir) >= cos(max_rota_radian)
@@ -187,8 +181,8 @@ func isInArc(vec):
 #	print(owner.global_rotation_degrees)
 #	print(global_rotation_degrees)
 #	print(rotation_degrees)
-	var from = anchor.rotated(-max_rota_radian + global_rotation)
-	var to = anchor.rotated(max_rota_radian + global_rotation)
+	var from = arc_midpoint_v.rotated(-max_rota_radian + global_rotation)
+	var to = arc_midpoint_v.rotated(max_rota_radian + global_rotation)
 	#print(rad2deg(from.angle()), " - ",  rad2deg(to.angle()))
 	if ((from.y * vec.x - from.x * vec.y) * (from.y * to.x - from.x * to.y) >= 0 && (to.y * vec.x - to.x * vec.y) * (to.y * from.x - to.x * from.y) >= 0):
 #		print("in Arc!")
@@ -211,17 +205,17 @@ func do_track_target():
 	change = clamp(change, -turnrate, turnrate)
 
 	# Calculate candidate rotation
-	var candidate = weapon.current_rot.rotated(change)
+	var candidate = weapon.current_rot_v.rotated(change)
 
 	# Check if within rotation limits
-	var angle_from_anchor = wrapf(anchor.angle_to(candidate), -PI, PI)
+	var angle_from_arc_midpoint_v = wrapf(arc_midpoint_v.angle_to(candidate), -PI, PI)
 
-	if abs(angle_from_anchor) <= max_rota_radian:
+	if abs(angle_from_arc_midpoint_v) <= max_rota_radian:
 		# Within limits - apply full rotation
-		weapon.current_rot = candidate
-		weapon.rotation = weapon.current_rot.angle()
+		weapon.current_rot_v = candidate
+		weapon.rotation = weapon.current_rot_v.angle()
 	else:
 		# Clamp to nearest rotation limit
-		var clamped_angle = clamp(angle_from_anchor, -max_rota_radian, max_rota_radian)
-		weapon.current_rot = anchor.rotated(clamped_angle)
-		weapon.rotation = weapon.current_rot.angle()
+		var clamped_angle = clamp(angle_from_arc_midpoint_v, -max_rota_radian, max_rota_radian)
+		weapon.current_rot_v = arc_midpoint_v.rotated(clamped_angle)
+		weapon.rotation = weapon.current_rot_v.angle()

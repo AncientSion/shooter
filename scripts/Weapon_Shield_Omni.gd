@@ -19,9 +19,6 @@ func _physics_process(_delta):
 func is_in_range(pos):
 	return false
 	
-func wpn_has_valid_target():
-	return false
-	
 func get_shield_max_scale():
 	return Vector2(spriteScale, spriteScale)
 

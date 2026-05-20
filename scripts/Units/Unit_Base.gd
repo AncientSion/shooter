@@ -673,25 +673,30 @@ func do_turnaround():
 	mirrorThrusters()
 	mirrorVarious()
 	mirrorColNodes()
-
+	
 func mirrorTurrets():
 	for n in $Mounts.get_children():
 		n.position.x *= -1
-		#n.get_node("Sprites/Main").flip_v = !n.get_node("Sprites/Main").flip_v
-		if n.has_node("Weapon"):
-			var weapon = n.get_node("Weapon")
-			weapon.anchor.x *= -1
-			weapon.current_rot.x *= -1
-			weapon.rotation = weapon.current_rot.angle()
-			n.get_node("DebugAim/Start").scale.x *= -1
-			n.get_node("DebugAim/End").scale.x *= -1
+		n.rotation *= -1
+		n.get_node("Sprites/Main").flip_h = !n.get_node("Sprites/Main").flip_h
+
+		if n.weapon:
+#			print(n.weapon.rotation_degrees)
+			n.weapon.rotation_degrees = mirror_horizontal(n.weapon.rotation_degrees)
 			
+func mirror_horizontal(angle: float) -> float:
+	return wrapf(180.0 - angle, -180.0, 180.0)
+	
+
 func xmirrorTurrets():
 	for n in $Mounts.get_children():
 		n.position.x *= -1
-		if n.has_node("Weapon"):
-			var weapon = n.get_node("Weapon")
-			weapon.scale.x *= -1
+		if n.weapon:
+			n.weapon.arc_midpoint_v.x *= -1
+			n.weapon.current_rot_v.x *= -1
+			n.weapon.rotation = n.weapon.current_rot_v.angle()
+			n.get_node("DebugAim/Start").scale.x *= -1
+			n.get_node("DebugAim/End").scale.x *= -1
 		
 func mirrorThrusters():
 	for n in $ThrusterNodes.get_children():
@@ -720,31 +725,14 @@ func set_armaments():
 		var weapon = getPossibleWeapons(index)
 		index += 1
 		if weapon:
-			weapon.do_init_weapon()
-			#addWeapon(weapon, mount)
 			weapon.shooter = self
+			weapon.do_init_weapon()
 			mount.add_weapon(weapon)
 		mount.do_init_mount()
 		
 	randomizeWeaponStartCooldown()
 	addSightCollision()
-	addStartingItems()	
-	
-func addWeapon(weapon, mount):
-	if not weapon:
-		return
-	mount.add_child(weapon)
-	weapon.set_faction(faction)
-	weapon.anchor = Vector2.RIGHT.rotated(deg2rad(mount.startAngle))
-	weapon.current_rot = weapon.anchor
-	weapon.rotation = weapon.current_rot.angle()
-	weapon.maximum_rotation = deg2rad(mount.maximum_rotation)
-	weapon.turnrate = deg2rad(mount.turnrate)
-	weapon.set_owner(mount)
-	if mount.turnrate == 0 or mount.maximum_rotation == 0:
-		weapon.canRotate = false
-	weapon.shooter = self
-	
+	addStartingItems()
 	
 func addStartingItems():
 	pass

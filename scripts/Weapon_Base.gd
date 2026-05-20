@@ -45,8 +45,8 @@ var notes:String
 
 var time:float
 
-var anchor: Vector2# = Vector2.RIGHT.rotated(rotation)
-var current_rot: Vector2#= anchor
+var arc_midpoint_v: Vector2# = Vector2.RIGHT.rotated(rotation)
+var current_rot_v: Vector2#= arc_midpoint_v
 var maximum_rotation: float# = PI / 6.0 # 30
 
 signal hasFired
@@ -293,78 +293,6 @@ func is_in_range(pos):
 	var range_sq = dist * dist
 
 	return global_position.distance_squared_to(pos) < range_sq
-
-func wpn_has_valid_target():
-#	print("wpn_has_valid_target on ", display, " #", id)
-	if not is_instance_valid(curTarget) or curTarget.destroyed == true or curTarget.ready == false: return false
-	if forcedLock and curTarget != null:
-		return !curTarget.destroyed
-	if not is_in_range(curTarget.global_position):
-		#print(display, " to ", target.display, " dist > speed x2 = illegal target")
-		return false
-	if not isInArc(global_position.direction_to(curTarget.global_position)): 
-		return false
-	return true
-	
-func set_wpn_target(allTargets):
-	var bestPrio:int = 10
-	var bestTarget = null
-	var targets = Array()
-	for n in allTargets:
-		if not n.target.isLegalTarget():
-			continue
-		if not is_in_range(n.target.global_position):
-			continue
-		var vec = global_position.direction_to(n.target.global_position)
-		if not isInArc(vec):
-			continue
-			
-		if n.prio < bestPrio:
-			bestPrio = n.prio
-			bestTarget = n.target
-	
-	if bestTarget != null:
-		curTarget = bestTarget
-	else:
-		curTarget = null 
-	return
-	
-func isInArc(vec):
-	if maximum_rotation == PI: return true
-#	print(owner.global_rotation_degrees)
-#	print(global_rotation_degrees)
-#	print(rotation_degrees)
-	var from = anchor.rotated(-maximum_rotation + owner_mount.global_rotation)
-	var to = anchor.rotated(maximum_rotation + owner_mount.global_rotation)
-#	print(rad2deg(from.angle()), " - ",  rad2deg(to.angle()))
-	if ((from.y * vec.x - from.x * vec.y) * (from.y * to.x - from.x * to.y) >= 0 && (to.y * vec.x - to.x * vec.y) * (to.y * from.x - to.x * from.y) >= 0):
-#		print("in Arc!")
-		return true
-#	print("not in Arc!")
-	return false
-
-func do_track_target():
-	if canRotate == false: return
-	if curTarget == null or not is_instance_valid(curTarget): return
-#	print(self.display, " #", id, " tracking ", curTarget.display, " #", curTarget.id)
-	var change = get_angle_to(curTarget.global_position)
-#	if abs(change) < 0.01: return
-	
-	change = clamp(change, -turnrate, turnrate)
-	
-	var candidate = current_rot.rotated(change)
-#	print(candidate)
-	
-	if abs(anchor.angle_to(candidate)) < maximum_rotation:
-		current_rot = candidate
-		rotation = current_rot.angle()
-#		print(Engine.get_idle_frames(), "_do_track_target: ", global_rotation_degrees)
-
-
-func looking_at(trans, pos):
-	var x : Vector2 = (pos - trans.origin)
-	var angle : float = atan2(x.y, x.x)
-	return Transform2D(angle, trans.origin)
 
 func kill():
 	if destroyed or indestructable: return
