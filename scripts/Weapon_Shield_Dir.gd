@@ -15,12 +15,6 @@ func do_sub_init_weapon():
 	
 func _physics_process(_delta):
 	pass
-
-func isInActiveBurst():
-	return false
-	
-func canFire():
-	return false
 	
 func is_in_range(pos):
 	return global_position.distance_to(pos) < 800
@@ -28,7 +22,7 @@ func is_in_range(pos):
 #func wpn_has_valid_target():
 #	if curTarget == null or not is_instance_valid(curTarget) or curTarget.destroyed == true or curTarget.ready == false:
 #		return false
-#	if isInArc(global_position.direction_to(curTarget.global_position)): 
+#	if is_in_arc(global_position.direction_to(curTarget.global_position)): 
 #		return true
 #	return false
 	

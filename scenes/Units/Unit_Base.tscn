@@ -93,7 +93,7 @@ custom_fonts/font = ExtResource( 2 )
 align = 1
 valign = 1
 
-[node name="steering_choice" type="Node2D" parent="Debug"]
+[node name="steering_input" type="Node2D" parent="Debug"]
 visible = false
 
 [node name="ThrusterNodes" type="Position2D" parent="."]
@@ -119,7 +119,9 @@ visible = false
 
 [node name="TimerNodes" type="Node2D" parent="."]
 
-[node name="BehaveTimer" type="Timer" parent="TimerNodes"]
+[node name="CrashTimer" type="Timer" parent="TimerNodes"]
+
+[node name="BehaveTimer2" type="Timer" parent="TimerNodes"]
 
 [node name="EffectNodes" type="Position2D" parent="."]
 

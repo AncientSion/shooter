@@ -16,8 +16,8 @@ func _ready():
 
 func weapon_process(_delta):
 #	print("rail weapon_process")
-	if isInActiveBurst():
-		handleBursting(_delta)
+	if is_in_active_burst():
+		handle_burst_cooldown(_delta)
 	else:
 		cooldown = max(cooldown - _delta, -rof)
 	

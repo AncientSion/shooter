@@ -81,6 +81,7 @@ const WEAPONENTRYCONT = preload("res://ui//WeaponEntryCont.tscn")
 const ITEMENTRYCONT = preload("res://ui//ItemEntryCont.tscn")
 
 var AIMDEBUG:bool = false
+var MOVEDEBUG:bool = false
 var SIGHTDEBUG:bool = false
 
 var PLAYER:Node = null

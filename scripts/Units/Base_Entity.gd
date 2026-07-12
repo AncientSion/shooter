@@ -254,7 +254,7 @@ func disable_col_nodes():
 		call_deferred("next_frame_disable_col_nodes")
 	
 func next_frame_disable_col_nodes():
-	print("disabling ", self.display)
+#	print("disabling ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", false)
 		n.set("monitorable", false)
@@ -274,11 +274,11 @@ func next_frame_disable_col_nodes():
 			n.disabled = true
 			
 func enableCollisionNodes():
-	print(self.display, ": ENABLE collisions")
+#	print(self.display, ": ENABLE collisions")
 	call_deferred("next_frame_enableCollisionNodes")
 			
 func next_frame_enableCollisionNodes():
-	print("enabling colNodes ", self.display)
+#	print("enabling colNodes ", self.display)
 	for n in $ColNodes.get_children():
 		n.set("monitoring", true)
 		n.set("monitorable", true)
@@ -320,6 +320,11 @@ func kill():
 		if $TimerNodes.has_node("WarpOutTimer"):
 			$TimerNodes/WarpOutTimer.stop()
 			cancelWarpOut()
+	if has_node("EffectNodes"):
+		for n in $EffectNodes.get_children():
+			if n.delay > 0:
+				print("Ding")
+				n.delay = -1.0
 	
 	hide_control_nodes()
 	stop_upcoming_effect_nodes()
@@ -355,7 +360,7 @@ func create_final_kill_explos():
 		
 	for n in ceil(amount*1):
 #		print("adding explo ", n)
-#	for n in 1:
+#		for n in 1:
 		var delay = rand_range(1.0, 4.2)
 		maxDelay = max(maxDelay, delay)
 		var scale = get_dmg_gfx_scale()
@@ -413,7 +418,7 @@ func add_shield_bar(size:float = 1.0):
 			shieldbar.get_child(0).percent_visible = false
 			
 
-func add_health_bar():
+func add_health_bar(size:float = 1.0):
 #	print("add_health_bar on ", self.display)
 	healthbar = Globals.HEALTHBAR.instance()
 	var bar = healthbar.get_node("ProgressBar")
@@ -421,6 +426,12 @@ func add_health_bar():
 	bar.max_value = round(self.maxHealth)
 	setHealthBarHealth()
 	add_controlNode(healthbar)
+	
+	if size:
+		healthbar.rect_scale = Vector2(size, size)
+	#	target.offset.y *= targetScale
+		if size <= 0.5:
+			healthbar.get_child(0).percent_visible = false
 
 func add_controlNode(ele):
 	print("adding control element to: ", self.display)
@@ -433,6 +444,7 @@ func add_controlNode(ele):
 #	healthbar.get_child(0).percent_visible = false
 
 func scale_progress_bar(bartype, targetScale):
+	return
 	var target = get(bartype)
 	target.rect_scale = Vector2(targetScale, targetScale)
 #	target.offset.y *= targetScale
@@ -689,7 +701,7 @@ func xhandleImpact(area, dmgMulti):
 		if area.owner.is_in_group("isUnit") or area.owner.is_in_group("isMount") or area.owner.is_in_group("isShield"):
 			initRamming(area)
 		elif not destroyed and area.owner.display == "Boundary":
-			killByCrash()
+			kill_by_crash()
 		else:
 			var dmgObj = area.owner.getDamageObject()
 			take_damage(dmgObj, Globals.getRawDamage(dmgObj.minDmg, dmgObj.maxDmg, dmgMulti))
@@ -712,7 +724,7 @@ func handleImpact(area, dmgMulti):
 		return
 
 	if not destroyed and impact_owner.display == "Boundary":
-		killByCrash()
+		kill_by_crash()
 		return
 
 	var dmgObj = impact_owner.getDamageObject()
@@ -792,7 +804,7 @@ func getRamDamage():
 #	ramBullet.impactForce = Globals.getRecoilForce(ramBullet.minDmg, ramBullet.maxDmg, self.velocity.length()) * mass / 2
 	return ramBullet
 	
-func killByCrash():
+func kill_by_crash():
 	return
 	
 func endRamming(area):

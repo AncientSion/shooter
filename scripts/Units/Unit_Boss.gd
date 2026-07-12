@@ -20,14 +20,14 @@ func do_specific_unit_init():
 	for mount in $Mounts.get_children():
 		if mount.has_node("Weapon"):
 			if mount.get_node("Weapon").display == "Flak":
-				mount.add_health_bar()
+				mount.add_health_bar(0.5)
 				mount.scale_progress_bar("healthbar", 0.5)
 				
 #	$Mounts/Shield.get_node("Weapon").scale_progress_bar("shieldbar", 2.0)
 		
 		
-func killByCrash():
-	.killByCrash()
+func kill_by_crash():
+	.kill_by_crash()
 		
 	for n in 35:
 		add_exp_fire_smoke_fx(rand_range(0.3, 1.0), rand_range(0.2, 0.6))
@@ -81,9 +81,6 @@ func initCallMethodTrack(method, interval, start):
 
 func get_crash_velo():
 	return 20
-	
-func getCrashAngle():
-	return round(rand_range(8, 12))
 	
 func do_turnaround():
 	pass

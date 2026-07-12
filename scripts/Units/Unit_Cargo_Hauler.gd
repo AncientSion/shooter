@@ -14,7 +14,7 @@ func xset_stats():
 		$EffectNodes.add_child(node)
 	
 func adjust_stats_res():
-	stats.canCrash = true
+	stats.can_crash = true
 	
 func process_movement(_delta):
 #	if $SM.state == $SM.states.crash:
@@ -49,7 +49,7 @@ func get_omni_shield():
 	var stats = {"maxShield": 30, "shieldRegenTime": 1.0, "shieldBreakTime": 4.0, "shieldFastCharge": 1.0, "shieldRadius": 80}
 		
 	shield.construct(5, "Shield", stats)
-	shield.add_shield_bar()
+	shield.add_shield_bar(0.5)
 	shield.scale_progress_bar("shieldbar", 0.5)
 #	shield_omni.position = Vector2(-15, 0)
 #	shield_omni.connect("updateShield_UI_Nodes", mainUI, "_on_updateShield_UI_Nodes")

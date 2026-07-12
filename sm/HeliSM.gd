@@ -58,7 +58,7 @@ func _enter_state(prev_state, new_state):
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()
 			else:
-				parent.setNewWanderTarget()
+				parent.set_wander_target()
 		states.close:
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()

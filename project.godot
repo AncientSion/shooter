@@ -139,7 +139,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://sm/DroneSM_Shotgun.gd"
 }, {
-"base": "Air_Unit",
+"base": "Strikecraft_Unit",
 "class": "Fighter",
 "language": "GDScript",
 "path": "res://scripts/Units/Unit_Fighter.gd"
@@ -464,6 +464,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/Units/Skyscraper.gd"
 }, {
+"base": "Air_Unit",
+"class": "Strikecraft_Unit",
+"language": "GDScript",
+"path": "res://Unit_Strikecraft.gd"
+}, {
 "base": "SM",
 "class": "Truck",
 "language": "GDScript",
@@ -641,6 +646,7 @@ _global_script_class_icons={
 "Reward_Box": "",
 "SM": "",
 "Skyscraper": "",
+"Strikecraft_Unit": "",
 "Truck": "",
 "Truck_Heavy": "",
 "Truck_Light": "",

@@ -30,7 +30,7 @@ func do_init(init_time):
 	
 func do_setup():
 	var attacker_group = []
-	attacker_group.append({"name": "FRIGATE", "amount": Globals.rng.randi_range(1, 1), "target": false})	
+	attacker_group.append({"name": "FIGHTER", "amount": Globals.rng.randi_range(1, 1), "target": false})
 	setup_attackers(attacker_group)
 	
 func setup_attackers(unitArray):
@@ -39,16 +39,17 @@ func setup_attackers(unitArray):
 			var attacker = handler_s.get(unit.name).instance()
 			var target = Globals.getRandomEntry(targets)
 			Globals.curScene.add_unit_to_scene("Enemy_Units", attacker)
-			attacker.do_init_unit()
 			attacker.set_hostile()
+			attacker.do_init_unit()
 			attacker.set_armaments()
 			attacker.set_direction(Vector2.RIGHT)
-			attacker.maxSpeed = 0
+#			attacker.maxSpeed = 0
 			
 			var x:int = Globals.WIDTH/2
 			var y:int = Globals.HEIGHT/2
 			
-			var pos = Globals.PLAYER.global_position + Vector2(-350, -150)
+			var pos = Globals.PLAYER.global_position + Vector2(-350, -150) + Vector2(-0, -200)
+			pos.x += 400 * i
 			
 			attacker.position = pos
 			attacker.add_health_bar()

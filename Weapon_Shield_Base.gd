@@ -53,10 +53,10 @@ func connectHurtBoxes():
 func _physics_process(_delta):
 	pass
 
-func isInActiveBurst():
+func is_in_active_burst():
 	return false
 	
-func canFire():
+func can_fire():
 	return false
 	
 func update_cooldown_ui_nodes():

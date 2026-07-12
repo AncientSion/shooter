@@ -126,38 +126,6 @@ func mirrorTurrets():
 		weapon.arc_midpoint_v.x *= -1
 		weapon.current_rot_v.x *= -1
 		weapon.rotation = weapon.current_rot_v.angle()
-	
-#func fireGuns(weapon):
-#	if curTarget == null or curTarget.real == false: return
-#	if weapon.canFire():
-##		if global_position.distance_to(curTarget.global_position) <= 50: return
-#		var angleToTarget = rad2deg(curTarget.position.angle_to_point(position))
-##		var angle = abs(angleToTarget - rotation_degrees)
-##		var fof = weapons[index].fof
-#		var dif = abs(angleToTarget - rotation_degrees)
-#		if abs(angleToTarget - rotation_degrees) < weapon.fof:
-#			weapon.doFire(curTarget)
-			
-func fireGunsx(weapon):
-	if curTarget == null or curTarget.real == false: return
-	if weapon.canFire():
-#		if global_position.distance_to(curTarget.global_position) <= 50: return
-#		var angleToTarget = rad2deg(curTarget.position.angle_to_point(position))
-		var angleToTarget = rad2deg(moveTarget.angle_to_point(position))
-#		var angle = abs(angleToTarget - rotation_degrees)
-#		var fof = weapons[index].fof
-		var dif = abs(angleToTarget - rotation_degrees)
-		if abs(angleToTarget - rotation_degrees) < weapon.fof:
-			var d = global_position.distance_to(moveTarget)
-			var tSpeed = curTarget.velocity.length()
-			var etaA = d / $Mounts/A.get_node("Weapon").speed
-			var etaB:float = 0.0
-			if tSpeed > 0:
-				etaB = curTarget.global_position.distance_to(moveTarget) / tSpeed
-				if etaA * 0.8 < etaB and etaA * 1.2 > etaB:
-					weapon.doFire(curTarget)
-			else:
-				weapon.doFire(curTarget)
 
 func getPossibleWeapons(index):
 	return false
@@ -197,11 +165,11 @@ func crash_step_one():
 	elif velocity.x < 0:
 		moveTarget = Vector2(global_position.x - global_position.y*2, Globals.HEIGHT)
 
-func killByCrash():
+func kill_by_crash():
 	kill()
 	$ThrusterNodes/Aft/Particle2D.emitting = false
 
-func setNewWanderTarget():
+func set_wander_target():
 		
 	var pos = global_position
 	var rot = rotation_degrees

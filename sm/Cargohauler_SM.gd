@@ -15,7 +15,7 @@ func _state_logic(delta):
 		states.wander:
 			parent.process_movement(delta)
 			if parent.global_position.distance_to(parent.moveTarget) <= 75:
-				parent.setNewWanderTarget()
+				parent.set_wander_target()
 		states.crash:
 			parent.process_movement(delta)
 	
@@ -27,6 +27,6 @@ func _enter_state(prev_state, new_state):
 		states.idle:
 			pass
 		states.wander:
-			parent.setNewWanderTarget()
+			parent.set_wander_target()
 		states.crash:
 			parent.crash_step_one()

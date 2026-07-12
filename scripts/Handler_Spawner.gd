@@ -155,13 +155,14 @@ func pick_units_into_pool(reinforcePoints):
 				if current > entry.weight:
 					current -= entry.weight
 				else:
-					print("adding: ",  entry.const, " to spawn")
+#					print("adding: ",  entry.const, " to spawn")
 					entry.amount += 1
 					reinforcePoints -= entry.strength
 					break
-		for entry in unitData:
-			if entry.amount > 0:
-				print("reinforcing by: ", entry.amount, "x ", entry.const)
+#		for entry in unitData:
+#			if entry.amount > 0:
+#				print("reinforcing by: ", entry.amount, "x ", entry.const)
+	return
 #	return roster
 			
 func adjustWaveDataByMission():
@@ -173,8 +174,8 @@ func adjustWaveDataByMission():
 func check_for_reinforce():
 	if enemy_str_cur < enemy_str_max * 0.7:
 		var reinforceStrength:int = floor(enemy_str_max/5)
-		print("enemies under 0.7 of max ---", enemy_str_cur, "/", enemy_str_max)
-		print("add: ", reinforceStrength)
+#		print("enemies under 0.7 of max ---", enemy_str_cur, "/", enemy_str_max)
+#		print("add: ", reinforceStrength)
 		Globals.UI.set_main_text(str("Reinforce by ", reinforceStrength))
 		
 		pick_units_into_pool(reinforceStrength)

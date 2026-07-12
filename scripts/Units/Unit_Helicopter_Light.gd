@@ -67,12 +67,9 @@ func crash_step_one():
 
 func get_crash_velo():
 	return max(30, maxSpeed / 4)
-	
-func getCrashAngle():
-	return round(rand_range(9, 14))
 
-func killByCrash():
-	.killByCrash()
+func kill_by_crash():
+	.kill_by_crash()
 		
 	for n in max_smoke * 2:
 		var explo = Globals.getExplo("radial", get_dmg_gfx_scale())

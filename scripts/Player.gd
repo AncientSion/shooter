@@ -358,8 +358,8 @@ func x_unhandled_input(event):
 	if Input.is_action_pressed("fire"):
 		mouseDown = true
 #		
-		if getActiveWeapon().canFire():
-			getActiveWeapon().doFire(null)
+		if getActiveWeapon().can_fire():
+			getActiveWeapon().do_fire(null)
 		
 	elif Input.is_action_just_released("fire"):
 		mouseDown = false
@@ -381,8 +381,8 @@ func get_input(_delta):
 	if Input.is_action_pressed("fire"):
 		mouseDown = true
 #		
-		if getActiveWeapon().canFire():
-			getActiveWeapon().doFire(null)
+		if getActiveWeapon().can_fire():
+			getActiveWeapon().do_fire(null)
 	elif Input.is_action_just_released("fire"):
 		mouseDown = false
 		

@@ -4,8 +4,8 @@ class_name Weapon_AoE
 func _ready():
 	pass
 
-func doFire(_target):
-	#	print("doFire")
+func do_fire(_target):
+	#	print("do_fire")
 	if burst > 1:
 		if !bursting:
 			#print("can burst, not yet bursting")

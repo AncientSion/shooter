@@ -18,7 +18,7 @@ func _state_logic(delta):
 		states.wander:
 			parent.process_movement(delta)
 			if parent.global_position.distance_to(parent.moveTarget) <= 100:
-				parent.setNewWanderTarget()
+				parent.set_wander_target()
 		states.close:
 			parent.process_movement(delta)
 			var d = parent.global_position.distance_to(parent.moveTarget)
@@ -41,7 +41,7 @@ func _enter_state(prev_state, new_state):
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()
 			else:
-				parent.setNewWanderTarget()
+				parent.set_wander_target()
 		states.close:
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()

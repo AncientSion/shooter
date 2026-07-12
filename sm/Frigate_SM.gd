@@ -42,7 +42,10 @@ func _state_logic(delta):
 #			parent.moveTarget = parent.global_position - (parent.curTarget.global_position - parent.global_position).normalized()*300
 #			parent.process_movement(delta)
 		states.crash:
-			pass
+			if parent.crashing:
+				parent.crash(delta)
+			else:
+				parent.process_movement(delta)
 	
 func _get_transition(delta):
 	pass
@@ -59,7 +62,7 @@ func _enter_state(prev_state, new_state):
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()
 			else:
-				parent.setNewWanderTarget()
+				parent.set_wander_target()
 		states.close:
 			if parent.curTarget == null and parent.targetsArr.size():
 				parent.set_new_target()

@@ -1,14 +1,17 @@
 extends Base_Unit
 class_name Air_Unit
 
-func adjust_stats_res():
-	stats.canCrash = true
-	
-#func set_danger():
-#	if $SM.state != $SM.states.crash:
-#		.set_danger()
+var crashing := false
+var crash_velocity := Vector2.ZERO
+var crash_rotation_speed := 0.0
+var crash_rotation_accel := 0.0
 
-func killByCrash():
+var crash_test:bool = false
+
+func adjust_stats_res():
+	stats.can_crash = true
+
+func kill_by_crash():
 	print("kill by crash ", get_instance_id())
 	destroyed = true
 	call_deferred("create_currency")
@@ -17,7 +20,8 @@ func killByCrash():
 	
 	for n in $Mounts.get_children():
 		n.destroyed = true
-		n.get_node("Weapon").doDisable()
+		if n.has_node("Weapon"):
+			n.get_node("Weapon").doDisable()
 		
 	if has_node("Tween"):
 		if $Tween.is_active(): 
@@ -49,9 +53,10 @@ func killByCrash():
 	for n in ceil(max_smoke/2):
 		add_exp_fire_smoke_fx(0.4, 0.0)
 		
-func crashCondition(remDmg):
+func crash_condition(remDmg):
 	if $SM.state == $SM.states.crash:
 		return false
+	return true
 		
 	var rand = rand_range(0, 1)
 	var trigger_min = float(maxHealth * stats.crashTresh)
@@ -65,12 +70,6 @@ func crashCondition(remDmg):
 func withdraw_condition(remDmg):
 	return false
 	
-func get_crash_velo():
-	return max(1, maxSpeed) / 2
-	
-func getCrashAngle():
-	return 0
-	
 func doFaceTarget():
 	if curTarget.global_position.x - position.x < 0:
 		if $Sprites/Main.flip_h == false:
@@ -78,33 +77,27 @@ func doFaceTarget():
 	else:
 		if $Sprites/Main.flip_h == true:
 			do_turnaround()
-
-func crash_step_one():
-	danger.fill(0.0)
 	
-	for n in max_smoke:
-		add_exp_fire_smoke_fx(1.0, rand_range(0, 1) * n*2)
-		
-	for n in max_smoke:
-		var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
-		explo.set_as_toplevel(true)
-		explo.offset = get_point_inside_tex()
-		explo.delay = rand_range(0.3, 1) * n + 3
-		$EffectNodes.add_child(explo)
+func get_crash_velo():
+	return max(1, maxSpeed) / 2
 	
-func crash_step_two():
+func get_crash_angle():
+	return round(rand_range(13, 18))
+	
+func xcrash_step_two():
 	disableAllThrusterParticles()
 
 	var direction:int = 1
 	if $Sprites/Main.flip_h == true:
 		direction = -1
 	
-	var rota = getCrashAngle() * direction
-	var time = (Globals.HEIGHT - global_position.y) / get_crash_velo() / 3
+	var rota = get_crash_angle() * direction
+	var dist_to_ground = Globals.HEIGHT - position.y
+	var time = dist_to_ground / get_crash_velo() / 3
 	var targetX = 550 * direction
 	
 	$Tween.interpolate_property(self, "position",
-		global_position, Vector2(global_position.x + targetX, Globals.HEIGHT - 30), ceil(time),
+		position, Vector2(position.x + targetX, Globals.HEIGHT - 30), ceil(time),
 		Tween.TRANS_QUAD, Tween.EASE_IN)
 	$Tween.interpolate_property(self, "rotation_degrees",
 		rotation_degrees, rotation_degrees + rota, ceil(time* 0.9),
@@ -144,7 +137,7 @@ func disableBoosting():
 	maxSpeed -= boostStrength*4
 	boostTimeRemain = 2.0
 
-func setNewWanderTarget():
+func set_wander_target():
 	var pos = global_position
 	var rot = rotation_degrees
 	var newTarget = Vector2.ZERO

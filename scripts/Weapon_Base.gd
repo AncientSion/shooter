@@ -93,8 +93,8 @@ func _physics_process(_delta):
 		weapon_process(_delta)
 	
 func weapon_process(_delta):
-	if isInActiveBurst():
-		handleBursting(_delta)
+	if is_in_active_burst():
+		handle_burst_cooldown(_delta)
 	else:
 		cooldown = max(cooldown - _delta, 0.0)
 	update_cooldown_ui_nodes()
@@ -105,7 +105,7 @@ func update_cooldown_ui_nodes():
 	if Globals.AIMDEBUG and faction != 0 and has_node("ControlNodes/rem_cooldown_label"):
 		$ControlNodes.get_node("rem_cooldown_label").update_label(cooldown)
 		
-func isInActiveBurst():
+func is_in_active_burst():
 	if burst > 1 && bursting:
 		return true
 	return false
@@ -142,22 +142,21 @@ func has_fire_solution(target) -> bool:
 
 	return abs(dif) < deg2rad(fof)
 
-func handleFiring():
-	doFire(curTarget)
+func handle_firing(_curTarget):
+	do_fire(_curTarget)
 			
-func handleBursting(delta):
-#	cooldown = 0.0
+func handle_burst_cooldown(delta):
 	burstCooldown -= delta
 	#print("burstDelay--")
-	if burstCooldown <= 0.0:
-		doFire(curTarget)
+#	if burstCooldown <= 0.0:
+#		do_fire(curTarget)
 
-func getAttackObject(target = null):
+func getAttackObject(_target = null):
 	match type:
 		1:
 			return getBullet()
 		2:
-			return getMissile(target)
+			return getMissile(_target)
 		3:
 			return getShell()
 		4:
@@ -165,7 +164,7 @@ func getAttackObject(target = null):
 		6:
 			return getRail()
 		7:
-			return getTorp(target)
+			return getTorp(_target)
 		8:
 			return getMelee()
 			
@@ -174,20 +173,16 @@ func applyRecoilFromWeaponFire():
 	if recoilForce:
 		shooter.applyForce(-(recoilForce.rotated(global_rotation)))
 
-func canFire():
-	#if shotInstance: return true
-	#print(cooldown)
-	if cooldown > 0: 
-		#print("can NOT fire!")
-		return false
-	#print("can fire!")
-	return true
+func can_fire():
+	if cooldown <= 0 or (bursting and burstCooldown <= 0.0):
+		return true
+	return false
 
 func setPostFireCooldown():
 	cooldown = rof
 	
-func doFire(_target):
-#	print("doFire")
+func do_fire(_target):
+#	print("do_fire")
 	if burst > 1:
 		if !bursting:
 			#print("can burst, not yet bursting")
@@ -204,7 +199,7 @@ func doFire(_target):
 	var projs = []
 	
 	for n in projNumber:
-		projs.append(getAttackObject(curTarget))
+		projs.append(getAttackObject(_target))
 	
 	for i in len(projs):
 		setProjRotation(projNumber, i, projs[i])
@@ -557,3 +552,6 @@ func makeInvisible():
 	
 func get_class():
 	return "Weapon_Base"
+
+func has_active_omni_shield():
+	return false

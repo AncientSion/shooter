@@ -461,6 +461,7 @@ text = "Cancel"
 [node name="Player" type="Control" parent="MC/PC/VBox/HBox"]
 margin_left = 1032.0
 margin_right = 1032.0
+margin_bottom = 500.0
 
 [node name="Sprite" type="TextureRect" parent="MC/PC/VBox/HBox/Player"]
 anchor_left = 0.5

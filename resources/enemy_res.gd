@@ -11,7 +11,7 @@ export var lootValue:int
 export var sightRange:int
 export var look_ahead:int
 export var num_rays:int = 8
-export var canCrash:bool = false
+export var can_crash:bool = false
 export var crashTresh:float = 0.3
 export var can_withdraw:bool = false
 export var flee_tresh:float = 0.5

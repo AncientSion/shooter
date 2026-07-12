@@ -66,14 +66,33 @@ func do_init_unit():
 	
 	setDamageBreaks()
 	init_lifetime()
-	showDebug()
+	#showDebug()
 	init_debug_menu_entry()
 	addPhysCollision()
 	initSteering()
 	initAvoidValues()
 	
 	do_specific_unit_init()
+	check_unit_debug_init()
 	
+func check_unit_debug_init():
+	if not has_node("Debug"):
+		return
+		
+	$Debug/moveTarget.set_as_toplevel(true)
+	$Debug/MoveTargetVector.set_as_toplevel(true)
+	$Debug/C/stats.set_as_toplevel(true)
+	$Debug/C/behav.set_as_toplevel(true)
+	
+	if Globals.MOVEDEBUG and faction != 0:
+		$Debug.show()
+		$Debug/moveTarget.show()
+		$Debug/MoveTargetVector.show()
+#		$Debug/C/stats.show()
+#		$Debug/C/behav.show()
+		$Debug/steering_input.hide()
+		
+		
 func do_specific_unit_init():
 	pass
 	
@@ -124,7 +143,7 @@ func check_hp_post_dmg(amount):
 		kill()
 	elif stats.can_withdraw and withdraw_condition(amount):
 		enter_withdraw_condition_state()
-	elif stats.canCrash and crashCondition(amount):
+	elif stats.can_crash and crash_condition(amount):
 		enter_crash_condition_state()
 	else:
 		check_add_gfx_dmg_effect()
@@ -154,7 +173,7 @@ func enter_crash_condition_state():
 func crash_step_one():
 	pass
 
-func crashCondition(remDmg):
+func crash_condition(remDmg):
 	return false
 	
 func withdraw_condition(remDmg):
@@ -185,7 +204,6 @@ func set_wave_strength(strength):
 	wave_strength = strength
 	
 func showDebug():
-	
 	if not has_node("Debug"):
 		return
 	$Debug/moveTarget.set_as_toplevel(true)
@@ -284,16 +302,22 @@ func get_weapon_by_index(index:int):
 func handle_weapons(_delta): # context: unit with several weapon mounts
 	for mount in $Mounts.get_children():
 		if mount.weapon:
-			if !is_instance_valid(mount.weapon) or mount.weapon.destroyed or !mount.weapon.active:
-				continue
-			if !mount.mount_has_valid_target(): # does it NOT have a target ?
-				mount.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
-			if mount.curTarget == null: # if it still has no target, next
-				continue
-			mount.do_track_target()
-			if mount.weapon.canFire(): # check cooldown, emp or other conditions
-				if mount.weapon.bursting or mount.weapon.has_fire_solution(curTarget): # do i have the right vector / rotation achieved `?
-					mount.weapon.handleFiring() # spawn projectile
+			mount.handle_mounted_weapon(targetsArr)
+
+#func handle_weapons(_delta): # context: unit with several weapon mounts
+#	for mount in $Mounts.get_children():
+#		if mount.weapon:
+#			var weapon = mount.weapon
+#			if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
+#				continue
+#			if !mount.mount_has_valid_target(): # does it NOT have a target ?
+#				mount.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+#			if mount.curTarget == null: # if it still has no target, next
+#				continue
+#			mount.do_track_target()
+#			if weapon.can_fire(): # check cooldown, emp or other conditions
+#				if weapon.bursting or weapon.has_fire_solution(mount.curTarget): # do i have the right vector / rotation achieved `?
+#					weapon.handle_firing(mount.curTarget) # spawn projectile
 				
 func handleItems(_delta):
 	for n in $Items.get_children():
@@ -683,6 +707,7 @@ func mirrorTurrets():
 		if n.weapon:
 #			print(n.weapon.rotation_degrees)
 			n.weapon.rotation_degrees = mirror_horizontal(n.weapon.rotation_degrees)
+			n.weapon.current_rot_v = Vector2.RIGHT.rotated(deg2rad(n.weapon.rotation_degrees))
 			
 func mirror_horizontal(angle: float) -> float:
 	return wrapf(180.0 - angle, -180.0, 180.0)
@@ -825,7 +850,7 @@ func setWrecked():
 	for n in $Mounts.get_children():
 		n.kill()
 #
-func killByCrash():
+func kill_by_crash():
 	return
 	
 func get_class():
@@ -856,10 +881,9 @@ func remove_cur_target():
 			break
 	for n in $Mounts.get_children():
 		if n.has_node("Weapon"):
-			var w = n.get_node("Weapon")
-			w.curTarget = null
-			if w.forcedLock:
-				w.forcedLock = false
+			n.curTarget = null
+			if n.forcedLock:
+				n.forcedLock = false
 
 func set_new_target():
 #	print("set_new_target on ", self.display, " #", get_instance_id())
@@ -971,15 +995,15 @@ func initSteering():
 		ray_directions[i] = Vector2.RIGHT.rotated(angle)
 		ray_degree[i] = rad2deg(angle)
 		
-		if $Debug.visible:
+		if Globals.MOVEDEBUG:
 			var line = Line2D.new()
 			line.name = str(i)
-			line.width = 3
+			line.width = 2
 			line.default_color = Color(0, 0, 0, 1)
 			line.add_point(Vector2.ZERO)
 			line.add_point(Vector2.RIGHT.rotated(angle) * look_ahead)
 			line.name = str("steer_choice", i)
-			$Debug/steering_choice.add_child(line)
+			$Debug/steering_input.add_child(line)
 
 func set_interest():
 	if moveTarget:
@@ -1022,17 +1046,17 @@ func choose_direction():
 		if danger[i] > 0.0:
 			interest[i] -= danger[i]
 		
-	if $Debug.visible:
-		for i in num_rays:
-			$Debug/steering_choice.get_child(i).default_color = Color(0, 0, 0, 1)
-			if danger[i] > 0.0:
-				$Debug/steering_choice.get_child(i).default_color = Color(1, 0, 0, 1)
-			$Debug/steering_choice.get_child(i).points[1] = ray_directions[i] * look_ahead * interest[i]
-		
 	chosen_dir = Vector2.ZERO
 	for i in num_rays:
 		chosen_dir += ray_directions[i] * interest[i]
 	chosen_dir = chosen_dir.normalized()
+	
+	if Globals.MOVEDEBUG:
+		for i in num_rays:
+			$Debug/steering_input.get_child(i).default_color = Color(0, 0, 0, 1)
+			if danger[i] > 0.0:
+				$Debug/steering_input.get_child(i).default_color = Color(1, 0, 0, 1)
+			$Debug/steering_input.get_child(i).points[1] = ray_directions[i] * look_ahead * interest[i]
 	
 func getDangerValueFromEntity(targetDisplay):
 	if targetDisplay in avoidValues:
@@ -1101,8 +1125,8 @@ func addItem(item):
 func addItemToUI(item):
 	return false
 
-func add_health_bar():
-	.add_health_bar()
+func add_health_bar(size:float = 1.0):
+	.add_health_bar(size)
 	healthbar.offset.y = texDim.y * 0.8 + 20
 	
 func enterBoundary():

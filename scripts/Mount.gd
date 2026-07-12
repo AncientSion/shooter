@@ -1,14 +1,14 @@
 extends Base_Entity
 class_name Base_Mount
 
-export var maximum_rotation: float = 90
-export var startAngle: int = 0
-export var turnrate:float = 0.0
+export var maximum_rotation: float = 89
+export var turnrate:float = 1.0
 export var enabled:bool = true
 export var invis:bool = false
 
 var weapon = null
 
+var init_turret_angle: int = -90
 var arc_midpoint_v: Vector2
 var max_rota_radian:float
 var canRotate:bool = true
@@ -29,7 +29,7 @@ func do_init_mount():
 		add_to_group("isMount")
 		init_mount_debug_arcs()
 		connectHurtBoxes()
-		add_health_bar()
+		add_health_bar(0.5)
 		scale_progress_bar("healthbar", 0.5)
 	else:
 		health = 0
@@ -41,8 +41,8 @@ func do_init_mount():
 func init_mount_debug_arcs():
 	if Globals.AIMDEBUG and faction != 0 and has_node("Weapon"):
 		$DebugAim.visible = true
-		$DebugAim/Start.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle-maximum_rotation))
-		$DebugAim/End.points[1] = Vector2(400, 0).rotated(deg2rad(startAngle+maximum_rotation))
+		$DebugAim/Start.points[1] = Vector2(400, 0).rotated(deg2rad(init_turret_angle-maximum_rotation))
+		$DebugAim/End.points[1] = Vector2(400, 0).rotated(deg2rad(init_turret_angle+maximum_rotation))
 
 func add_smoke_fx(node):
 	node.position = global_position - owner.global_position
@@ -55,9 +55,9 @@ func add_weapon(wpn):
 	set_mount_firing_arc()
 
 func set_mount_firing_arc():
-	arc_midpoint_v = Vector2.RIGHT.rotated(deg2rad(startAngle))
+	arc_midpoint_v = Vector2.RIGHT.rotated(deg2rad(init_turret_angle))
 	weapon.current_rot_v = arc_midpoint_v
-	weapon.rotation_degrees = startAngle
+	weapon.rotation_degrees = init_turret_angle
 	max_rota_radian = deg2rad(maximum_rotation)
 	turnrate = deg2rad(turnrate)
 	
@@ -87,12 +87,13 @@ func kill():
 	create_final_kill_explos()
 
 func create_final_kill_explos():
-	var amount = 1
-	for n in amount:
-		var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
-		var pos = get_point_inside_tex()
-		explo.position = global_position + pos
-		Globals.curScene.get_node("Various").add_child(explo)
+	if maxHealth > 0:
+		var amount = 1
+		for n in amount:
+			var explo = Globals.getExplo("wreck", get_dmg_gfx_scale())
+			var pos = get_point_inside_tex()
+			explo.position = global_position + pos
+			Globals.curScene.get_node("Various").add_child(explo)
 	
 func get_dmg_gfx_scale():
 	return 0.7
@@ -100,8 +101,11 @@ func get_dmg_gfx_scale():
 func initRamming(area):
 	return
 
-func add_health_bar():
-	.add_health_bar()
+func add_health_bar(size:float = 1.0):
+	if health <= 0:
+		return
+		
+	.add_health_bar(size)
 	
 	healthbar.offset.y = sign(position.y) * 60
 #	print(position)
@@ -139,11 +143,25 @@ func mount_has_valid_target():
 	if not weapon.is_in_range(curTarget.global_position):
 		#print(display, " to ", target.display, " dist > speed x2 = illegal target")
 		return false
-	if not isInArc(global_position.direction_to(curTarget.global_position)): 
+	if not is_in_arc(global_position.direction_to(curTarget.global_position)): 
 		return false
 	return true
 	
+func handle_mounted_weapon(targetsArr):
+	if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
+		return
+	if !mount_has_valid_target(): # does it NOT have a target ?
+		set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+	if curTarget == null: # if it still has no target, next
+		return
+	do_track_target()
+	if weapon.can_fire(): # check cooldown, emp or other conditions
+		if weapon.bursting or weapon.has_fire_solution(curTarget): # do i have the right vector / rotation achieved `?
+			weapon.handle_firing(curTarget) # spawn projectile
+	
 func set_wpn_target(allTargets):
+	if allTargets.empty():
+		return
 	var bestPrio:int = 10
 	var bestTarget = null
 	var targets = Array()
@@ -154,7 +172,7 @@ func set_wpn_target(allTargets):
 			continue
 		var vec = global_position.direction_to(n.target.global_position)
 #		print(rad2deg(vec.angle()))
-		if not isInArc(vec):
+		if not is_in_arc(vec):
 			continue
 			
 		if n.prio < bestPrio:
@@ -167,27 +185,12 @@ func set_wpn_target(allTargets):
 		curTarget = null 
 	return
 	
-func xisInArc(vec: Vector2) -> bool:
-	if max_rota_radian >= PI:
-		return true
-	
-	var forward = arc_midpoint_v.rotated(global_rotation).normalized()
-	var dir = vec.normalized()
-	
-	return forward.dot(dir) >= cos(max_rota_radian)
-	
-func isInArc(vec):
+func is_in_arc(vec):
 	if max_rota_radian == PI: return true
-#	print(owner.global_rotation_degrees)
-#	print(global_rotation_degrees)
-#	print(rotation_degrees)
 	var from = arc_midpoint_v.rotated(-max_rota_radian + global_rotation)
 	var to = arc_midpoint_v.rotated(max_rota_radian + global_rotation)
-	#print(rad2deg(from.angle()), " - ",  rad2deg(to.angle()))
 	if ((from.y * vec.x - from.x * vec.y) * (from.y * to.x - from.x * to.y) >= 0 && (to.y * vec.x - to.x * vec.y) * (to.y * from.x - to.x * from.y) >= 0):
-#		print("in Arc!")
 		return true
-#	print("not in Arc!")
 	return false
 
 func do_track_target():

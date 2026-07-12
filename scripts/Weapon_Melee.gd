@@ -34,9 +34,9 @@ var steps:Array = [
 ]
 
 
-func doFire(_target):
+func do_fire(_target):
 	cooldown += lifetime
-#	print("doFire")
+#	print("do_fire")
 	if burst > 1:
 		if !bursting:
 			#print("can burst, not yet bursting")

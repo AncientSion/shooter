@@ -43,7 +43,7 @@ func getPossibleWeapons(index):
 			
 	shield.construct(5, "Shield", stats)
 	shield.shield = shield.maxShield
-	shield.add_shield_bar()
+	shield.add_shield_bar(0.8)
 	shield.scale_progress_bar("shieldbar", 0.8)
 	return shield
 #	pass

@@ -7,9 +7,6 @@ func _ready():
 	pass
 	
 func process_movement(_delta):
-#	if $SM.state == $SM.states.crash:
-#		return
-		
 	set_interest()
 	set_danger()
 	choose_direction()
@@ -21,6 +18,7 @@ func process_movement(_delta):
 	toggleThrusterparticles()
 	
 #	rotation_degrees += 20.0 * _delta
+
 
 func toggleThrusterparticles():
 	if accel.x > 10:
@@ -103,12 +101,6 @@ func addStartingItems():
 	
 func initAvoidValues():
 	avoidValues = {"Player": 1.0, "Fighter": 0.0, "Helicopter_Light": 0.0, "Boundary": 5.0, "Obstacle": 5.0, "Cargohauler": 1.5, "City": 1.5, "Boss": 2.0}
-	
-func crash_step_one():
-	.crash_step_one()
-	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, get_crash_velo(), 3.0)
-	$Tween.start()
-	$Tween.connect("tween_all_completed", self, "crash_step_two")
 	
 func set_hold_position():
 	moveTarget = global_position

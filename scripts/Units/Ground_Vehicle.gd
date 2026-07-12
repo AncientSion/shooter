@@ -36,7 +36,7 @@ func checkMoveTargetWithinBoundary():
 func initAvoidValues():
 	avoidValues = {"Player": 5.0, "Boundary": 5.0, "Obstacle": 5.0, "Jeep": 2.0, "City": 2.0}
 	
-func setNewWanderTarget():
+func set_wander_target():
 	var pos:Vector2 = global_position
 	var newTarget:Vector2 = Vector2(0, Globals.ROADY)
 	var limit = sightRange + 1

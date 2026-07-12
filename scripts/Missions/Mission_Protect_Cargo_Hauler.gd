@@ -151,7 +151,7 @@ func setup_attackers(unitArray):
 				"Frigate":
 					x = target.position.x + (400 * -attacker.direction.x)
 					attacker.stats.can_withdraw = true
-					attacker.stats.canCrash = false
+					attacker.stats.can_crash = false
 			
 #			print(target.position)
 			attacker.position = Vector2(x, y)

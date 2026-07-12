@@ -74,9 +74,9 @@ func doEnable():
 		cooldown = rof
 		update_cooldown_ui_nodes()
 	
-func doFire(target):
-#	print("doFire")
-	.doFire(target)
+func do_fire(target):
+#	print("do_fire")
+	.do_fire(target)
 	isFiring = true
 	isCharging = false
 	cooldown += lifetime

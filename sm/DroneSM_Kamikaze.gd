@@ -68,7 +68,7 @@ func _enter_state(prev_state, new_state):
 			pass
 		states.wander:
 			parent.curTarget = null
-			parent.setNewWanderTarget()
+			parent.set_wander_target()
 		states.close:
 			parent.moveTarget = parent.curTarget.global_position
 		states.circle:

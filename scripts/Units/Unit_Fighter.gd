@@ -1,12 +1,15 @@
-extends Air_Unit
+extends Strikecraft_Unit
 class_name Fighter
 
-var crash_velocity:Vector2
-var crash_rotation_speed:float
+const CRASH_GRAVITY := 30.0
+const CRASH_DRAG := 0.995
+const CRASH_ROT_ACCEL_MIN := 0.3
+const CRASH_ROT_ACCEL_MAX := 0.5
+const CRASH_ROT_SPEED_MAX := 10.0
 
 var display = "Fighter"
 	
-func do_specific_unit_init():	
+func do_specific_unit_init():
 	if position.x < Globals.WIDTH / 2:
 		rotation_degrees += Globals.rng.randi_range(-4, 4)
 	else:
@@ -20,37 +23,14 @@ func do_specific_unit_init():
 	
 func _ready():
 	pass
-#	$ThrusterNodes/Aft/Particle2D.process_material.scale = 2
-#	$EffectNodes.set_as_toplevel(true)
 
 func _physics_process(_delta):
 #	print("# ", self.id, ", rota: ", rotation_degrees)
+	#print(rotation_degrees)
 	pass
 	
 func set_direction(_dirVector = false):
 	pass
-
-func xxprocess_movement(_delta):
-#	return
-	var agility = 20.0
-	set_interest()
-	set_danger()
-	choose_direction()
-	
-#	accel = Vector2.ZERO
-	accel = chosen_dir.rotated(rotation)
-	accel = accel.normalized() * enginePower
-
-	var dot = abs(velocity.normalized().dot(accel.normalized()))
-	
-	var minimum_momentum_factor = 0.7
-	var air_resistance_factor = dot * (0.3 / agility)
-
-	velocity += accel * _delta
-	velocity = velocity.normalized() * maxSpeed
-	velocity *= air_resistance_factor + minimum_momentum_factor
-	
-	rotation = velocity.angle()
 	
 func drift_process_movement(delta):
 
@@ -131,11 +111,33 @@ func process_movement(_delta):
 
 	# 6. Update Visuals
 	# The jet nose always follows the velocity vector
+#	if not crashing and velocity.length() > 0.1:
 	if velocity.length() > 0.1:
 		rotation = velocity.angle()
 		
+func process_crash_rotation(delta):
+	
+	var dot = velocity.normalized().dot((moveTarget-global_position).normalized())
+	print("crashing")
+#	prinwwwwt(dot)
+	if abs(dot) > 0.97:
+		
+		crash_rotation_speed += crash_rotation_accel * delta
+
+		crash_rotation_speed = clamp(
+		crash_rotation_speed,
+		-CRASH_ROT_SPEED_MAX,
+		CRASH_ROT_SPEED_MAX
+		)
+
+		rotation_degrees += crash_rotation_speed * delta * 3
+		
+#		rotation_degrees = clamp(rotation_degrees, -10, 10)
+#		print(rotation_degrees)
+		print(">")
+			
 func process_crash_movement(delta):
-	var gravity = Vector2(0, 200)
+	var gravity = Vector2(0, 40)
 	
 	crash_velocity += gravity * delta
 	crash_velocity *= 0.995   # air drag
@@ -257,38 +259,6 @@ func mirrorTurrets():
 		weapon.arc_midpoint_v.x *= -1
 		weapon.current_rot_v.x *= -1
 		weapon.rotation = weapon.current_rot_v.angle()
-	
-#func fireGuns(weapon):
-#	if curTarget == null or curTarget.real == false: return
-#	if weapon.canFire():
-##		if global_position.distance_to(curTarget.global_position) <= 50: return
-#		var angleToTarget = rad2deg(curTarget.position.angle_to_point(position))
-##		var angle = abs(angleToTarget - rotation_degrees)
-##		var fof = weapons[index].fof
-#		var dif = abs(angleToTarget - rotation_degrees)
-#		if abs(angleToTarget - rotation_degrees) < weapon.fof:
-#			weapon.doFire(curTarget)
-			
-func fireGunsx(weapon):
-	if curTarget == null or curTarget.real == false: return
-	if weapon.canFire():
-#		if global_position.distance_to(curTarget.global_position) <= 50: return
-#		var angleToTarget = rad2deg(curTarget.position.angle_to_point(position))
-		var angleToTarget = rad2deg(moveTarget.angle_to_point(position))
-#		var angle = abs(angleToTarget - rotation_degrees)
-#		var fof = weapons[index].fof
-		var dif = abs(angleToTarget - rotation_degrees)
-		if abs(angleToTarget - rotation_degrees) < weapon.fof:
-			var d = global_position.distance_to(moveTarget)
-			var tSpeed = curTarget.velocity.length()
-			var etaA = d / $Mounts/A.get_node("Weapon").speed
-			var etaB:float = 0.0
-			if tSpeed > 0:
-				etaB = curTarget.global_position.distance_to(moveTarget) / tSpeed
-				if etaA * 0.8 < etaB and etaA * 1.2 > etaB:
-					weapon.doFire(curTarget)
-			else:
-				weapon.doFire(curTarget)
 
 func getPossibleWeapons(index):
 #	return false
@@ -309,48 +279,72 @@ func getPossibleWeapons(index):
 	
 func initAvoidValues():
 	avoidValues = {"Player": 1.0, "Fighter": 1.0, "Helicopter_Light": 1.0, "Boundary": 5.0, "Obstacle": 5.0, "Cargohauler": 3.5, "City": 3.5}
-
-func crashCondition(remDmg):
-	if $SM.state != $SM.states.crash:
-		return true
-	return false
+	
+func get_crash_velo():
+	return ceil(maxSpeed * 1.15)
 	
 func crash_step_one():
-	.crash_step_one()
-	disableWeapons()
+	$Tween.interpolate_property(self, "maxSpeed", maxSpeed, get_crash_velo(), 3.0)
+	$Tween.start()
+#	$Tween.connect("tween_all_completed", self, "crash_step_two")
+	
+	for n in 1:
+		add_exp_fire_smoke_fx(1.25, 0.3)
+		
+	crash_step_two()
+	
+func crash_step_two():
+	danger.fill(0.0)
+	crashing = true
+
+	# Keep existing momentum but damp it
+#	crash_velocity = velocity * 0.4
+#	velocity = Vector2.ZERO
+
+	# Ensure some downward movement
+#	crash_velocity.y = max(crash_velocity.y, 10)
+#	crash_velocity.x = max(crash_velocity.x, 10) * direction.x
+
+	crash_rotation_speed = 0
+	crash_rotation_accel = rand_range(CRASH_ROT_ACCEL_MIN, CRASH_ROT_ACCEL_MAX)
+	crash_rotation_accel *= velocity.x
 	
 	if rotation_degrees > 55 and rotation_degrees < 125:
 		moveTarget = global_position + (Vector2.RIGHT.rotated(rotation +  Globals.rng.randf_range(-0.3, 0.3)) * Globals.rng.randi_range(600, 900))
 	elif velocity.x > 0:
-		moveTarget = Vector2(global_position.x + (Globals.HEIGHT-global_position.y)*2, Globals.HEIGHT)
+		moveTarget = Vector2(global_position.x + (Globals.HEIGHT-global_position.y)*2.5, Globals.HEIGHT)
 	elif velocity.x < 0:
-		moveTarget = Vector2(global_position.x - (Globals.HEIGHT-global_position.y)*2, Globals.HEIGHT)
+		moveTarget = Vector2(global_position.x - (Globals.HEIGHT-global_position.y)*2.5, Globals.HEIGHT)
 		
 #	maxSpeed *= 1.3
-	enginePower *= 0.3
+#	enginePower *= 0.3
 	
 #	crash_velocity = velocity
 #	velocity = Vector2.ZERO
 #	crash_rotation_speed = Globals.rng.randf_range(-0.5, 0.5)
 	
-	var timer = Timer.new()
-	$TimerNodes.add_child(timer)
-	timer.name = "CrashExploTimer"
-#	var time:float = float(Globals.rng.randi_range(700, 1000))/100
-	var time:float = Globals.rng.randf_range(7.0, 10.0)
-	timer.wait_time = time
-	timer.one_shot = true # don't loop, run once
-	timer.autostart = true # start timer when added to a scene
-	timer.start()
-	timer.connect("timeout", self, "_on_crash_explo_timer_timeout")
+#	var timer = Timer.new()
+#	$TimerNodes.add_child(timer)
+#	timer.name = "CrashExploTimer"
+#	var time:float = Globals.rng.randf_range(7.0, 10.0)
+#	timer.wait_time = time
+#	timer.one_shot = true
+#	timer.autostart = true
+#	timer.start()
+#	timer.connect("timeout", self, "_on_crash_explo_timer_timeout")
 
 func _on_crash_explo_timer_timeout():
 	kill()
-		
-func crash_step_two():
-	return
 
-func killByCrash():
+func crash_impact():
+	print("crash_impact")
+	crashing = false
+	global_position.y = Globals.HEIGHT - 30
+	crash_rotation_speed = 0
+	crash_velocity = Vector2.ZERO
+
+func kill_by_crash():
+	print("kill_by_crash")
 	if $SM.state == $SM.states.crash:
 		kill()
 		$ThrusterNodes/Aft/Particle2D.emitting = false
@@ -361,7 +355,6 @@ func killByCrash():
 #			global_rotation_degrees += 180
 			velocity *= -1
 			accel *= -1
-			
 
 func setMixUpWanderTarget():
 	print("setMixUpWanderTarget #", self.id)
@@ -372,7 +365,7 @@ func setMixUpWanderTarget():
 		
 	checkMoveTargetWithinBoundary()
 
-func setNewWanderTarget():
+func set_wander_target():
 	if  Globals.rng.randf_range(0, 1) < 0.08:
 		return setMixUpWanderTarget()
 		
@@ -419,6 +412,11 @@ func add_exp_fire_smoke_fx(scale:float, delay:float):
 
 func get_dmg_gfx_scale():
 	return 1
+	
+func crash_condition(remDmg):
+	if $SM.state != $SM.states.crash:
+		return true
+	return false
 	
 func withdraw_condition(remDmg):
 	if $SM.state != $SM.states.withdraw:

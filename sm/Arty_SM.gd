@@ -34,7 +34,7 @@ func _enter_state(prev_state, new_state):
 			pass
 		states.wander:
 			parent.curTarget = null
-			parent.setNewWanderTarget()
+			parent.set_wander_target()
 		states.close:
 			parent.moveTarget = Vector2.ZERO
 		states.crash:

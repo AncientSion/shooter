@@ -89,10 +89,6 @@ visible = false
 
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 6 )]
 
-[node name="BehaveTimer" parent="TimerNodes" index="0"]
-wait_time = 3.0
-one_shot = true
-
 [node name="A" type="CollisionShape2D" parent="ColNodes/DmgNormal" index="0"]
 position = Vector2( 1, 0 )
 shape = SubResource( 4 )

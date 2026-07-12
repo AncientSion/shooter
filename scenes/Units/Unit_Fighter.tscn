@@ -40,6 +40,12 @@ stats = ExtResource( 8 )
 
 [node name="SM" parent="." index="0" instance=ExtResource( 4 )]
 script = ExtResource( 5 )
+DISENGAGE_DIST = 300
+NEXT_WANDER_STEP_DIST = 100
+MIN_DIST_TO_CLOSE_STATE = 600
+NEW_ATTACK_RUN_MIN_DIST = 100
+WITHDRAW_MOVE_TARGET_DIST = 900
+DISENGAGE_MOVE_TARGET_DIST = 500
 
 [node name="ThrusterNodes" parent="." index="2"]
 position = Vector2( 0, -1 )
@@ -56,17 +62,18 @@ position = Vector2( 1, -1 )
 texture = ExtResource( 2 )
 
 [node name="Mounts" parent="." index="5"]
-visible = false
 __meta__ = {
 "_editor_description_": ""
 }
 
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 1 )]
-position = Vector2( 17, 5 )
+position = Vector2( 19, 2 )
+rotation = 1.5708
 invis = true
 
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 1 )]
 position = Vector2( -6, 8 )
+rotation = 1.5708
 invis = true
 
 [node name="VisibilityNotifier2D" parent="." index="7"]

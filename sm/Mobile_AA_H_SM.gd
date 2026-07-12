@@ -55,7 +55,7 @@ func _enter_state(prev_state, new_state):
 			pass
 		states.wander:
 			parent.curTarget = null
-			parent.setNewWanderTarget()
+			parent.set_wander_target()
 			parent.get_weapon_by_index(0).doDisable()
 		states.close:
 			parent.moveTarget = parent.curTarget.global_position

@@ -42,4 +42,7 @@ func _on_Real_pressed():
 	Globals.GAMESCREEN.start_new_game()
 	
 func check_debug_options():
-	Globals.AIMDEBUG = $MC/PC/VBC/Debug_Box/Aim_Debug.pressed
+	var aimdebug = $MC/PC/VBC/Debug_Box/Aim_Debug.pressed
+	var movedebug = $MC/PC/VBC/Debug_Box/Move_Debug.pressed
+	Globals.AIMDEBUG = aimdebug
+	Globals.MOVEDEBUG = movedebug

@@ -517,14 +517,12 @@ texture = ExtResource( 24 )
 position = Vector2( 184, -39 )
 health = 30
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 0.75
 
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 4 )]
 position = Vector2( 97, -42 )
 health = 30
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 0.75
 
 [node name="C" parent="Mounts" index="2" instance=ExtResource( 4 )]
@@ -532,7 +530,6 @@ position = Vector2( -237, 30 )
 rotation = 3.14159
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="D" parent="Mounts" index="3" instance=ExtResource( 4 )]
@@ -540,7 +537,6 @@ position = Vector2( 35, 65 )
 rotation = 3.14159
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="E" parent="Mounts" index="4" instance=ExtResource( 4 )]
@@ -548,24 +544,20 @@ position = Vector2( 247, 27 )
 rotation = 3.14159
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="F" parent="Mounts" index="5" instance=ExtResource( 4 )]
 position = Vector2( -227, -42 )
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="Shield" parent="Mounts" index="6" instance=ExtResource( 4 )]
 position = Vector2( -54, -17 )
-startAngle = -90
 invis = true
 
 [node name="Missiles" parent="Mounts" index="7" instance=ExtResource( 4 )]
 position = Vector2( -145, -19 )
-startAngle = -90
 
 [node name="PatrolNodes" type="Position2D" parent="." index="6"]
 

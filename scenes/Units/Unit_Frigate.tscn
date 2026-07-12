@@ -167,7 +167,6 @@ texture = ExtResource( 3 )
 position = Vector2( 20, -36 )
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 6 )]
@@ -175,15 +174,13 @@ position = Vector2( 102, 30 )
 rotation = -3.14159
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 turnrate = 2.0
 
 [node name="C" parent="Mounts" index="2" instance=ExtResource( 6 )]
 position = Vector2( 152, -29 )
-rotation = 1.1973
+rotation = 1.5708
 health = 20
 maximum_rotation = 89.0
-startAngle = -90
 
 [node name="VisibilityNotifier2D" parent="." index="7"]
 scale = Vector2( 5.49501, -0.922956 )

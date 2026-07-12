@@ -110,7 +110,7 @@ func getPossibleWeapons(index):
 func get_crash_velo():
 	return max(30, maxSpeed / 2)
 	
-func getCrashAngle():
+func get_crash_angle():
 	return 0
 	
 func crash_step_one():
@@ -127,8 +127,8 @@ func crash_step_one():
 	elif velocity.x < 0:
 		moveTarget = global_position + Vector2(1, 0).rotated(deg2rad(90 + Globals.rng.randi_range(20, 30)))*Globals.HEIGHT
 
-func killByCrash():
-	.killByCrash()
+func kill_by_crash():
+	.kill_by_crash()
 		
 	for n in 1:
 		add_exp_fire_smoke_fx(0.3, 0.0)
@@ -148,7 +148,7 @@ func killByCrash():
 	for n in $EffectNodes.get_children():
 		n.rotation = -rotation
 
-func setNewWanderTarget():
+func set_wander_target():
 	var pos = global_position
 	var rot = rotation_degrees
 	var limit = look_ahead + 1

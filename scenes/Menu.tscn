@@ -55,16 +55,16 @@ margin_right = 460.0
 margin_bottom = 26.0
 
 [node name="Aim_Debug" type="CheckBox" parent="MC/PC/VBC/Debug_Box"]
-margin_right = 20.0
+margin_right = 106.0
+margin_bottom = 26.0
+text = "Aimdebug"
+
+[node name="Move_Debug" type="CheckBox" parent="MC/PC/VBC/Debug_Box"]
+margin_left = 110.0
+margin_right = 229.0
 margin_bottom = 26.0
 pressed = true
-
-[node name="Label" type="Label" parent="MC/PC/VBC/Debug_Box"]
-margin_left = 24.0
-margin_top = 4.0
-margin_right = 89.0
-margin_bottom = 21.0
-text = "Aimdebug"
+text = "Movedebug"
 
 [node name="SepA2" type="HSeparator" parent="MC/PC/VBC"]
 margin_top = 50.0

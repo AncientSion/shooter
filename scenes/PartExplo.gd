@@ -5,7 +5,7 @@ var delay:float = 0.0
 var offset:Vector2 = Vector2.ZERO
 
 func _ready():
-#	print("ready explo")
+	print("ready explo")
 #	print("pos", global_position)
 	for n in $Parts.get_children():
 		n.one_shot = true
