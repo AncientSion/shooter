@@ -22,10 +22,10 @@ func createPlayerStatsPanel():
 	$MC/VBC/HBC.move_child(panel, 0)
 
 #	var keys = ["Max Health", "Max Shield", "", "Healthregen per Warp", "Shieldbreak cooldown", "Shieldregen timer", "", "Enginepower", "Max Speed", stCharge", "Angular Rotation", "", "Cash"]
-#	var values = ["maxHealth", "maxShield", "", "healthRegenTime", "shieldBreakTime", "shieldRegenTime", "", "enginePower", "maxSpeed", "boostCharge", "agility", "", "resources"]
+#	var values = ["maxHealth", "maxShield", "", "healthRegenTime", "shieldBreakTime", "shieldRegenTime", "", "enginePower", "maxSpeed", "boost_charge", "agility", "", "resources"]
 
-	var keys = ["Max Health", "Max Shield", "", "Hullrepair / Warp", "Shieldbreak cooldown", "Shieldregen timer", "", "Enginepower", "boostMaxCharge", "Boostpower", "Angular Rotation", "", "Materials"]
-	var values = ["maxHealth", "maxShield", "", "healthRegenTime", "shieldBreakTime", "shieldRegenTime", "", "enginePower", "boostMaxCharge", "boostPower", "agility", "", "materials"]
+	var keys = ["Max Health", "Max Shield", "", "Hullrepair / Warp", "Shieldbreak cooldown", "Shieldregen timer", "", "Enginepower", "boost_max_charge", "Boostpower", "Angular Rotation", "", "Materials"]
+	var values = ["maxHealth", "maxShield", "", "healthRegenTime", "shieldBreakTime", "shieldRegenTime", "", "enginePower", "boost_max_charge", "boostPower", "agility", "", "materials"]
 
 	for n in len(keys):
 #		panel.addEntry(keys[n], player.get(values[n]))

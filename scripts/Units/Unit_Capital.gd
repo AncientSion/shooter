@@ -100,7 +100,7 @@ func kill_by_crash():
 func get_crash_velo():
 	return maxSpeed / 2
 	
-func disableBoosting():
+func disable_boosting():
 	return
 
 func setUnitFacing():

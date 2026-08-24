@@ -1,7 +1,13 @@
 extends Air_Unit
 class_name Drone_Shotgun
 
-var display = "Drone_Shotgun"
+var	display = "Drone_Shotgun"
+	
+func do_specific_unit_init():
+	name = display
+#	boostStrength = 200
+#	boostTimeRemain = 2.0
+	do_connect_unit_signals()
 	
 #func doInit():
 #	.doInit()
@@ -15,17 +21,12 @@ var display = "Drone_Shotgun"
 func _ready():
 	$ThrusterNodes/Aft/Particle2D.process_material.scale = 2
 	pass
-	
-func doInit():
-	.doInit()
-#	boostStrength = 60
-#	$ThrusterNodes/Aft/Particle2D.process_material.scale = 3
-	doConnect()
 
-func doConnect():
-	if has_node("Mounts/A"):
-		$Mounts/A.get_node("Weapon").connect("hasFired", self, "on_hasFired")
-	$TimerNodes/BehaveTimer.connect("timeout", self, "doPowerUp")
+func do_connect_unit_signals():
+	$TimerNodes/Free_Timer.name = "Power_up_timer"
+	$TimerNodes/Power_up_timer.connect("timeout", self, "do_power_up")
+	$TimerNodes/Power_up_timer.wait_time = 1.0
+	$TimerNodes/Power_up_timer.one_shot = true
 
 func on_hasFired():
 	doPowerDown()
@@ -37,9 +38,10 @@ func doPowerDown():
 	$Tween.interpolate_property(self, "velocity", velocity, velocity/10, 1.0,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
-	$TimerNodes/BehaveTimer.start()
+	$TimerNodes/Power_up_timer.start()
 	
-func doPowerUp():
+func do_power_up():
+	print("do_power_up")
 	$ThrusterNodes/Aft/Particle2D.emitting = true
 	maxSpeed = 200
 	
@@ -65,10 +67,11 @@ func process_movement(_delta):
 	elif maxSpeed > 0:
 		setSelfFacing(_delta)
 
+#	print(boostTimeRemain)
 	if boosting:
 		boostTimeRemain -= _delta
 		if boostTimeRemain <= 0:
-			disableBoosting()
+			disable_boosting()
 
 func setSelfFacing(_delta):
 #	var forwardV = Vector2(cos(rotation), sin(rotation))
@@ -103,8 +106,15 @@ func getPossibleWeapons(index):
 #	return false
 #	var weapon = Globals.getWeaponBase("Super-Light Missile");
 	var weapon = Globals.getWeaponBase("Drone Shotgun");
+#	var weapon = Globals.getWeaponBase("Streamcannon");
 #	var weapon = Globals.getWeaponBase("Beamlance");
 	weapon.makeInvisible()
+	
+	weapon.connect("hasFired", self, "on_hasFired")
+#	if has_node("Mounts/A"):
+#		$Mounts/A.get_node("Weapon").connect("hasFired", self, "on_hasFired")
+		
+		
 	return weapon
 	
 func get_crash_velo():
@@ -115,7 +125,7 @@ func get_crash_angle():
 	
 func crash_step_one():
 	.crash_step_one()
-	doPowerUp()
+	do_power_up()
 	$ThrusterNodes/Aft/Particle2D.emitting = false
 	
 	if velocity.x == 0:

@@ -121,7 +121,7 @@ visible = false
 
 [node name="CrashTimer" type="Timer" parent="TimerNodes"]
 
-[node name="BehaveTimer2" type="Timer" parent="TimerNodes"]
+[node name="Free_Timer" type="Timer" parent="TimerNodes"]
 
 [node name="EffectNodes" type="Position2D" parent="."]
 

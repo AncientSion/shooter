@@ -226,7 +226,7 @@ func hideDebug():
 		return
 	$Debug.hide()
 	$Debug/moveTarget.set_as_toplevel(false)
-	$Debug/moveTarget.hide()
+	$Debug/moveTarget.hide()#
 	$Debug/MoveTargetVector.set_as_toplevel(false)
 	$Debug/MoveTargetVector.hide()
 	$Debug/C/stats.set_as_toplevel(false)
@@ -1066,11 +1066,11 @@ func getDangerValueFromEntity(targetDisplay):
 func getFuturePosition(time):
 	return global_position + velocity * time
 	
-func disableBoosting():
+func disable_boosting():
 	return
 	
 func disableAllThrusterParticles():
-	disableBoosting()
+	disable_boosting()
 	for n in $ThrusterNodes.get_children():
 		n.get_node("Particle2D").emitting = false
 

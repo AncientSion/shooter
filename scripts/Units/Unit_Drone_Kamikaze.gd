@@ -6,24 +6,28 @@ class_name Drone_Kamikaze
 #var boostTimeRemain:float = 2.0
 
 func do_specific_unit_init():
-	display = "Drone_Kamikaze"
+	display = ""
+	name = display
 	boostStrength = 200
 	boostTimeRemain = 2.0
+	do_connect_unit_signals()
 
 func _ready():
 	pass
 
 func setSelfFacing(delta):
-	if curTarget:
-		rotation = curTarget.global_position.angle_to_point(global_position)
-	else:
+	if is_instance_valid(curTarget):
+		rotation = (curTarget.global_position - global_position).angle()
+	elif velocity.length_squared() > 1:
 		rotation = velocity.angle()
 
-func doConnect():
-	$TimerNodes/BehaveTimer.connect("timeout", self, "doPowerUp")
+#func do_connect_unit_signals():
+#	return
+#	$TimerNodes/Power_up_timer.connect("timeout", self, "do_power_up")
+#	print("time: ", $TimerNodes/Power_up_timer.wait_time)
 
-func doPowerUp():
-	.doPowerUp()
+func do_power_up():
+	.do_power_up()
 	if $SM.state != $SM.states.crash:
 		$SM.set_state($SM.states.strike)
 
@@ -36,22 +40,22 @@ func getPossibleWeapons(index):
 	weapon.makeInvisible()
 	return weapon
 
-func enableBoosting():
-	.enableBoosting()
-#	print(id, " enableboosting")
+func enable_boosting():
+	.enable_boosting()
+#	print(id, " enable_boosting")
 	$Sprites/AnimatedSprite.show()
 	$Sprites/AnimatedSprite.play()
 
-func disableBoosting():
+func disable_boosting():
 	if boosting:
-#		print(id, " disableBoosting")
+#		print(id, " disable_boosting")
 		boosting = false
 		var curScale = $ThrusterNodes/Aft.get_node("Particle2D").scale
 		$Tween.interpolate_property($ThrusterNodes/Aft.get_node("Particle2D"), "scale", curScale, curScale/1.5, 0.8, 0, 2)
 		$Tween.start()
 		steer_force -= boostStrength
 		maxSpeed -= boostStrength*4
-		boostTimeRemain = 4.0
+		boostTimeRemain = 2.0
 		$Sprites/AnimatedSprite.hide()
 		$Sprites/AnimatedSprite.stop()
 		call_deferred("selfDestruct")

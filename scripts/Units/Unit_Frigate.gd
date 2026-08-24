@@ -2,9 +2,17 @@ extends Capital
 class_name Frigate
 
 var display = "Frigate"
+var rotator:float
 
 func _ready():
 	pass
+	
+func do_specific_unit_init():
+	maxSpeed = 0
+	rotator = 15.0
+	
+func do_turnaround():
+	return
 	
 func process_movement(_delta):
 	set_interest()
@@ -16,9 +24,8 @@ func process_movement(_delta):
 	velocity = velocity.limit_length(maxSpeed)
 	
 	toggleThrusterparticles()
-	
-#	rotation_degrees += 20.0 * _delta
 
+	rotation_degrees += rotator * _delta
 
 func toggleThrusterparticles():
 	if accel.x > 10:
@@ -83,8 +90,7 @@ func getPossibleWeapons(index):
 			return w
 		2:
 #			return Globals.getWeaponBase("Heavy Autocannon");
-			var w = Globals.getWeaponBase("Light Autocannon");
-			w.rof = 12.0
+			var w = Globals.getWeaponBase("Streamcannon");
 			return w
 	
 			

@@ -112,10 +112,11 @@ func kill():
 		hide()
 		disable_col_nodes()
 
-func enableBoosting():
+func enable_boosting():
+	print("enable_boosting")
 	if boosting:
 		return false
-	print("enableBooosting")
+#	print("enableBooosting")
 	boosting = true
 	
 	var curScale = $ThrusterNodes/Aft.get_node("Particle2D").scale
@@ -125,8 +126,8 @@ func enableBoosting():
 	steer_force += boostStrength
 	maxSpeed += boostStrength*4
 
-func disableBoosting():
-	print("disableBoosting")
+func disable_boosting():
+	print("disable_boosting")
 	if not boosting:
 		return
 	boosting = false

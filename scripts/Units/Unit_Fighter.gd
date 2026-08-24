@@ -232,7 +232,7 @@ func is_outside_viewport(x, y):
 #			break
 			
 	
-func enableBoosting():
+func enable_boosting():
 	return false
 		
 func setUnitFacing():

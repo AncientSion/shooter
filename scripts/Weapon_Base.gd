@@ -38,6 +38,7 @@ var burstCooldown:float = 0.0
 var bursting:int = 0
 
 var fof = 3
+var fof_rad:float
 var vLaunch = false
 
 var display:String
@@ -47,11 +48,12 @@ var time:float
 
 var arc_midpoint_v: Vector2# = Vector2.RIGHT.rotated(rotation)
 var current_rot_v: Vector2#= arc_midpoint_v
-var maximum_rotation: float# = PI / 6.0 # 30
+#var maximum_rotation: float# = PI / 6.0 # 30
 
 signal hasFired
 
 func _ready():
+	fof_rad = deg2rad(fof)
 	pass
 	
 func do_init_weapon():
@@ -126,11 +128,23 @@ func setRecoilForce():
 	recoilForce = Globals.getRecoilForce(minDmg, maxDmg, speed)
 
 func has_fire_solution(target) -> bool:
+	if not is_instance_valid(target):
+		return false
+
+	var dist_sq: float = global_position.distance_squared_to(target.global_position)
+#	if dist_sq < min_fire_dist * min_fire_dist:
+#		return false
+#	if dist_sq > max_fire_dist * max_fire_dist:
+#		return false
+
+	return abs(get_angle_to(target.global_position)) < fof_rad
+	
+	
+
+func xhas_fire_solution(target) -> bool:
 	if global_position.distance_squared_to(target.global_position) < minFireDist * minFireDist:
 		return false
 
-	# Getting the direction vector, then the angle. 
-	# This avoids the Godot 3 angle_to_point backwards bug.
 	var dir_to_target = target.global_position - global_position
 	var angle_to_target = dir_to_target.angle() 
 
@@ -139,7 +153,9 @@ func has_fire_solution(target) -> bool:
 		-PI,
 		PI
 	)
-
+	
+#	var valid:bool = abs(dif) < deg2rad(fof)
+#	return valid
 	return abs(dif) < deg2rad(fof)
 
 func handle_firing(_curTarget):

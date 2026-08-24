@@ -57,13 +57,13 @@ margin_bottom = 26.0
 [node name="Aim_Debug" type="CheckBox" parent="MC/PC/VBC/Debug_Box"]
 margin_right = 106.0
 margin_bottom = 26.0
+pressed = true
 text = "Aimdebug"
 
 [node name="Move_Debug" type="CheckBox" parent="MC/PC/VBC/Debug_Box"]
 margin_left = 110.0
 margin_right = 229.0
 margin_bottom = 26.0
-pressed = true
 text = "Movedebug"
 
 [node name="SepA2" type="HSeparator" parent="MC/PC/VBC"]

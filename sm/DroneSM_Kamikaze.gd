@@ -20,6 +20,7 @@ func _state_logic(delta):
 			if parent.global_position.distance_to(parent.moveTarget) <= 50:
 				set_state(states.wander)
 		states.close:
+#			print("states.close")
 			parent.moveTarget = parent.curTarget.global_position
 			parent.process_movement(delta)
 			var d = parent.global_position.distance_to(parent.moveTarget)
@@ -29,6 +30,7 @@ func _state_logic(delta):
 				parent.remove_cur_target_set_new_target()
 				set_state(states.wander)
 		states.circle:
+#			print("states.circle")
 			parent.process_movement(delta)
 			if parent.global_position.distance_to(parent.moveTarget) <= 50:
 				if rand_range(0, 1) > 0.07:
@@ -38,16 +40,15 @@ func _state_logic(delta):
 			elif parent.global_position.distance_to(parent.curTarget.global_position) > 700:
 				set_state(states.close)
 		states.prepStrike:
+#			print("states.prepStrike")
 			parent.process_movement(delta)
 			if parent.global_position.distance_to(parent.curTarget.global_position) > 700:
 				set_state(states.close)
 			else:
 				parent.doPowerDown()
 				set_state(states.idle)
-#			elif parent.global_position.distance_to(parent.moveTarget) <= 30:
-#				if parent.velocity.length() <= 60:
-#					set_state(states.strike)
 		states.strike:
+#			print("states.strike")
 			parent.moveTarget = parent.curTarget.global_position
 			parent.process_movement(delta)
 		states.crash:
@@ -81,7 +82,7 @@ func _enter_state(prev_state, new_state):
 		states.prepStrike:
 			parent.moveTarget = parent.global_position - parent.velocity
 		states.strike:
-			parent.enableBoosting()
+			parent.enable_boosting()
 			canChangeState = false
 		states.crash:
 			parent.crash_step_one()

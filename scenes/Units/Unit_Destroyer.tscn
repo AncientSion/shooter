@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Units/Unit_Destroyer.gd" type="Script" id=1]
 [ext_resource path="res://textures/Unit_Destroyer.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://scenes/Mount.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sm/Frigate_SM.gd" type="Script" id=6]
 [ext_resource path="res://sm/SM.tscn" type="PackedScene" id=7]
+[ext_resource path="res://resources/destroyer.tres" type="Resource" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 95, 29.75 )
@@ -19,6 +20,7 @@ extents = Vector2( 19.7188, 10.3125 )
 
 [node name="Destroyer" instance=ExtResource( 3 )]
 script = ExtResource( 1 )
+stats = ExtResource( 8 )
 
 [node name="SM" parent="." index="0" instance=ExtResource( 7 )]
 script = ExtResource( 6 )
@@ -43,24 +45,20 @@ texture = ExtResource( 2 )
 [node name="A" parent="Mounts" index="0" instance=ExtResource( 5 )]
 position = Vector2( 6, -29 )
 maximum_rotation = 45.0
-startAngle = -90
 
 [node name="B" parent="Mounts" index="1" instance=ExtResource( 5 )]
 position = Vector2( 130, -23 )
 maximum_rotation = 45.0
-startAngle = -90
 
 [node name="C" parent="Mounts" index="2" instance=ExtResource( 5 )]
 position = Vector2( 133, 34 )
 rotation = 3.14159
 maximum_rotation = 45.0
-startAngle = -90
 
 [node name="D" parent="Mounts" index="3" instance=ExtResource( 5 )]
 position = Vector2( -14, 49 )
 rotation = 3.14159
 maximum_rotation = 45.0
-startAngle = -90
 
 [node name="VisibilityNotifier2D" parent="." index="7"]
 position = Vector2( 0.794594, 0.499983 )

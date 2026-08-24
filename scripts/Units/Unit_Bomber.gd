@@ -95,7 +95,7 @@ func shortest_angle_dist(from: float, to: float) -> float:
 		delta += twoPi
 	return delta
 		
-func enableBoosting():
+func enable_boosting():
 	return false
 		
 func setUnitFacing():

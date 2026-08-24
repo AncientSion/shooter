@@ -3,11 +3,23 @@ class_name Player
 
 onready var mainUI = Globals.curScene.get_node("UI")
 
+onready var main_ui = Globals.curScene.get_node("UI")
+onready var mounts_a = $Mounts/A
+onready var thruster_front = $ThrusterNodes/Front
+onready var thruster_aft = $ThrusterNodes/Aft
+onready var thruster_port = $ThrusterNodes/Port
+onready var thruster_starboard = $ThrusterNodes/Starboard
+onready var thruster_aft_boost = $ThrusterNodes/Aft_Boost
+onready var thruster_front_boost = $ThrusterNodes/Front_Boost
+onready var sprites = $Sprites
+
 var frame = 0
 
 var display = "Player"
 
 var aItem:int = -1
+
+signal boost_charge_changed
 
 #var baseHealth:int
 var healthRegenTime:float
@@ -15,9 +27,6 @@ var maxSideThrustDuration:float
 #var enginePower:int
 var friction:float
 var agility:float
-var boostCharge:float
-var boostMaxCharge:float
-var boostRegenTime:float
 #var boostPower:int
 var boostPower:float
 var shiftDuration:float
@@ -25,13 +34,10 @@ var shiftCooldown:float
 
 var sideThrust = false
 var sideThrustDuration:float
-var isRechargingBoost = false
 var isShifting = false
 
 var shieldRegenTime:float
 var shieldBreakTime:float
-
-var materials = 0
 
 var new:bool = true
 
@@ -46,10 +52,45 @@ var baseStats
 
 var mouseDown = false
 
-var time_since_ground_dmg:float = 0.0
-var time_since_ground_smoke:float = 0.0
 
 #var boost_on:float = 0.0
+const BACK_WEIGHT := 0.5
+const SIDE_WEIGHT := 0.5
+const FORWARD_WEIGHT := 1.0
+const DRAG_CO := 1.5
+const BOOST_DRAG_CO := 1.5
+const BOOST_DRAIN_PER_SEC := 60.0
+const GROUND_SMOKE_INTERVAL := 0.1
+const GROUND_DMG_INTERVAL := 0.3
+
+var active_item_index: int = -1
+var materials: int = 0
+var base_stats: Dictionary
+
+var boost_charge: float
+var boost_max_charge: float
+var boost_regen_time: float
+var boost_power: float
+var is_recharging_boost := false
+
+var side_thrust := false
+var side_thrust_duration: float
+var max_side_thrust_duration: float
+
+var is_shifting := false
+var shift_duration: float
+var shift_cooldown: float
+
+var time_since_ground_dmg := 0.0
+var time_since_ground_smoke := 0.0
+
+var _thrust_front := false
+var _thrust_aft := false
+var _thrust_port := false
+var _thrust_starboard := false
+
+
+
 
 func _ready():
 	print("_ready player")
@@ -64,10 +105,10 @@ func setBaseStats():
 		"enginePower": 1600, #500dd
 		"friction": 0.998, # 0.014
 		"agility": 8.0,
-		"boostCharge": 60,
-		"boostMaxCharge": 60,
+		"boost_charge": 60,
+		"boost_max_charge": 60,
 		"maxSideThrustDuration": 0.20,
-		"boostRegenTime": 3.0,
+		"boost_regen_time": 3.0,
 		"boostPower": 1.5,
 		"shiftDuration": 2.0,
 		"shiftCooldown": 1.0,
@@ -81,8 +122,170 @@ func setBaseStats():
 			self[stat] = stats[stat]
 		
 	coreRange = 60
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if not ready:
+		return
+
+	if event.is_action_pressed("ui_select") and can_warp_out():
+		warp_out_phase_one()
+		get_tree().set_input_as_handled()
+	elif event.is_action_pressed("alt_use_item") and aItem >= 0:
+		getActiveItem().doUse()
+	elif event.is_action_pressed("right_click"):
+		enableShifting()
+	elif event.is_action_released("right_click"):
+		disableShifting()
+	elif event.is_action_pressed("hold_shift") and boost_charge > 0.0 and Input.is_action_pressed("0"):
+		if not is_aft_boosting():
+			enable_aft_boosting()
+	elif event.is_action_released("hold_shift"):
+		disable_aft_boosting()
+	elif event.is_action_pressed("180") and boost_charge > 0.0:
+		if not is_front_boosting():
+			enable_front_boosting()
+	elif event.is_action_released("180"):
+		disable_front_boosting()
+
+	if Input.is_action_pressed("fire"):
+		mouseDown = true
+	elif Input.is_action_just_released("fire"):
+		mouseDown = false
+	
+	
+	
+	
+func process_movement(delta: float) -> void:
+	var input_vec := _poll_move_axes() if ready else Vector2.ZERO
+	handle_angular_rotation(input_vec, delta)
+	_update_thrusters(input_vec)
+	_update_side_thrust(input_vec, delta)
+	_recharge_boost(delta)
+	_tick_shift(delta)
+
+	var facing := Vector2.RIGHT.rotated(rotation)
+	var side := facing.rotated(PI * 0.5)
+	var thrust := Vector2.ZERO
+
+	if input_vec.x > 0.0:
+		thrust += facing * (enginePower * FORWARD_WEIGHT)
+	elif input_vec.x < 0.0:
+		thrust -= facing * (enginePower * BACK_WEIGHT)
+
+	if input_vec.y != 0.0:
+		thrust += side * (input_vec.y * enginePower * SIDE_WEIGHT)
+
+	var drag_co := DRAG_CO
+	var max_speed := enginePower * 0.5
+
+	if aft_boosting and input_vec.x > 0.0:
+		thrust *= boostPower
+		drag_co = BOOST_DRAG_CO
+		max_speed *= boostPower
+		var previous := boost_charge
+		boost_charge = max(0.0, boost_charge - BOOST_DRAIN_PER_SEC * delta)
+		if boost_charge != previous:
+			emit_signal("boost_charge_changed", boost_charge, boost_max_charge)
+		if boost_charge <= 0.0:
+			disable_aft_boosting()
+
+	velocity += (thrust - velocity * drag_co) * delta
+	if velocity.length_squared() > max_speed * max_speed:
+		velocity = velocity.limit_length(max_speed)
+
+	gravity_vec = Vector2.ZERO if input_vec.x > 0.5 else Globals.BASEGRAVITY * 2.25
+
+
+func _poll_move_axes() -> Vector2:
+	if Input.is_action_pressed("stop_move"):
+		accel = Vector2.ZERO
+		velocity = Vector2.ZERO
+		extForces = Vector2.ZERO
+		return Vector2.ZERO
+	return Input.get_vector("180", "0", "270", "90")
+
+
+func handle_angular_rotation(input_vec: Vector2, delta: float) -> void:
+	var target := global_position.direction_to(get_global_mouse_position()).angle()
+	var turn_rate := agility * 0.25 if input_vec.x > 0.0 else agility
+	rotation = lerp_angle(rotation, target, turn_rate * delta)
+
+
+func _set_thruster(node: Node, on: bool, prev: bool) -> bool:
+	if on == prev:
+		return prev
+	for child in node.get_children():
+		child.emitting = on
+	return on
+
+
+func _update_thrusters(input_vec: Vector2) -> void:
+	if is_shifting:
+		return
+	_thrust_front = _set_thruster(thruster_front, input_vec.x < 0.0, _thrust_front)
+	_thrust_aft = _set_thruster(thruster_aft, input_vec.x > 0.0, _thrust_aft)
+	_thrust_port = _set_thruster(thruster_port, input_vec.y < 0.0, _thrust_port)
+	_thrust_starboard = _set_thruster(thruster_starboard, input_vec.y > 0.0, _thrust_starboard)
+
+
+func _update_side_thrust(input_vec: Vector2, delta: float) -> void:
+	if side_thrust:
+		if side_thrust_duration <= 0.0 or is_equal_approx(input_vec.y, 0.0):
+			side_thrust = false
+	elif side_thrust_duration > max_side_thrust_duration * 0.5 \
+			and (Input.is_action_just_pressed("270") or Input.is_action_just_pressed("90")):
+		side_thrust = true
+
+	if not side_thrust:
+		side_thrust_duration = min(max_side_thrust_duration, side_thrust_duration + delta * 0.2)
+
+
+func _recharge_boost(delta: float) -> void:
+	if not is_recharging_boost:
+		return
+	boost_charge = min(boost_max_charge, boost_charge + boost_regen_time * delta)
+	if boost_charge >= boost_max_charge:
+		is_recharging_boost = false
+	emit_signal("boost_charge_changed", boost_charge, boost_max_charge)
+
+
+func _tick_shift(delta: float) -> void:
+	if is_shifting:
+		shift_duration = max(0.0, shift_duration - delta)
+		if shift_duration <= 0.0:
+			disableShifting()
+	else:
+		shift_cooldown = max(0.0, shift_cooldown - delta)
 		
-func process_movement(delta: float):
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+func xprocess_movement(delta: float):
 	var thrust_vector:Vector2 = Vector2.ZERO
 	
 	var back_weight: float = 0.5   # Counter-thrust is 30% power
@@ -125,7 +328,7 @@ func process_movement(delta: float):
 			thrust_force *= boostPower
 			cur_drag = boost_drag_co
 			cur_max *= boostPower
-			boostCharge = max(0, boostCharge - 60.0 * delta)
+			boost_charge = max(0, boost_charge - 60.0 * delta)
 			
 	# 5. Linear Drag & Physics
 	# This is where the drift happens! Old velocity fights new thrust.
@@ -159,6 +362,7 @@ func do_init_player():
 	
 	update_stats()
 	connectHurtBoxes()
+	connect_main_ui_signals()
 	
 	if not is_connected("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level"):
 		connect("_has_warped_out", Globals.GAMESCREEN, "on_warp_out_end_level")
@@ -168,6 +372,10 @@ func do_init_player():
 
 	addPhysCollision()
 #	addSightCollision()
+
+func connect_main_ui_signals():
+	connect("boost_charge_changed", mainUI, "updateBoostChargeBar")
+	#mainUI.updateBoostChargeBar()
 
 func on_exit_level():
 	for item in items:
@@ -322,7 +530,7 @@ func enableShifting():
 	disable_col_nodes()
 	$Sprites.hide()
 	disableAllThrusterParticles()
-	disableBoosting()
+	disable_boosting()
 		
 func disableShifting():
 	print("disableShifting")
@@ -336,7 +544,7 @@ func disableShifting():
 	shiftDuration = baseStats["shiftDuration"]
 
 func disableAllThrusterParticles():
-	disableBoosting()
+	disable_boosting()
 	for thruster in $ThrusterNodes.get_children():
 		for n in thruster.get_children():
 			n.emitting = false
@@ -412,29 +620,29 @@ func get_input(_delta):
 			enableThruster($ThrusterNodes/Starboard)
 		if Input.is_action_pressed("180"):
 			enableThruster($ThrusterNodes/Front)
-			if front_boosting and boostCharge == 0:
+			if front_boosting and boost_charge == 0:
 				disable_front_boosting()
 		if Input.is_action_pressed("0"):
 			enableThruster($ThrusterNodes/Aft)
-			if aft_boosting and boostCharge == 0:
+			if aft_boosting and boost_charge == 0:
 				disable_aft_boosting()
 		else:
 			disableThruster($ThrusterNodes/Aft)
 
 #		if not is_aft_boosting():
-#			if Input.is_action_just_pressed("0") and boostCharge > 0:
+#			if Input.is_action_just_pressed("0") and boost_charge > 0:
 #				enable_aft_boosting()
 #		elif Input.is_action_just_released("0"):
 #			disable_aft_boosting()
 		
 		if not is_aft_boosting():
-			if boostCharge > 0 and Input.is_action_pressed("0") and Input.is_action_just_pressed("hold_shift"):
+			if boost_charge > 0 and Input.is_action_pressed("0") and Input.is_action_just_pressed("hold_shift"):
 				enable_aft_boosting()
 		elif Input.is_action_just_released("hold_shift"):
 			disable_aft_boosting()
 			
 		if not is_front_boosting():
-			if Input.is_action_just_pressed("180") and boostCharge > 0:# and rotation_degrees > 35 and rotation_degrees < 125:
+			if Input.is_action_just_pressed("180") and boost_charge > 0:# and rotation_degrees > 35 and rotation_degrees < 125:
 				enable_front_boosting()
 		elif Input.is_action_just_released("180"):
 			disable_front_boosting()
@@ -474,33 +682,33 @@ func is_front_boosting():
 	
 func enable_aft_boosting():
 	aft_boosting = true
-	isRechargingBoost = false
+	is_recharging_boost = false
 #	$BoostRegen.stop()
 	enableThruster($ThrusterNodes/Aft_Boost)
 
 func disable_aft_boosting():
 	aft_boosting = false
-	isRechargingBoost = true
+	is_recharging_boost = true
 #	$BoostRegen.start()
 	disableThruster($ThrusterNodes/Aft_Boost)
 	
 func enable_front_boosting():
 	front_boosting = true
-	isRechargingBoost = false
+	is_recharging_boost = false
 #	$BoostRegen.stop()
 	enableThruster($ThrusterNodes/Front_Boost)
 
 func disable_front_boosting():
 	front_boosting = false
-	isRechargingBoost = true
+	is_recharging_boost = true
 #	$BoostRegen.start()
 	disableThruster($ThrusterNodes/Front_Boost)
 	
 func handleMainBoostCharge(_delta):
-	if isRechargingBoost:
-		boostCharge = min(boostMaxCharge, boostCharge + boostRegenTime * _delta)
-		if boostCharge >= boostMaxCharge:
-			isRechargingBoost = false
+	if is_recharging_boost:
+		boost_charge = min(boost_max_charge, boost_charge + boost_regen_time * _delta)
+		if boost_charge >= boost_max_charge:
+			is_recharging_boost = false
 			
 	if not sideThrust:
 #		print("before: ", sideThrustDuration)
@@ -617,7 +825,7 @@ func xxxhandleAngularRotation(_delta):
 	var forwardV = Vector2(cos(rotation), sin(rotation))
 	rotation = forwardV.move_toward((Globals.MOUSE - global_position), _delta * agility).angle()
 
-func xprocess_movement(delta):
+func xxxxprocess_movement(delta):
 	var thrust_vector:Vector2 = Vector2.ZERO
 	
 	var max_speed:int = enginePower/2
@@ -647,7 +855,7 @@ func xprocess_movement(delta):
 		
 		if aft_boosting:
 			thrust_vector *= boostPower
-			boostCharge = max(0, boostCharge - 60.0 * delta)
+			boost_charge = max(0, boost_charge - 60.0 * delta)
 			max_speed *= boostPower/2
 #			boost_on += delta
 #			print(boost_on)
@@ -700,11 +908,11 @@ func xxprocess_movement(_delta):
 #			thrust.y /= 3
 			if aft_boosting:
 				thrust.x *= boostPower * 1.0
-				boostCharge = max(0, boostCharge - 60.0 * _delta)
+				boost_charge = max(0, boost_charge - 60.0 * _delta)
 			elif front_boosting:
 #				print("ding")
 				thrust.x *= boostPower * 0.5
-				boostCharge = max(0, boostCharge - 60.0 * 1.5 * _delta)
+				boost_charge = max(0, boost_charge - 60.0 * 1.5 * _delta)
 				
 			if sideThrust:
 				thrust.y *= boostPower * 1.5
@@ -834,6 +1042,7 @@ func set_armaments():
 	weapons.append(setShield())
 	weapons.append(Globals.getWeaponBase("Autocannon"))
 	weapons.append(Globals.getWeaponBase("Laserblaster"))
+	weapons.append(Globals.getWeaponBase("Player Rail"))
 	
 	for n in weapons:
 		n.set_faction(faction)
@@ -922,7 +1131,7 @@ func update_stats():
 	setBaseStats()
 	maxHealth = baseStats.maxHealth
 	sideThrustDuration = maxSideThrustDuration
-	boostMaxCharge = baseStats.boostMaxCharge
+	boost_max_charge = baseStats.boost_max_charge
 	
 	for item in items:
 		if item.trigger == "":
@@ -940,7 +1149,7 @@ func update_stats():
 	
 	emit_signal("update_player_health", health, maxHealth)
 	mainUI.updateBoostChargeProps()
-	mainUI.updateBoostChargeBar()
+	mainUI.updateBoostChargeBar(boost_charge, boost_max_charge)
 	
 	updateShieldStats()
 	
@@ -971,7 +1180,11 @@ func checkAggro(shooterObj):
 	return
 	
 func handle_weapons(_delta):
-	return
+	if not ready or not Input.is_action_pressed("fire"):
+		return
+	var weapon = getActiveWeapon()
+	if weapon and weapon.can_fire():
+		weapon.do_fire(null)
 	
 func handleItems(_delta):
 	return
@@ -1042,7 +1255,7 @@ func bound_process(_delta):
 			else: time_since_ground_dmg += _delta
 
 func _on_BoostRegen_timeout():
-	isRechargingBoost = true
+	is_recharging_boost = true
 	
 func getStatByName(key):
 	match key:
@@ -1056,8 +1269,8 @@ func getStatByName(key):
 		"shieldRegenTime":  if get_shield_weapon():
 			return str("%.1f" % get_shield_weapon().shieldRegenTime)
 		"enginePower": return get(key)
-		"boostCharge": return str("%.1f" % get(key))
-		"boostMaxCharge": return str("%.0f" % get(key))
+		"boost_charge": return str("%.1f" % get(key))
+		"boost_max_charge": return str("%.0f" % get(key))
 		"boostPower": return str("%.1f" % get(key))
 		"agility": return str("%.1f" % get(key))
 		"materials": return get(key)

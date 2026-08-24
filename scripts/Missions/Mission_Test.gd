@@ -30,7 +30,8 @@ func do_init(init_time):
 	
 func do_setup():
 	var attacker_group = []
-	attacker_group.append({"name": "FIGHTER", "amount": Globals.rng.randi_range(1, 1), "target": false})
+	attacker_group.append({"name": "DRONE_SHOTGUN", "amount": Globals.rng.randi_range(1, 1), "target": false})
+#	attacker_group.append({"name": "FRIGATE", "amount": Globals.rng.randi_range(1, 1), "target": false})
 	setup_attackers(attacker_group)
 	
 func setup_attackers(unitArray):

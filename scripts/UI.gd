@@ -160,15 +160,16 @@ func _on_updateShieldBreakCooldown(wait_time):
 	$Bars/Panel/VBox/CC_HealthShield/VBox/Bar_Shield/Value.text = str("%.1f" % wait_time)
 	
 func updateBoostChargeProps():
-	$Bars/Panel/VBox/CC_Boost/Bar_Boost.max_value = player.boostMaxCharge
-	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boostCharge
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.max_value = player.boost_max_charge
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boost_charge
 	
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.max_value = player.maxSideThrustDuration*100
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100
 	
-func updateBoostChargeBar():
-	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boostCharge
-	$Bars/Panel/VBox/CC_Boost/Bar_Boost/Value.text = str(round(player.boostCharge), " / ", player.boostMaxCharge)
+func updateBoostChargeBar(a, b):
+	print(a,"/",b)
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boost_charge
+	$Bars/Panel/VBox/CC_Boost/Bar_Boost/Value.text = str(round(player.boost_charge), " / ", player.boost_max_charge)
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost/Value.text = str(("%.2f" % player.sideThrustDuration), " / ", ("%.2f" % player.maxSideThrustDuration))
 	
@@ -183,7 +184,7 @@ func add_player_debug_panel():
 	$Place/Bottomright.add_child(shipstats)
 	
 	var keys = ["Health", "Materials", "Accel", "Velocity", "Boost", "BoostCharge", "Position", "Rotation", "ShiftCooldown", "ShiftDuration"]
-	var values = ["maxHealth", "materials", "accel", "velocity", "boosting", "boostCharge", "position", "rotation_degrees", "shiftCooldown", "shiftDuration"]
+	var values = ["maxHealth", "materials", "accel", "velocity", "boosting", "boost_charge", "position", "rotation_degrees", "shiftCooldown", "shiftDuration"]
 
 	for n in len(keys):
 		shipstats.addEntry(keys[n], player[values[n]])

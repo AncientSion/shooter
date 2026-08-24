@@ -30,9 +30,9 @@ func _state_logic(delta):
 			parent.process_movement(delta)
 			if parent.global_position.distance_to(parent.moveTarget) <= 35:
 				set_state(states.circle)
-			elif parent.global_position.distance_to(parent.curTarget.global_position) < 100:
+			elif parent.global_position.distance_to(parent.curTarget.global_position) < 150:
 				set_state(states.circle)
-			elif parent.global_position.distance_to(parent.curTarget.global_position) > 250:
+			elif parent.global_position.distance_to(parent.curTarget.global_position) > 275:
 				set_state(states.close)
 		states.standoff:
 			parent.moveTarget = parent.global_position - (parent.curTarget.global_position - parent.global_position).normalized() * 50

@@ -312,7 +312,7 @@ func applyQualityMods():
 				"shieldRegenTime": entry.amount = -stepify(entry.amount, 0.01)
 				"shieldBreakTime": entry.amount = -stepify(entry.amount, 0.1)
 				"agility": entry.amount = stepify(entry.amount, 0.01)
-				"boostMaxCharge": entry.amount = stepify(entry.amount, 1)
+				"boost_max_charge": entry.amount = stepify(entry.amount, 1)
 			
 #		print(result)
 		else:
