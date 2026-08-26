@@ -9,17 +9,28 @@ func _physics_process(_delta):
 	pass # Replace with function body.
 	
 func _ready():
+	pass
+	
+func do_init_unit():
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
+	#connectHurtBoxes()
+	do_custom_init()
+	set_stats()
+	
+func do_custom_init():
 	$ColNodes/Hover.connect("mouse_entered", self, "_on_mouse_entered")
 	$ColNodes/Hover.connect("mouse_exited", self, "_on_mouse_exited")
 	$ColNodes/Hover.connect("input_event", self, "_on_Reward_Box_input_event")
 	$Sprites/Main.material.set_shader_param("width", 0.0)
 	
-	loot = getLoot()
+	loot = get_loot_content()
+	set_cost()
 	loot.set_physics_process(false)
 
-	$ColorRect.material.set_shader_param("shake_rate", Globals.rng.randf_range(0.1, 0.9))
+	#$ColorRect.material.set_shader_param("shake_rate", Globals.rng.randf_range(0.1, 0.9))
 
 	$Debug.queue_free()
+	pass
 
 func set_stats():
 	maxHealth = 30
@@ -31,16 +42,16 @@ func update_debug_menu_entry():
 	return
 	
 func _on_mouse_entered():
-#	print("mouse in")
+	print("mouse in")
 	$Sprites/Main.material.set_shader_param("width", 3.0)
-	print($ColorRect.material.get_shader_param("shake_rate"))
+	#print($ColorRect.material.get_shader_param("shake_rate"))
 	
 func _on_mouse_exited():
-#	print("mouse out")
+	print("mouse out")
 	$Sprites/Main.material.set_shader_param("width", 0.0)
 	
 func _on_Reward_Box_input_event(_viewport, event, _shape_idx):
-#	print("_on_Reward_Box_input_event")
+	print("_on_Reward_Box_input_event")
 	if  event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if player.materials >= cost:
 			player.add_resources(-cost)
@@ -69,10 +80,10 @@ func spawnSelfLoot():
 	loot.subPanel_Stats.show()
 	loot.show()
 	
-func setCost():
+func set_cost():
 	cost = Globals.getRandomEntry([30, 40, 50, 60])
 
-func getLoot():
+func get_loot_content():
 	var options = ["Weapon", "Item"]
 	var pick = options[Globals.rng.randi_range(0, len(options)-1)]
 #	pick = "Weapon"

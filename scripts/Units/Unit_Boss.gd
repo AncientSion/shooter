@@ -7,7 +7,6 @@ func _ready():
 	pass
 		
 func do_specific_unit_init():
-#	.doInit()
 	$ThrusterNodes/Aft/Particle2D.emitting = false
 	$Mounts/Missiles.hide()
 	$Sprites/Missile_Lights.hide()

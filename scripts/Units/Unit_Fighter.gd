@@ -15,7 +15,6 @@ func do_specific_unit_init():
 	else:
 		rotation_degrees += 180 + Globals.rng.randi_range(-4, 4)
 	
-#	.doInit()
 	velocity = (moveTarget - global_position).normalized() * maxSpeed/2
 	accel = velocity
 	rotation = velocity.angle()

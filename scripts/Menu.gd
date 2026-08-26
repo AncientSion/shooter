@@ -20,12 +20,9 @@ func _on_Start_pressed():
 	
 
 func _on_Intermission_pressed():
-	var scene = load("res://scenes/Intermission.tscn")
+	#var scene = load("res://scenes/Intermission.tscn")
 #	var scene = intermission.instance()
-	Globals.curScene = scene
-	get_tree().get_root().add_child(scene)
-	get_tree().set_current_scene(scene)
-	queue_free()
+	Globals.GAMESCREEN.start_new_mission_by_name("mission_test")
 
 func _on_Map_pressed():
 	var scene = load("res://scenes/Map.tscn")

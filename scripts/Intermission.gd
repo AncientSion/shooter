@@ -141,6 +141,7 @@ func onPlayerWarpIn():
 		n.setItemPanelCooldown()
 
 func spawnRewardCrates():
+	return
 	var xBorder = 150
 	var width = Globals.SCREEN.x - xBorder*2
 	var maxPerRow = 3

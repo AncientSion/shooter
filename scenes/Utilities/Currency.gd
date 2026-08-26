@@ -7,6 +7,12 @@ var accel = Vector2.ZERO
 var steer_force = 30
 var resValue:int
 	
+func do_init_unit():
+	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
+	connectHurtBoxes()
+	do_custom_init()
+	set_stats()
+	
 func _physics_process(delta):
 	accel += seekVector()
 	accel = accel.limit_length(maxSpeed/20)
@@ -15,7 +21,10 @@ func _physics_process(delta):
 	position += velocity * delta
 	
 func connectHurtBoxes():
-	return
+	pass
+	
+func do_custom_init():
+	pass
 	
 func set_stats():
 	maxHealth = 1

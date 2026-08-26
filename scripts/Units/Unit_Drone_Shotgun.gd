@@ -8,15 +8,6 @@ func do_specific_unit_init():
 #	boostStrength = 200
 #	boostTimeRemain = 2.0
 	do_connect_unit_signals()
-	
-#func doInit():
-#	.doInit()
-#	rotation = 0.5 * PI
-##	var facing = Globals.rng.randi_range(-8, 8)
-##	if position.x > Globals.WIDTH / 2:
-##		facing += 180
-##	velocity = Vector2(1, 0).rotated(deg2rad(facing))
-##	rotation = velocity.angle()
 
 func _ready():
 	$ThrusterNodes/Aft/Particle2D.process_material.scale = 2

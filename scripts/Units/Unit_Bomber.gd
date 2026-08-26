@@ -5,7 +5,6 @@ var display = "Bomber"
 var engine = 300
 	
 func do_specific_unit_init():
-#	.doInit()
 	var facing = Globals.rng.randi_range(-0, 0)
 	steer_force = 6
 	if position.x > Globals.WIDTH / 2:

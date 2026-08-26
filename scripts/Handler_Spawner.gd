@@ -216,10 +216,10 @@ func spawn_and_init_unit(enemy):
 	enemy.set_armaments()
 #	print(enemy.get_node("Mounts").get_child(0).get_child(0).get_node("Sprites/Main").scale)
 	enemy.set_direction()
-#	enemy.setActive()
+#	enemy.set_active()
 #	enemy.speed = 0
 	enemy.connect("isDestroyed", self, "_on_enemy_from_wave_destroyed", [enemy])
-	enemy.setActive()
+	enemy.set_active()
 #	enemy.doFullyEnable()
 	#print("spawning ", enemy.display, ": ", enemy.position, ", rot: ", enemy.rotation_degrees)
 
@@ -235,7 +235,6 @@ func spawnSpecial():
 	enemy.set_hostile()
 	enemy.set_armaments()
 	enemy.set_direction()
-	enemy.doInit()
 	enemy.visible = false
 	enemy.set_inactive()
 	

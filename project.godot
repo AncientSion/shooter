@@ -335,6 +335,11 @@ _global_script_classes=[ {
 "path": "res://scripts/Missions/Mission_Raid_Light_Convoy.gd"
 }, {
 "base": "Mission_Base",
+"class": "Mission_Shop",
+"language": "GDScript",
+"path": "res://scripts/Missions/Mission_Shop.gd"
+}, {
+"base": "Mission_Base",
 "class": "Mission_Survive_Time",
 "language": "GDScript",
 "path": "res://scripts/Missions/Mission_Survive_Time.gd"
@@ -620,6 +625,7 @@ _global_script_class_icons={
 "Mission_Raid_Building": "",
 "Mission_Raid_Cargo_Hauler": "",
 "Mission_Raid_Light_Convoy": "",
+"Mission_Shop": "",
 "Mission_Survive_Time": "",
 "Mission_Test": "",
 "Mobile_AA_Heavy": "",

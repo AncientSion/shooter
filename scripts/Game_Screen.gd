@@ -29,8 +29,12 @@ func start_new_mission_by_name(name):
 		0,
 #		Globals.handler_mission.get_mission_by_name("mission_protect_cargo_hauler")
 #		Globals.handler_mission.get_mission_by_name("mission_survive_time")
-		Globals.handler_mission.get_mission_by_name(name)
+		Globals.handler_mission.get_mission_by_name(name),
+		"Stage_0"
 	)
+	
+	if name == "mission_shop":
+		node.base_stage = "Intermission"
 	
 	start_new_mission(node)
 	
@@ -54,25 +58,24 @@ func init_map_scene():
 	Globals.MAP_SCENE = load("res://scenes/Map.tscn").instance()
 	$Menu_BG.add_child(Globals.MAP_SCENE)
 
-func start_new_mission(mission_node:Map_Node):
+func start_new_mission(map_node:Map_Node):
 	print("start_new_mission")
 	
-	if  mission_node:
-		mission_node.mission_class.logic.print_props()
-		Globals.handler_spawner.mission_unit_data = mission_node.mission_class.logic.unit_data
+	if  map_node:
+		map_node.mission_class.logic.print_props()
+		Globals.handler_spawner.mission_unit_data = map_node.mission_class.logic.unit_data
 		print("__________")
 		print("do start mission")
 		
-		Globals.curScene = load("res://scenes/Stage_0.tscn").instance()
-		Globals.curScene.name = "Level"
-		Globals.curScene.get_node("Objective_Scene").add_child( mission_node.mission_class)
+		load_respective_base_stage(map_node)
+		
+		Globals.curScene.get_node("Objective_Scene").add_child( map_node.mission_class)
 		Globals.curScene.add_child(Globals.UI)
 		
 		Globals.GAMESCREEN.add_child(Globals.curScene)
 		Globals.GAMESCREEN.get_node("Menu_BG").hide()
 		
-		#Globals.handler_mission.connect_mission_ui_in_game()
-		Globals.handler_mission.mission_node = mission_node
+		Globals.handler_mission.mission_node = map_node
 		Globals.handler_mission.do_enable()
 		
 		Globals.handler_spawner.increase_difficulty(15)
@@ -80,9 +83,14 @@ func start_new_mission(mission_node:Map_Node):
 		Globals.handler_spawner.connect_debug_diffi_ui_in_game()
 		Globals.handler_spawner.do_enable()
 		
-		mission_node.mission_class.logic.mission_final_setup_self()
+		map_node.mission_class.logic.mission_final_setup_self()
 		
-#		Globals.handler_mission.do_start_mission()
+
+func load_respective_base_stage(map_node):
+	print(map_node.base_stage)
+	Globals.curScene = load(str("res://scenes/", map_node.base_stage, ".tscn")).instance()
+	Globals.curScene.name = "Level"
+	
 
 func on_warp_out_end_level():
 	print("on_warp_out_end_level")

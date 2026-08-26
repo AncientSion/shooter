@@ -58,7 +58,7 @@ func setup_attackers(unitArray):
 			if attacker.can_warp_in():
 				attacker.setup_delayed_warp_in(time_until_target_arrives+1)
 			else:
-				attacker.setActive()
+				attacker.set_active()
 
 func do_process(_delta):
 #	if inArea:

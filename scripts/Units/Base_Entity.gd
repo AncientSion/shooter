@@ -74,12 +74,6 @@ var impactForce = Vector2.ZERO
 
 func _ready():
 	pass
-	
-func do_init_entity():
-	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
-	connectHurtBoxes()
-	do_custom_init()
-	set_stats()
 
 func set_stats():
 	pass

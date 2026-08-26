@@ -167,7 +167,7 @@ func updateBoostChargeProps():
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100
 	
 func updateBoostChargeBar(a, b):
-	print(a,"/",b)
+#	print(a,"/",b)
 	$Bars/Panel/VBox/CC_Boost/Bar_Boost.value = player.boost_charge
 	$Bars/Panel/VBox/CC_Boost/Bar_Boost/Value.text = str(round(player.boost_charge), " / ", player.boost_max_charge)
 	$Bars/Panel/VBox/CC_SideBoost/Bar_SideBoost.value = player.sideThrustDuration*100

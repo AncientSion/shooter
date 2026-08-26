@@ -55,7 +55,6 @@ func do_setup(unitArray):
 			object.set_armaments()
 			object.set_direction(Vector2(dir, 0))
 			object.look_ahead = 0
-			object.doInit()
 			lowestSpeed = min(lowestSpeed, object.maxSpeed)
 			if unit.target:
 				num_targets += 1
@@ -71,7 +70,7 @@ func do_setup(unitArray):
 		startX += (120 + w/2) * dir
 		single.position = Vector2(startX, single.getSpawnY(0, 0))
 		if single.display == "Light Truck" or single.display == "Heavy Truck" or single.display == "Mobile AA Light":
-			single.setActive()
+			single.set_active()
 			single.get_node("SM").canChangeState = false
 			if single.display == "Heavy Truck" or single.display == "Light Truck":
 				single.mark_as_target()

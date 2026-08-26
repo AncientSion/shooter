@@ -66,7 +66,6 @@ func setup_targets(unitArray):
 			target_unit.set_direction(Vector2(dir, 0))
 			target_unit.add_health_bar()
 			target_unit.mark_as_protect()
-#			target_unit.doInit()
 			if unit.target:
 				num_targets += 1
 #				object.display = "Cargohauler"
@@ -163,5 +162,5 @@ func setup_attackers(unitArray):
 			if attacker.can_warp_in():
 				attacker.setup_delayed_warp_in(time_until_target_arrives+1)
 			else:
-				attacker.setActive()
+				attacker.set_active()
 

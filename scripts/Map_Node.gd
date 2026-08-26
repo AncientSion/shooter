@@ -17,17 +17,19 @@ var position: Vector2
 var path_index: int  # Which pathway this node belongs to (0-2)
 var node_index: int  # Position in the path sequence
 var mission_class
+var base_stage: String
 var connections: Dictionary = {}
 var is_hovered:bool = false
 var is_tweening:bool = false
 
-func do_init(name_str:String, node_id: String, node_position: Vector2, path_idx: int, node_idx: int, node_type):
+func do_init(name_str:String, node_id: String, node_position: Vector2, path_idx: int, node_idx: int, node_type, base_stage_str: String):
 	name = name_str
 	id = node_id
 	position = Vector2(round(node_position.x), round(node_position.y))
 	path_index = path_idx
 	node_index = node_idx
 	mission_class = node_type
+	base_stage = base_stage_str
 	
 func _ready():
 	pass

@@ -392,7 +392,7 @@ func disableAllCollisionNodes():
 	for n in $Mounts.get_children():
 		n.disable_col_nodes()
 
-func setActive():
+func set_active():
 #	print("set active: ", self.display)
 	ready = true
 	set_physics_process(true)
@@ -527,7 +527,7 @@ func on_warp_in_done():
 	$Jump.visible = false
 	$Jump.modulate.a = 1
 	
-	setActive()
+	set_active()
 	show_all_control_nodes()
 #	enableWeapons()
 #	enableItems()
@@ -810,14 +810,14 @@ func create_currency():
 	var perInstance = 1
 	var total = self.lootValue / perInstance
 	for n in total:
-		var reward = Globals.CURRENCY.instance()
-		Globals.curScene.get_node("Various").add_child(reward)
-		reward.do_init_entity()
-		reward.position = global_position + Vector2(Globals.rng.randi_range(-texDim.x/2, texDim.x/2), Globals.rng.randi_range(-texDim.y/2, texDim.y/2))
-		reward.rotation_degrees = Globals.rng.randi_range(0, 359)
-		reward.velocity = Vector2(500, 0).rotated(reward.rotation)
-		reward.resValue = perInstance
-		reward.curTarget = player
+		var currency = Globals.CURRENCY.instance()
+		Globals.curScene.get_node("Various").add_child(currency)
+		currency.do_init_unit()
+		currency.position = global_position + Vector2(Globals.rng.randi_range(-texDim.x/2, texDim.x/2), Globals.rng.randi_range(-texDim.y/2, texDim.y/2))
+		currency.rotation_degrees = Globals.rng.randi_range(0, 359)
+		currency.velocity = Vector2(500, 0).rotated(currency.rotation)
+		currency.resValue = perInstance
+		currency.curTarget = player
 	#queue_free()
 	
 func set_friendly():
