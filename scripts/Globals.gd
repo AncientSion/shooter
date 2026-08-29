@@ -591,10 +591,10 @@ func toggle_pause_and_menu():
 #				wpn.subPanel_Stats.get_node("Tween").stop_all()
 #				wpn.subPanel_Stats.set("modulate", Color(1, 1, 1, 1))
 				
-		if PLAYER.aWeapon > -1:
+		if PLAYER.active_weapon_index > -1:
 			PLAYER.getActiveWeapon().subPanel_Stats.show()
-		if PLAYER.aItem > -1:
-			PLAYER.items[PLAYER.aItem].subPanel_Stats.show()
+		if PLAYER.active_item_index > -1:
+			PLAYER.items[PLAYER.active_item_index].subPanel_Stats.show()
 
 	
 func getRecoilForce(minDmg, maxDmg, speed):

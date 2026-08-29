@@ -23,7 +23,7 @@ var accel = Vector2.ZERO
 var velocity = Vector2.ZERO
 var extForces = Vector2.ZERO
 var gravity_vec = Vector2.ZERO
-var aWeapon:int = 0
+var active_weapon_index:int = 0
 var items = []
 
 var sightRange:int = 0
@@ -311,7 +311,7 @@ func handle_weapons(_delta): # context: unit with several weapon mounts
 #			if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
 #				continue
 #			if !mount.mount_has_valid_target(): # does it NOT have a target ?
-#				mount.set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+#				mount.set_target_for_mount(targetsArr) # if so, assign a valid target to this weapon
 #			if mount.curTarget == null: # if it still has no target, next
 #				continue
 #			mount.do_track_target()
@@ -656,27 +656,6 @@ func getSpawnY(_viewFrom, _viewTo):
 	var y = Globals.HEIGHT/2 + Globals.rng.randi_range(-variance, variance)
 	return y
 
-func setTargetx():
-	print("setTargetx, context: ", self.display, " #", id)
-	var targetgroup = "friendly"
-	if is_in_group("friendly"):
-		targetgroup = "hostile"
-	
-	var allTargets = get_tree().get_nodes_in_group(targetgroup)
-	var opttargets = Array()
-	for n in allTargets:
-		if not n.isLegalTarget(): continue
-		var dist = global_position.distance_to(n.global_position)
-		#print("dist to ", n.display, ": ", int(dist))
-		if dist < sightRange:
-			opttargets.append(n)
-		
-	if len(opttargets):
-		curTarget = Globals.getRandomEntry(opttargets)
-	else: curTarget = null
-	
-	print("setting target for ", self.display, " to ", curTarget.display)
-
 func set_direction(dirVector:Vector2 = Vector2.ZERO):
 	if dirVector:
 		direction = dirVector
@@ -917,9 +896,6 @@ func set_new_target():
 
 	if changed:
 		state_m.set_state(state_m.states.close)
-	
-func is_legal_target(target_unit):
-	return true
 
 func _on_Sight_area_entered(area):
 #	print(self.display, ", target: ", area.owner.display, " has LEFT sight !")
@@ -929,8 +905,7 @@ func _on_Sight_area_entered(area):
 		if n.target == area.owner:
 			return
 #	print(self.display, ": adding ", area.owner.display, " to targets")
-	if is_legal_target(area.owner):
-		targetsArr.append({"target": area.owner, "prio": 1})
+	targetsArr.append({"target": area.owner, "prio": 1})
 	set_new_target()
 
 func _on_Sight_area_exited(area):

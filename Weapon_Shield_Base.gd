@@ -36,13 +36,13 @@ func construct(init_type, init_display, stats):
 	type = init_type
 	display = init_display
 	baseStats = stats
-	setShieldBaseStats()
+	set_shield_base_stats()
 	if shieldFastCharge > 0.0:
 		shield = 0
 	else: 
 		shield = maxShield
 
-func setShieldBaseStats():
+func set_shield_base_stats():
 	for key in baseStats:
 		self[key] = baseStats[key]
 		

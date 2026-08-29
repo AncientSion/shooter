@@ -151,15 +151,15 @@ func handle_mounted_weapon(targetsArr):
 	if !is_instance_valid(weapon) or weapon.destroyed or !weapon.active:
 		return
 	if !mount_has_valid_target(): # does it NOT have a target ?
-		set_wpn_target(targetsArr) # if so, assign a valid target to this weapon
+		set_target_for_mount(targetsArr) # if so, assign a valid target to this weapon
 	if curTarget == null: # if it still has no target, next
 		return
 	do_track_target()
 	if weapon.can_fire(): # check cooldown, emp or other conditions
 		if weapon.bursting or weapon.has_fire_solution(curTarget): # do i have the right vector / rotation achieved `?
 			weapon.handle_firing(curTarget) # spawn projectile
-	
-func set_wpn_target(allTargets):
+			
+func set_target_for_mount(allTargets):
 	if allTargets.empty():
 		return
 	var bestPrio:int = 10

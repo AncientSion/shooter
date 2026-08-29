@@ -66,6 +66,9 @@ func _ready():
 	doDisable()
 	checkTimer = 1.0
 	
+func do_init_item():
+	pass
+	
 func _physics_process(_delta):
 	#print(cooldown)
 	if baseCooldown != 0 and cooldown != 0:

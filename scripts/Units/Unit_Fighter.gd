@@ -395,9 +395,6 @@ func checkMoveTargetWithinBoundary():
 		moveTarget.x = clamp(moveTarget.x, look_ahead, Globals.WIDTH - look_ahead)
 		moveTarget.y = clamp(moveTarget.y, look_ahead, Globals.HEIGHT - look_ahead)
 	pass
-	
-func is_legal_target(target_unit):
-	return target_unit.global_position.y < Globals.HEIGHT - 200 and target_unit.global_position.y > 200
 
 func add_exp_fire_smoke_fx(scale:float, delay:float):
 #	add_exp_fire_smoke_fx(scale, delay)

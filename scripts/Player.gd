@@ -17,8 +17,6 @@ var frame = 0
 
 var display = "Player"
 
-var aItem:int = -1
-
 signal boost_charge_changed
 
 #var baseHealth:int
@@ -98,7 +96,7 @@ func _ready():
 func set_stats():
 	pass
 
-func setBaseStats():
+func set_base_stats():
 	var stats = {
 		"maxHealth": 30,
 		"healthRegenTime": 0.0,
@@ -141,7 +139,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_select") and can_warp_out():
 		warp_out_phase_one()
 		get_tree().set_input_as_handled()
-	elif event.is_action_pressed("alt_use_item") and aItem >= 0:
+	elif event.is_action_pressed("alt_use_item") and active_item_index >= 0:
 		getActiveItem().doUse()
 	elif event.is_action_pressed("right_click"):
 		enableShifting()
@@ -303,7 +301,7 @@ func do_init_player():
 	texDim = Vector2($Sprites/Main.texture.get_width() * $Sprites/Main.scale.x, $Sprites/Main.texture.get_height() * $Sprites/Main.scale.y)
 	isPlayer = true
 	set_friendly()
-	setBaseStats()
+	set_base_stats()
 	setMass()
 	health = baseStats.maxHealth
 	maxHealth = health
@@ -365,7 +363,7 @@ func setFirstWeaponActive():
 	for wpn in $Mounts/A.get_children():
 		count += 1
 		if wpn.canBeSelected():
-			aWeapon = count
+			active_weapon_index = count
 			return
 	
 func doSelectItem(key):
@@ -376,14 +374,14 @@ func doSelectItem(key):
 #		print(item.display)
 		if item.type == 0:
 			hits += 1
-			if hits == key and aItem != index:
+			if hits == key and active_item_index != index:
 #				print("toggling!")
-				items[aItem].toggle()
-				aItem = index
-				items[aItem].toggle()
+				items[active_item_index].toggle()
+				active_item_index = index
+				items[active_item_index].toggle()
 				return
-			elif hits == key and aItem == index:
-				items[aItem].subPanel_Stats.showandfadeout()
+			elif hits == key and active_item_index == index:
+				items[active_item_index].subPanel_Stats.showandfadeout()
 #	print("no item to toggle foudn")
 
 func selectWeapon(step):
@@ -394,16 +392,16 @@ func selectWeapon(step):
 	
 	getActiveWeapon().doUnselect()
 		
-	aWeapon += step
-	if aWeapon > $Mounts/A.get_child_count()-1:
-		aWeapon = 1
-	elif aWeapon < 1:
-		aWeapon = $Mounts/A.get_child_count()-1
+	active_weapon_index += step
+	if active_weapon_index > $Mounts/A.get_child_count()-1:
+		active_weapon_index = 1
+	elif active_weapon_index < 1:
+		active_weapon_index = $Mounts/A.get_child_count()-1
 
 	getActiveWeapon().doSelect()
 	
 func getActiveWeapon():
-	return $Mounts/A.get_child(aWeapon)
+	return $Mounts/A.get_child(active_weapon_index)
 	
 func do_unselect_all_weapons():
 	for n in $Mounts/A.get_children():
@@ -422,7 +420,7 @@ func enableItems():
 		n.doEnable()
 		
 func getActiveItem():
-	if aItem >= 0: return items[aItem]
+	if active_item_index >= 0: return items[active_item_index]
 	return false
 
 func doPrintFacing():
@@ -599,12 +597,12 @@ func addItemToUI(item):
 		mainUI.get_node("Place/BottomleftHigher").add_child(item.subPanel_Stats)
 		item.subPanel_Stats.hide()
 		item.full_ui_box.queue_free()
-		if aItem == -1:
+		if active_item_index == -1:
 			for n in items:
-				aItem += 1
+				active_item_index += 1
 				if item.id == n.id:
-					#aItem = len(items)-1
-					items[aItem].toggle()
+					#active_item_index = len(items)-1
+					items[active_item_index].toggle()
 					break
 	elif item.type == 1: #stats
 #		item.full_ui_box.get_node("Vbox").grow_horizontal = 1
@@ -726,11 +724,8 @@ func addStartingItems():
 #	item.initQuality()
 #	addItem(item)
 
-func isLegalTarget():
-	return true
-
 func update_stats():
-	setBaseStats()
+	set_base_stats()
 	maxHealth = baseStats.maxHealth
 	sideThrustDuration = maxSideThrustDuration
 	boost_max_charge = baseStats.boost_max_charge
@@ -753,12 +748,12 @@ func update_stats():
 	mainUI.updateBoostChargeProps()
 	mainUI.updateBoostChargeBar(boost_charge, boost_max_charge)
 	
-	updateShieldStats()
+	update_shield_stats()
 	
-func updateShieldStats():
+func update_shield_stats():
 	var shield = get_shield_weapon()
 	if not shield: return
-	shield.setShieldBaseStats()
+	shield.set_shield_base_stats()
 	for item in items:
 		if item.trigger == "":
 			for n in item.result:

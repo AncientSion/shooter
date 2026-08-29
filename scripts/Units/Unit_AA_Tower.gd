@@ -25,12 +25,6 @@ func getPossibleWeapons(index):
 			return weapon
 		1:
 			return Globals.getWeaponBase("Flak")
-
-func isLegalTarget():
-	return true
-	if curTarget.global_position.y > Globals.HEIGHT - 200:
-		return false
-	return true
 	
 func get_dmg_gfx_scale():
 	return rand_range(0.8, 1.4)

@@ -27,6 +27,3 @@ func toggle():
 	
 func doUse():
 	return false
-	
-func do_init_item():
-	pass

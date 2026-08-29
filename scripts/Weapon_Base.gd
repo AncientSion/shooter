@@ -519,7 +519,7 @@ func _on_LOOTNODE_mouseclick(event, lootnode):
 		Globals.curScene.get_node("UI/LootNodes").remove_child(full_ui_box)
 		Globals.PLAYER.getActiveWeapon().doUnselect()
 		Globals.PLAYER.addWeapon(self)
-		Globals.PLAYER.aWeapon = Globals.PLAYER.get_node("Mounts/A").get_child_count()-1
+		Globals.PLAYER.active_weapon_index = Globals.PLAYER.get_node("Mounts/A").get_child_count()-1
 		Globals.PLAYER.getActiveWeapon().doSelect()
 
 func getIconContainer():
